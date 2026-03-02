@@ -260,18 +260,12 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
       <div class="card-head"><div class="chL"><span class="ci">💰</span><span class="ct">Novo Orçamento</span></div></div>
       <div class="fgrp"><label>Descrição</label><input type="text" id="oDesc" placeholder="Ex: Decoração, Buffet, DJ..." autocomplete="off"></div>
       <div class="frow2">
-        <div class="fgrp"><label>Categoria</label>
-          <select id="oCat"><option>🎊 Decoração</option><option>🍽️ Buffet</option><option>🍰 Comida</option><option>🥤 Bebida</option><option>🎵 Música/DJ</option><option>📷 Foto/Vídeo</option><option>💌 Convites</option><option>🎁 Brindes</option><option>👗 Fantasia</option><option>🏠 Local</option><option>📦 Outros</option></select>
-        </div>
         <div class="fgrp"><label>Valor R$</label><input type="number" id="oValor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"></div>
-      </div>
-      <div class="frow2">
         <div class="fgrp"><label>Status</label>
           <select id="oStatus"><option>Pendente</option><option>Pago</option><option>Cancelado</option></select>
         </div>
-        <div class="fgrp"><label>Observações</label><input type="text" id="oObs" placeholder="Fornecedor..." autocomplete="off"></div>
       </div>
-      <button class="btn btn-cherry btn-full" onclick="addOrc()">🍒 Adicionar Orçamento</button>
+      <button class="btn btn-cherry btn-full" onclick="addOrc()">🍒 Adicionar</button>
     </div>
 
     <div class="mini-stats">
@@ -342,6 +336,12 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
         <button class="btn btn-leaf btn-sm" onclick="exportCSV('convidados')">⬇️ CSV</button>
       </div>
       <div id="cLista"><div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div></div>
+    </div>
+
+    <!-- RESUMO DETALHADO -->
+    <div class="card" id="resumoConvCard" style="display:none">
+      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Resumo de Convidados</span></div></div>
+      <div id="resumoConvBody"></div>
     </div>
   </div>
 
@@ -563,18 +563,18 @@ function scls(s){return s==='Pago'||s==='Confirmado'?'sp':s==='Cancelado'||s==="
 function addOrc(){
   const d=document.getElementById('oDesc').value.trim();
   if(!d){alert('Informe a descrição!');return;}
-  const item={id:Date.now(),desc:d,cat:document.getElementById('oCat').value,
+  const item={
+    id:   Date.now(),
+    desc: d,
     valor:parseFloat(document.getElementById('oValor').value)||0,
     status:document.getElementById('oStatus').value,
-    obs:document.getElementById('oObs').value,
-    data:new Date().toLocaleDateString('pt-BR')};
+    data: new Date().toLocaleDateString('pt-BR')
+  };
   D.orc.push(item);
-  // Limpa campos SEM tirar o foco de outros
   document.getElementById('oDesc').value='';
   document.getElementById('oValor').value='';
-  document.getElementById('oObs').value='';
   saveLocal();render();
-  pushSheet('orcamentos'); // envia imediatamente ao Sheets
+  pushSheet('orcamentos');
 }
 function delOrc(id){if(confirm('Remover?')){D.orc=D.orc.filter(x=>x.id!==id);saveLocal();render();pushSheet('orcamentos');}}
 
@@ -588,7 +588,7 @@ function renderOrc(){
     return `<div class="list-item ${scls(o.status)}">
       <div class="lib">
         <div class="lit">${o.desc}</div>
-        <div class="lis">${o.cat}${o.obs?' · '+o.obs:''}${o.data?' · '+o.data:''}</div>
+        <div class="lis">${o.data||''}</div>
       </div>
       <div class="lir">
         <div class="liv ${o.status==='Pago'?'vg':'vr'}">${fmt(o.valor)}</div>
@@ -611,8 +611,7 @@ function renderOrc(){
 // ════════════════════════════════════
 function stepNum(id, delta) {
   const el = document.getElementById(id);
-  const v = Math.max(0, Math.min(20, parseInt(el.value||0) + delta));
-  el.value = v;
+  el.value = Math.max(0, Math.min(20, (parseInt(el.value)||0) + delta));
 }
 
 function addConv(){
@@ -621,13 +620,7 @@ function addConv(){
   const adultos  = parseInt(document.getElementById('cAdultos').value)  || 0;
   const criancas = parseInt(document.getElementById('cCriancas').value) || 0;
   if(adultos + criancas === 0){alert('Adicione pelo menos 1 pessoa!');return;}
-  D.conv.push({
-    id: Date.now(),
-    familia: fam,
-    adultos,
-    criancas,
-    status: document.getElementById('cStatus').value
-  });
+  D.conv.push({ id:Date.now(), familia:fam, adultos, criancas, status:document.getElementById('cStatus').value });
   document.getElementById('cFamilia').value = '';
   document.getElementById('cAdultos').value  = 1;
   document.getElementById('cCriancas').value = 0;
@@ -636,59 +629,96 @@ function addConv(){
 }
 
 function delConv(id){
-  if(confirm('Remover família?')){
-    D.conv = D.conv.filter(x=>x.id!==id);
-    saveLocal(); render(); pushSheet('convidados');
-  }
+  if(confirm('Remover família?')){ D.conv=D.conv.filter(x=>x.id!==id); saveLocal(); render(); pushSheet('convidados'); }
 }
 
 function renderConv(){
-  // Garante números sempre — valores podem vir como string do Sheets
-  const num = v => Math.max(0, parseInt(v) || 0);
+  const num = v => parseInt(v) || 0;
 
-  let totAdultos  = 0;
-  let totCriancas = 0;
+  // Totais globais (TODOS os registros)
+  let totAdultos=0, totCriancas=0, cnfAdultos=0, cnfCriancas=0, cnfFam=0;
+  let naoVirao=0, aguardando=0;
 
-  D.conv.forEach(c => {
-    totAdultos  += num(c.adultos);
-    totCriancas += num(c.criancas);
+  D.conv.forEach(c=>{
+    const a=num(c.adultos), cr=num(c.criancas);
+    totAdultos  += a;
+    totCriancas += cr;
+    if(c.status==='Confirmado'){ cnfAdultos+=a; cnfCriancas+=cr; cnfFam++; }
+    if(c.status==='Não virá')  naoVirao++;
+    if(c.status==='Aguardando') aguardando++;
   });
 
   const totPessoas = totAdultos + totCriancas;
 
+  // Atualiza mini-stats e barra
   document.getElementById('cTotAdultos').textContent = totAdultos;
   document.getElementById('cTotCri').textContent     = totCriancas;
   document.getElementById('cTotPessoas').textContent = totPessoas;
   document.getElementById('sumConv').textContent     = totPessoas;
 
+  const pct = D.conv.length ? Math.round(cnfFam/D.conv.length*100) : 0;
+  document.getElementById('progConf').style.width = pct+'%';
+  document.getElementById('progPct').textContent  = pct+'%';
+
+  // Lista de famílias
   const el = document.getElementById('cLista');
-  if (!D.conv.length) {
-    el.innerHTML = '<div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div>';
-    return;
+  if(!D.conv.length){
+    el.innerHTML='<div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div>';
+  } else {
+    el.innerHTML = D.conv.map(c=>{
+      const a=num(c.adultos), cr=num(c.criancas), tot=a+cr;
+      // Garante que o nome da família nunca fique vazio
+      const nomeFam = (c.familia && c.familia.trim()) ? c.familia.trim() : '—';
+      return `<div class="fam-card ${scls(c.status)}">
+        <div class="fam-top">
+          <div style="flex:1;min-width:0">
+            <div class="fam-nome">👨‍👩‍👧 ${nomeFam}</div>
+            <div class="fam-pills" style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
+              ${a  > 0 ? `<span class="fam-pill adulto">👨 ${a} adult${a===1?'o':'os'}</span>` : ''}
+              ${cr > 0 ? `<span class="fam-pill crianca">👧 ${cr} criança${cr===1?'':'s'}</span>` : ''}
+              <span class="fam-pill" style="background:#f0f0f0;color:#555">👥 ${tot}</span>
+            </div>
+          </div>
+          <div style="flex-shrink:0">${badge(c.status)}</div>
+        </div>
+        <div style="display:flex;gap:5px;margin-top:10px;justify-content:flex-end">
+          <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 12px;font-size:12px">✏️ Status</button>
+          <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 12px;font-size:12px">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
   }
 
-  el.innerHTML = D.conv.map(c => {
-    const a   = num(c.adultos);
-    const cr  = num(c.criancas);
-    const tot = a + cr;
-    return `<div class="fam-card ${scls(c.status)}">
-      <div class="fam-top">
-        <div style="flex:1;min-width:0">
-          <div class="fam-nome">👨‍👩‍👧 ${c.familia || '—'}</div>
-          <div class="fam-pills" style="margin-top:6px">
-            ${a  > 0 ? `<span class="fam-pill adulto">👨 ${a} adult${a===1?'o':'os'}</span>` : ''}
-            ${cr > 0 ? `<span class="fam-pill crianca">👧 ${cr} criança${cr===1?'':'s'}</span>` : ''}
-            <span class="fam-pill" style="background:#f0f0f0;color:#555">👥 ${tot}</span>
-          </div>
+  // Resumo detalhado
+  const resumoCard = document.getElementById('resumoConvCard');
+  if(D.conv.length > 0){
+    resumoCard.style.display = 'block';
+    document.getElementById('resumoConvBody').innerHTML = `
+      <div class="resumo-section">
+        <div class="resumo-section-title">✅ Confirmados</div>
+        <div class="resumo-row"><span class="resumo-label">Famílias confirmadas</span><span class="resumo-val">${cnfFam}</span></div>
+        <div class="resumo-row"><span class="resumo-label">👨 Adultos confirmados</span><span class="resumo-val vg">${cnfAdultos}</span></div>
+        <div class="resumo-row"><span class="resumo-label">👧 Crianças confirmadas</span><span class="resumo-val vg">${cnfCriancas}</span></div>
+        <div class="resumo-row" style="border-top:2px solid #d6f5e3;margin-top:4px;padding-top:10px">
+          <span class="resumo-label" style="font-weight:700">Total confirmado</span>
+          <span class="resumo-val" style="color:var(--leaf)">${cnfAdultos+cnfCriancas} pessoas</span>
         </div>
-        <div>${badge(c.status)}</div>
       </div>
-      <div style="display:flex;gap:5px;margin-top:10px;justify-content:flex-end">
-        <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 12px;font-size:12px">✏️ Status</button>
-        <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 12px;font-size:12px">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
+      <div class="resumo-section">
+        <div class="resumo-section-title">📊 Geral</div>
+        <div class="resumo-row"><span class="resumo-label">Total de famílias</span><span class="resumo-val">${D.conv.length}</span></div>
+        <div class="resumo-row"><span class="resumo-label">👨 Total de adultos</span><span class="resumo-val">${totAdultos}</span></div>
+        <div class="resumo-row"><span class="resumo-label">👧 Total de crianças</span><span class="resumo-val">${totCriancas}</span></div>
+        <div class="resumo-row"><span class="resumo-label">⏳ Aguardando</span><span class="resumo-val" style="color:#8a6000">${aguardando} famílias</span></div>
+        <div class="resumo-row"><span class="resumo-label">❌ Não virão</span><span class="resumo-val" style="color:#b00020">${naoVirao} famílias</span></div>
+        <div class="resumo-row" style="border-top:2px solid var(--cherry-pale);margin-top:4px;padding-top:10px">
+          <span class="resumo-label" style="font-weight:700">Total de pessoas</span>
+          <span class="resumo-val">${totPessoas} pessoas</span>
+        </div>
+      </div>`;
+  } else {
+    resumoCard.style.display = 'none';
+  }
 }
 
 // ════════════════════════════════════
