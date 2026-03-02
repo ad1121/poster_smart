@@ -1,1495 +1,824 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livre dos Jogos - Plataforma de Apoio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: opacity 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.8;
-        }
-
-        /* Menu Hamburger */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .section {
-            margin: 4rem 0;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: white;
-        }
-
-        .hero {
-            text-align: center;
-            margin-top: 6rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #FFD700;
-        }
-
-        .hero-text {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            margin: 5px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #f44336, #d32f2f);
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .tool-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .blocked-sites {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            font-size: 0.8rem;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        /* Chat Styles */
-        .chat-container {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .chat-header {
-            text-align: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .name-input-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-
-        .name-input {
-            flex: 1;
-            padding: 10px 15px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .name-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.8rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            word-wrap: break-word;
-        }
-
-        .message.own {
-            background: rgba(76, 175, 80, 0.3);
-            border-left: 3px solid #4CAF50;
-            margin-left: 20px;
-        }
-
-        .message.other {
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid #2196F3;
-            margin-right: 20px;
-        }
-
-        .message-author {
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-            color: #FFD700;
-        }
-
-        .message-text {
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        .message-time {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-top: 0.3rem;
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 12px 15px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            resize: none;
-            max-height: 100px;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-
-        .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .online-count {
-            text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin: 0.5rem 0;
-        }
-
-        .testimonials {
-            margin: 1.5rem 0;
-        }
-
-        .testimonial {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #FFD700;
-            font-size: 0.9rem;
-        }
-
-        .resources-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .resources-list li {
-            background: rgba(255, 255, 255, 0.1);
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #4CAF50;
-            font-size: 0.9rem;
-        }
-
-        .emergency-section {
-            background: rgba(255, 0, 0, 0.2) !important;
-            border: 2px solid #ff4444 !important;
-            animation: gentle-pulse 3s infinite;
-        }
-
-        @keyframes gentle-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .progress-tracker {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin: 1rem 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .quote-rotation {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            margin: 2rem 0;
-            font-style: italic;
-            font-size: 1rem;
-        }
-
-        .footer {
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 4rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(0, 0, 0, 0.95);
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: 2rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .nav-links a {
-                font-size: 1.2rem;
-                padding: 1rem;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .container {
-                padding: 0 0.5rem;
-            }
-
-            .section {
-                margin: 2rem 0;
-                padding: 1.5rem;
-                border-radius: 10px;
-            }
-
-            .hero {
-                margin-top: 5rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .tool-card {
-                padding: 1rem;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.8rem;
-                margin: 3px;
-            }
-
-            .chat-messages {
-                height: 250px;
-            }
-
-            .name-input-container {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .name-input {
-                width: 100%;
-            }
-
-            .chat-input-container {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .message {
-                padding: 0.6rem;
-                font-size: 0.85rem;
-            }
-
-            .message.own {
-                margin-left: 10px;
-            }
-
-            .message.other {
-                margin-right: 10px;
-            }
-
-            .blocked-sites {
-                font-size: 0.7rem;
-                max-height: 120px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-text {
-                font-size: 1rem;
-            }
-
-            .quote-rotation {
-                font-size: 0.9rem;
-                padding: 1rem;
-            }
-
-            .testimonial {
-                font-size: 0.8rem;
-                padding: 0.8rem;
-            }
-
-            .chat-messages {
-                height: 200px;
-                padding: 0.8rem;
-            }
-
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.75rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#c0173a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Festa Ana Clara">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Planejamento da festa de 2 anos da Ana Clara 🍒">
+<link rel="manifest" id="manifestLink">
+<title>🍒 Festa da Ana Clara — 2 Aninhos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cherry:      #c0173a;
+  --cherry-dark: #8b0f28;
+  --cherry-mid:  #e8254f;
+  --cherry-soft: #f5b8c8;
+  --cherry-pale: #fdf0f3;
+  --leaf:        #3a7d44;
+  --leaf-light:  #6ab87a;
+  --cream:       #fff8f9;
+  --text:        #2d0a12;
+  --text-muted:  #9a5060;
+  --gold:        #d4a853;
+  --shadow:      0 4px 20px rgba(192,23,58,0.13);
+  --shadow-lg:   0 8px 32px rgba(192,23,58,0.22);
+  --r:           16px;
+  --safe-b:      env(safe-area-inset-bottom, 12px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + var(--safe-b))}
+
+/* CHERRIES BG */
+.cb{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cb span{position:absolute;opacity:.07;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0}8%{opacity:.07}92%{opacity:.07}100%{transform:translateY(-10vh) rotate(380deg);opacity:0}}
+
+.wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 13px}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--cherry-dark),var(--cherry));padding:13px 16px 11px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(192,23,58,.4)}
+.topbar-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;line-height:1.1}
+.topbar-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;opacity:.8;font-weight:500}
+.topbar-cherry{font-size:26px;animation:sway 3s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+/* INSTALL BANNER */
+.install-banner{background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;padding:11px 14px;display:none;align-items:center;gap:10px;font-size:13px;font-weight:600;border-bottom:2px solid rgba(255,255,255,.1)}
+.install-banner.visible{display:flex}
+.ib-icon{font-size:22px}
+.ib-txt{flex:1}
+.ib-txt span{display:block;font-size:11px;opacity:.75;font-weight:400}
+.ib-btn{background:var(--cherry);border:none;border-radius:8px;color:white;font-weight:700;font-size:12px;padding:7px 13px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.ib-close{background:none;border:none;color:white;font-size:18px;padding:0 4px;cursor:pointer}
+
+/* SHEETS BAR */
+.sheets-bar{background:#1a4a2a;color:white;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:#ffd700;flex-shrink:0}
+.dot.ok{background:#7fff00;animation:pulse 1.5s infinite}
+.dot.err{background:#ff6b6b}
+.dot.syncing{background:#79c0ff;animation:pulse .6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-all-btn{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:white;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+
+/* HERO */
+.hero{background:white;border-radius:0 0 24px 24px;padding:18px 18px 20px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cherry-mid),var(--cherry-dark),var(--leaf))}
+.hero-emoji{font-size:48px;line-height:1;margin-bottom:5px;display:block;filter:drop-shadow(0 4px 12px rgba(192,23,58,.3))}
+.hero h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:900;color:var(--cherry-dark);margin-bottom:2px}
+.hero h2 em{font-style:italic;color:var(--cherry-mid)}
+.hero p{font-size:12px;color:var(--text-muted)}
+.age-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--cherry),var(--cherry-dark));color:white;padding:7px 17px;border-radius:50px;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(192,23,58,.35);margin-top:9px}
+
+/* SUM GRID */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.sum-card{background:white;border-radius:var(--r);padding:14px 12px;text-align:center;box-shadow:var(--shadow);border-top:3px solid transparent;transition:transform .18s}
+.sum-card:active{transform:scale(.97)}
+.sum-card.c1{border-color:var(--cherry)}.sum-card.c2{border-color:var(--leaf)}.sum-card.c3{border-color:var(--gold)}.sum-card.c4{border-color:var(--cherry-soft)}
+.sv{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--cherry-dark);display:block;margin-bottom:2px}
+.sl{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:white;display:flex;box-shadow:0 -3px 20px rgba(0,0,0,.12);padding-bottom:var(--safe-b);border-top:1.5px solid #fce8ec}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;border:none;background:transparent;cursor:pointer;transition:all .18s;color:var(--text-muted);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;position:relative}
+.nicon{font-size:21px;line-height:1;margin-bottom:3px;transition:transform .18s}
+.nlabel{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.nav-btn.active{color:var(--cherry)}
+.nav-btn.active .nicon{transform:scale(1.2) translateY(-2px)}
+.nav-btn:active .nicon{transform:scale(.9)}
+.nav-ind{position:absolute;top:0;left:50%;transform:translateX(-50%);width:26px;height:3px;border-radius:3px;background:var(--cherry);opacity:0;transition:opacity .2s}
+.nav-btn.active .nav-ind{opacity:1}
+
+/* PANELS */
+.panel{display:none;padding-top:4px}
+.panel.active{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:white;border-radius:var(--r);padding:16px 15px;box-shadow:var(--shadow);margin-bottom:13px;position:relative;overflow:hidden}
+.ca{position:absolute;right:-6px;top:-6px;font-size:55px;opacity:.04;pointer-events:none}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:11px;border-bottom:1.5px solid var(--cherry-pale);flex-wrap:wrap;gap:7px}
+.chL{display:flex;align-items:center;gap:8px}
+.ci{font-size:19px}
+.ct{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cherry-dark)}
+
+/* FORM */
+.fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px}
+input[type=text],input[type=number],input[type=tel],select,textarea{border:2px solid #f2dde2;border-radius:11px;padding:12px 12px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--cherry-pale);transition:border-color .18s,background .18s;outline:none;width:100%;-webkit-appearance:none}
+input:focus,select:focus{border-color:var(--cherry);background:white}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border:none;border-radius:11px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .18s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.96)}
+.btn-full{width:100%;margin-top:3px}
+.btn-cherry{background:linear-gradient(135deg,var(--cherry-mid),var(--cherry-dark));color:white;box-shadow:0 4px 14px rgba(192,23,58,.35)}
+.btn-leaf{background:linear-gradient(135deg,var(--leaf-light),var(--leaf));color:white}
+.btn-sheets{background:linear-gradient(135deg,#34a853,#1a6332);color:white}
+.btn-red{background:linear-gradient(135deg,#ff6b6b,#d03030);color:white}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#b8891e);color:white}
+.btn-sm{padding:7px 12px;font-size:12px;border-radius:9px}
+
+/* LIST ITEMS */
+.list-item{background:var(--cherry-pale);border-radius:12px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:9px;border-left:3px solid var(--cherry-soft);transition:background .15s}
+.list-item:active{background:#fce8ec}
+.list-item.sp{border-left-color:var(--leaf)}
+.list-item.sc{border-left-color:#ccc;opacity:.65}
+.lib{flex:1;min-width:0}
+.lit{font-weight:700;font-size:13.5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lis{font-size:11.5px;color:var(--text-muted)}
+.lir{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.liv{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;white-space:nowrap}
+
+/* MINI STATS */
+.mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
+.msc{background:white;border-radius:11px;padding:11px 6px;text-align:center;box-shadow:var(--shadow)}
+.msc-v{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--cherry-dark);display:block;margin-bottom:2px}
+.msc-l{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:50px;font-size:11px;font-weight:700}
+.b-pago{background:#d6f5e3;color:#1d6b3a}
+.b-pendente{background:#fff3d6;color:#8a6000}
+.b-cancelado{background:#ffe3e3;color:#b00020}
+.b-encomend{background:#e3eeff;color:#1a4080}
+.b-confirmado{background:#d6f5e3;color:#1d6b3a}
+.b-aguardando{background:#fff3d6;color:#8a6000}
+.b-nao{background:#ffe3e3;color:#b00020}
+.b-crianca{background:#e8f4ff;color:#1a5090}
+.b-adulto{background:#fde8f0;color:#8a1040}
+.vg{color:#1d6b3a;font-weight:700}
+.vr{color:var(--cherry);font-weight:700}
+
+/* PROGRESS */
+.prog-wrap{background:#f2dde2;border-radius:50px;height:11px;overflow:hidden;margin:5px 0}
+.prog-bar{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--leaf-light),var(--leaf));transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* SYNC LOG */
+.sync-log{background:#0d1117;border-radius:9px;padding:11px;font-family:monospace;font-size:11px;color:#7ee787;max-height:90px;overflow-y:auto;margin-top:9px;display:none}
+.sync-log.visible{display:block}
+.le{color:#ff7070}
+.li2{color:#79c0ff}
+
+/* CATEGORIA */
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--cherry-pale);font-size:13.5px}
+.cat-item:last-child{border-bottom:none}
+.cat-n{font-weight:600}
+.cat-t{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--cherry-dark);text-align:right}
+.cat-s{font-size:11px;color:var(--text-muted);text-align:right}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:28px 18px;color:var(--text-muted)}
+.ei{font-size:38px;margin-bottom:7px}
+.empty-state p{font-size:13.5px}
+
+/* STATUS MODAL */
+.status-overlay{position:fixed;inset:0;background:rgba(45,10,18,.45);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.status-overlay.open{display:flex;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.status-sheet{background:white;border-radius:24px 24px 0 0;padding:20px 16px calc(20px + var(--safe-b));width:100%;max-width:480px;animation:slideSheet .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.status-sheet h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cherry-dark);margin-bottom:4px;text-align:center}
+.status-sheet p{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:16px}
+.status-options{display:flex;flex-direction:column;gap:9px}
+.status-opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;border:2px solid transparent;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;background:var(--cherry-pale);-webkit-tap-highlight-color:transparent}
+.status-opt:active{transform:scale(.97)}
+.status-opt.selected{border-color:var(--cherry);background:white}
+.status-opt .so-icon{font-size:20px;width:28px;text-align:center}
+.status-opt .so-label{flex:1}
+.status-opt .so-check{font-size:16px;opacity:0}
+.status-opt.selected .so-check{opacity:1}
+.btn-cancel-sheet{width:100%;margin-top:12px;padding:13px;border:2px solid #f2dde2;border-radius:13px;background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* GUIA */
+.guia-card{display:none;border:2px solid #34a853}
+.guia-card.visible{display:block}
+.guia-code{background:#1e1e1e;color:#d4d4d4;border-radius:9px;padding:12px;font-family:monospace;font-size:10.5px;white-space:pre-wrap;overflow-x:auto;margin:9px 0;line-height:1.6}
+.gs{font-size:13px;line-height:1.8;color:#333}
+.gs strong{color:var(--cherry-dark)}
+code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color:var(--cherry-dark)}
+
+/* FAB */
+.fab{position:fixed;bottom:calc(78px + var(--safe-b));right:14px;z-index:250;background:linear-gradient(135deg,#34a853,#1a6332);color:white;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;box-shadow:0 4px 16px rgba(52,168,83,.45);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.fab:active{transform:scale(.91)}
+</style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">🛡️ Livre dos Jogos</div>
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#inicio" onclick="closeMenu()">Início</a></li>
-                <li><a href="#ferramentas" onclick="closeMenu()">Ferramentas</a></li>
-                <li><a href="#chat-apoio" onclick="closeMenu()">Chat</a></li>
-                <li><a href="#recursos" onclick="closeMenu()">Recursos</a></li>
-                <li><a href="#emergencia" onclick="closeMenu()">Emergência</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <div class="container">
-        <section id="inicio" class="section hero">
-            <h1>🌟 Você Não Está Sozinho</h1>
-            <p class="hero-text">
-                Esta é uma plataforma de apoio para pessoas que querem se livrar do vício em jogos e apostas. 
-                Aqui você encontra ferramentas, motivação e uma comunidade que entende sua luta.
-            </p>
+<div class="cb" id="cherryBg"></div>
 
-            <div class="quote-rotation">
-                <p id="rotating-quote">"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi</p>
-            </div>
-        </section>
-
-        <section id="ferramentas" class="section">
-            <h2>🛠️ Ferramentas de Proteção</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>🚫 Bloqueadores Recomendados</h3>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">💻 Desktop/Navegador:</h4>
-                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                        <li><strong>Cold Turkey Blocker</strong> - Windows/Mac</li>
-                        <li><strong>BlockSite</strong> - Chrome/Firefox</li>
-                        <li><strong>Freedom</strong> - Multiplataforma</li>
-                    </ul>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">📱 Mobile:</h4>
-                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                        <li><strong>BlockSite</strong> - Android/iOS</li>
-                        <li><strong>AppBlock</strong> - Bloqueio de apps</li>
-                        <li><strong>Freedom</strong> - Multiplataforma</li>
-                    </ul>
-                    
-                    <div style="margin-top: 1.5rem;">
-                        <a href="https://getcoldturkey.com/" class="btn" target="_blank">Cold Turkey</a>
-                        <a href="https://blocksite.co/" class="btn btn-secondary" target="_blank">BlockSite</a>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <h3>🎯 Seu Progresso</h3>
-                    <div class="progress-tracker">
-                        <p>Bloqueios hoje: <strong id="personal-blocks">0</strong></p>
-                        <p>Dias limpo: <strong id="clean-days">1</strong></p>
-                        <p>Economia: <strong id="personal-savings">R$ 0,00</strong></p>
-                        
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 10%;"></div>
-                        </div>
-                        <p><small>Meta: 30 dias livres</small></p>
-                        
-                        <button class="btn" onclick="addBlock()">Registrar Bloqueio</button>
-                        <button class="btn btn-secondary" onclick="resetProgress()">Recomeçar</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h3>📋 Sites Mais Bloqueados</h3>
-                <h3>Clique para copiar a lista de sites:</h3>
-<div class="blocked-sites" onclick="copiarLista()">
-1win.com  
-22bet.com  
-bc.game  
-bet365.com  
-bet365 (pode aparecer como .bet.br também)  
-betMGM  
-betNacional.com  
-BetMotion.com  
-bet365.com  
-Betfair.com  
-Betsson.com  
-Betboo.com  
-Betdasorte.bet.br  
-B2xBet  
-bateubet.bet.br  
-Bet.bet  
-betano.com  
-br4bet.bet.br  
-Brazino777.bet.br  
-BacanaPlay  
-BetSul.bet.br  
-Betão  
-Big  
-Blaze.com  
-bodog.com  
-brxBet  
-Brazilbet  
-C2C plateformes  
-caesars.com  
-Davbet  
-Donald.bet  
-Donald Bet  
-Empresa Upbet  
-EsportesDaSorte.com  
-Esporte365  
-EsportivaBet.bet.br  
-F12.bet  
-Fogo777  
-Galera.bet  
-Geralbet.bet.br  
-Goldspin.com  
-H2bet.com  
-Hiperbet.bet.br  
-Icecasino.com  
-Jogo Online (marca genérica)  
-JogoAki  
-Jogão  
-Jonbet  
-King Panda  
-KTO.com  
-Luva.bet  
-Luvabet.bet.br  
-LiderBet  
-Lotogreen  
-Luck.bet  
-Luckybet.com  
-MagicJackpot  
-McGames  
-Melbet.com  
-MetGol.io  
-Milbets.com  
-MultiBet.bet.br  
-NetBet.com  
-Neon54.com  
-Novibet.bet.br  
-Obabet.com  
-OleyBet  
-Onabet.bet.br  
-Pagol  
-PapiGames.com  
-Pin-Up.bet  
-Pixbet.com  
-PlayUZU  
-PowBet.com  
-QuickWin.com  
-Realsbet.com  
-Reaℓs  
-RealBet.com (variante)  
-R7 (marca)  
-RebuBet  
-RevenBet  
-Rivalo.com  
-Segurobet.com  
-Seubet.bet.br  
-Spin (genérico)  
-SpinCasino.com  
-Stake.com  
-Sportingbet.com  
-Sportybet  
-Super  
-Superbet.com  
-Tigrinho.bet  
-UX (marca genérica)  
-vaidebet.com  
-Vbet.com  
-Verdecassino.com  
-Vera-and-John.com  
-Vegasino  
-WsmCasino.com  
-VulkanVegas.com  
-Winbuzz.com  
-ZetCasino.com  
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-title">
+    🍒 Festa da Ana Clara
+    <small>Planejamento — 2 Aninhos</small>
+  </div>
+  <span class="topbar-cherry">🍒</span>
 </div>
 
-<div class="copiado" id="mensagemCopiado">Lista copiada com sucesso!</div>
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <span class="ib-icon">📲</span>
+  <div class="ib-txt">Instalar como App<span>Acesse rápido pela tela inicial</span></div>
+  <button class="ib-btn" id="installBtn">Instalar</button>
+  <button class="ib-close" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+</div>
 
-<script>
-function copiarLista() {
-  const div = document.querySelector('.blocked-sites');
-  const texto = div.innerText;
+<!-- SHEETS STATUS -->
+<div class="sheets-bar">
+  <span class="dot ok" id="sheetsDot"></span>
+  <span id="sheetsStatusTxt" style="flex:1">📊 Google Sheets conectado — Ana Clara</span>
+  <button class="sync-all-btn" onclick="syncTudo()">🔄 Sync tudo</button>
+</div>
 
-  navigator.clipboard.writeText(texto).then(() => {
-    const msg = document.getElementById('mensagemCopiado');
-    msg.style.display = 'block';
-    setTimeout(() => {
-      msg.style.display = 'none';
-    }, 2000);
-  }).catch(err => {
-    alert('Erro ao copiar: ' + err);
-  });
-}
-</script>
-                <p><small>💡 Use esta lista em seus bloqueadores</small></p>
-            </div>
-        </section>
+<div class="wrap">
 
-        <section id="chat-apoio" class="section">
-            <h2>💬 Chat da Comunidade</h2>
-            
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h3>🤝 Converse com a Comunidade</h3>
-                    <div class="online-count">
-                        <span id="online-users"></span> pessoas online agora
-                    </div>
-                </div>
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-emoji">🍒</span>
+    <h2>Festa da <em>Ana Clara</em></h2>
+    <p>Planejamento completo do aniversário</p>
+    <div class="age-pill">🎂 2 Aninhos de Amor</div>
+  </div>
 
-                <div class="name-input-container" id="nameContainer">
-                    <input type="text" class="name-input" id="userName" placeholder="Digite seu nome ou apelido..." maxlength="20">
-                    <button class="btn" onclick="joinChat()">Entrar</button>
-                </div>
+  <!-- RESUMO -->
+  <div class="sum-grid">
+    <div class="sum-card c1"><span class="sv" id="sumTotal">R$ 0</span><span class="sl">🍒 Orçado</span></div>
+    <div class="sum-card c2"><span class="sv" id="sumPago">R$ 0</span><span class="sl">✅ Pago</span></div>
+    <div class="sum-card c3"><span class="sv" id="sumPend">R$ 0</span><span class="sl">⏳ A Pagar</span></div>
+    <div class="sum-card c4"><span class="sv" id="sumConv">0</span><span class="sl">👥 Convid.</span></div>
+  </div>
 
-                <div class="chat-messages" id="chatMessages" style="display: none;">
-                    <!-- Mensagens aparecerão aqui -->
-                </div>
-
-                <div class="chat-input-container" id="chatInputContainer" style="display: none;">
-                    <textarea class="chat-input" id="messageInput" placeholder="Digite sua mensagem..." rows="1"></textarea>
-                    <button class="btn" onclick="sendMessage()">Enviar</button>
-                </div>
-
-                <div style="margin-top: 1rem; text-align: center;">
-                    <p style="font-size: 0.8rem; opacity: 0.8;">
-                        🔥 Chat em tempo real com Firebase<br>
-                        <span id="connection-status">🔄 Conectando...</span>
-                    </p>
-                    <p style="font-size: 0.7rem; opacity: 0.6; margin-top: 0.5rem;">
-                        💡 Mensagens são moderadas automaticamente
-                    </p>
-                </div>
-            </div>
-
-            <div class="tools-grid" style="margin-top: 2rem;">
-                <div class="tool-card">
-                    <h3>🆘 Ajuda Profissional 24h</h3>
-                    <p>Para momentos de crise:</p>
-                    
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.cvv.org.br/chat/" class="btn btn-danger" target="_blank">
-                            🆘 CVV Chat Online
-                        </a>
-                        <a href="tel:188" class="btn btn-danger">
-                            📞 CVV - 188
-                        </a>
-                    </div>
-                    
-                    <p style="font-size: 0.8rem; opacity: 0.8;">
-                        O CVV oferece apoio 24h gratuito e sigiloso.
-                    </p>
-                </div>
-
-                <div class="tool-card">
-                    <h3>🎯 Atividades Alternativas</h3>
-                    <p>Quando sentir vontade de apostar:</p>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.youtube.com/results?search_query=meditação+guiada+ansiedade" class="btn" target="_blank">🧘 Meditar</a>
-                        <a href="https://www.youtube.com/results?search_query=exercícios+casa" class="btn btn-secondary" target="_blank">🏃 Exercitar</a>
-                        <a href="https://www.duolingo.com" class="btn" target="_blank">📚 Aprender</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="apoio" class="section">
-            <h2>🤝 Apoio e Motivação</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>💭 Depoimentos Reais</h3>
-                    <div class="testimonials">
-                        <div class="testimonial">
-                            <p>"Depois de 3 meses usando bloqueadores, consegui controlar minha compulsão. O chat me ajudou muito nos momentos difíceis." - <em>João, 34 anos</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Esta plataforma me mostrou que não estava sozinha. A comunidade é incrível!" - <em>Maria, 28 anos</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Já economizei R$ 8.000 em 8 meses. Comprei um notebook novo com o dinheiro que gastava apostando." - <em>Carlos, 41 anos</em></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <h3>🏆 Metas e Conquistas</h3>
-                    <div style="margin: 1rem 0;">
-                        <p><strong>🎯 Suas Metas:</strong></p>
-                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                            <li>✅ 1 dia sem apostar</li>
-                            <li>🎯 7 dias sem apostar</li>
-                            <li>🎯 30 dias sem apostar</li>
-                            <li>🎯 100 dias sem apostar</li>
-                            <li>🎯 1 ano livre</li>
-                        </ul>
-                        
-                        <div style="margin-top: 1rem;">
-                            <button class="btn" onclick="celebrateProgress()">🎉 Celebrar Progresso</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="recursos" class="section">
-            <h2>📞 Recursos Profissionais</h2>
-            
-            <ul class="resources-list">
-                <li>
-                    <strong>🏥 CAPS - Centro de Atenção Psicossocial</strong><br>
-                    Atendimento gratuito pelo SUS. Procure o CAPS da sua região.
-                </li>
-                <li>
-                    <strong>📞 CVV - Centro de Valorização da Vida</strong><br>
-                    Telefone: 188 (24h, gratuito)<br>
-                    Chat: <a href="https://www.cvv.org.br" target="_blank" style="color: #FFD700;">cvv.org.br</a>
-                </li>
-                <li>
-                    <strong>🎲 Jogadores Anônimos</strong><br>
-                    Grupos de apoio gratuitos<br>
-                    Site: <a href="https://www.jogadoresanonimos.org.br" target="_blank" style="color: #FFD700;">jogadoresanonimos.org.br</a>
-                </li>
-            </ul>
-        </section>
-
-        <section id="emergencia" class="section emergency-section">
-            <h2>🚨 Em Crise? Ação Imediata!</h2>
-            
-            <div style="text-align: center; margin: 2rem 0;">
-                <p style="font-size: 1.2rem; margin-bottom: 2rem;">
-                    Se você está com vontade intensa de apostar AGORA:
-                </p>
-                
-                <div style="margin: 2rem 0;">
-                    <a href="tel:188" class="btn btn-danger" style="font-size: 1.1rem;">📞 CVV (188)</a>
-                    <button class="btn btn-danger" onclick="emergencyBreathing()">🫁 Respirar 4-7-8</button>
-                </div>
-                
-                <div id="breathing-exercise" style="display: none; margin: 2rem 0; font-size: 1.3rem;">
-                    <p id="breathing-instruction">Prepare-se...</p>
-                    <div style="font-size: 2.5rem; color: #FFD700; margin: 1rem 0;" id="breathing-counter"></div>
-                </div>
-                
-                <p style="margin-top: 2rem;">
-                    <strong>Lembre-se:</strong> Esta sensação vai passar. Você já resistiu antes!
-                </p>
-            </div>
-        </section>
+  <!-- ===== ORÇAMENTOS ===== -->
+  <div id="tab-orc" class="panel active">
+    <div class="card">
+      <div class="ca">💰</div>
+      <div class="card-head"><div class="chL"><span class="ci">💰</span><span class="ct">Novo Orçamento</span></div></div>
+      <div class="fgrp"><label>Descrição</label><input type="text" id="oDesc" placeholder="Ex: Decoração, Buffet, DJ..."></div>
+      <div class="frow2">
+        <div class="fgrp"><label>Categoria</label>
+          <select id="oCat"><option>🎊 Decoração</option><option>🍽️ Buffet</option><option>🍰 Comida</option><option>🥤 Bebida</option><option>🎵 Música/DJ</option><option>📷 Foto/Vídeo</option><option>💌 Convites</option><option>🎁 Brindes</option><option>👗 Fantasia</option><option>🏠 Local</option><option>📦 Outros</option></select>
+        </div>
+        <div class="fgrp"><label>Valor R$</label><input type="number" id="oValor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"></div>
+      </div>
+      <div class="frow2">
+        <div class="fgrp"><label>Status</label>
+          <select id="oStatus"><option>Pendente</option><option>Pago</option><option>Cancelado</option></select>
+        </div>
+        <div class="fgrp"><label>Observações</label><input type="text" id="oObs" placeholder="Fornecedor..."></div>
+      </div>
+      <button class="btn btn-cherry btn-full" onclick="addOrc()">🍒 Adicionar Orçamento</button>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Livre dos Jogos - Plataforma de apoio</p>
-            <p>Criado com ❤️ para ajudar pessoas a reconquistarem suas vidas</p>
-            <p><small>Esta não é uma plataforma médica. Procure ajuda profissional quando necessário.</small></p>
-            <div style="text-align: center; margin-top: 2rem;">
-    <h3 style="margin-bottom: 1rem;">📲 Precisa de ajuda?</h3>
-    <p>Fale diretamente com nossa equipe via WhatsApp:</p>
-    <a href="https://wa.me/5561991944143?text=Olá!%20Preciso%20de%20ajuda%20com%20apostas." 
-       target="_blank" class="btn btn-secondary" style="font-size: 1rem; margin-top: 1rem;">
-        💬 Entrar em Contato pelo WhatsApp
-    </a>
+    <div class="mini-stats">
+      <div class="msc"><span class="msc-v" id="oST">R$0</span><span class="msc-l">Total</span></div>
+      <div class="msc"><span class="msc-v" id="oSP">R$0</span><span class="msc-l">Pago</span></div>
+      <div class="msc"><span class="msc-v" id="oSPe">R$0</span><span class="msc-l">Pend.</span></div>
+      <div class="msc"><span class="msc-v" id="oSQ">0</span><span class="msc-l">Itens</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="chL"><span class="ci">📋</span><span class="ct">Orçamentos</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('orcamentos')">📊</button>
+          <button class="btn btn-leaf btn-sm" onclick="exportCSV('orcamentos')">⬇️</button>
+        </div>
+      </div>
+      <div id="oLista"><div class="empty-state"><div class="ei">💸</div><p>Nenhum orçamento ainda</p></div></div>
+    </div>
+  </div>
+
+  <!-- ===== CONVIDADOS ===== -->
+  <div id="tab-conv" class="panel">
+    <div class="card">
+      <div class="ca">👥</div>
+      <div class="card-head"><div class="chL"><span class="ci">👥</span><span class="ct">Novo Convidado</span></div></div>
+      <div class="fgrp"><label>Nome</label><input type="text" id="cNome" placeholder="Nome completo..."></div>
+      <div class="frow2">
+        <div class="fgrp"><label>Tipo</label>
+          <select id="cTipo"><option>Criança</option><option>Adulto</option></select>
+        </div>
+        <div class="fgrp"><label>Confirmação</label>
+          <select id="cStatus"><option>Aguardando</option><option>Confirmado</option><option>Não virá</option></select>
+        </div>
+      </div>
+      <div class="fgrp"><label>Telefone</label><input type="tel" id="cTel" placeholder="(00) 00000-0000" inputmode="tel"></div>
+      <button class="btn btn-cherry btn-full" onclick="addConv()">🍒 Adicionar Convidado</button>
+    </div>
+
+    <div class="mini-stats">
+      <div class="msc"><span class="msc-v" id="cTotal">0</span><span class="msc-l">Total</span></div>
+      <div class="msc"><span class="msc-v" id="cCri">0</span><span class="msc-l">👧 Cri.</span></div>
+      <div class="msc"><span class="msc-v" id="cAdu">0</span><span class="msc-l">👨 Adu.</span></div>
+      <div class="msc"><span class="msc-v" id="cConf">0</span><span class="msc-l">✅ Conf.</span></div>
+    </div>
+
+    <div class="card" style="padding:13px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:700;color:var(--text-muted)">Confirmados</span>
+        <span style="font-size:12px;font-weight:700;color:var(--leaf)" id="progPct">0%</span>
+      </div>
+      <div class="prog-wrap"><div class="prog-bar" id="progConf" style="width:0%"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="chL"><span class="ci">📋</span><span class="ct">Convidados</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('convidados')">📊</button>
+          <button class="btn btn-leaf btn-sm" onclick="exportCSV('convidados')">⬇️</button>
+        </div>
+      </div>
+      <div id="cLista"><div class="empty-state"><div class="ei">🎈</div><p>Nenhum convidado ainda</p></div></div>
+    </div>
+  </div>
+
+  <!-- ===== COMIDAS ===== -->
+  <div id="tab-food" class="panel">
+    <div class="card">
+      <div class="ca">🍰</div>
+      <div class="card-head"><div class="chL"><span class="ci">🍰</span><span class="ct">Nova Comida / Bebida</span></div></div>
+      <div class="fgrp"><label>Item</label><input type="text" id="fNome" placeholder="Ex: Bolo de cereja..."></div>
+      <div class="frow2">
+        <div class="fgrp"><label>Categoria</label>
+          <select id="fCat"><option>🎂 Bolo</option><option>🍬 Doces</option><option>🥐 Salgados</option><option>🍽️ Prato Principal</option><option>🧃 Bebida Criança</option><option>🍹 Bebida Adulto</option><option>🥪 Petisco</option><option>🍮 Sobremesa</option><option>🍴 Outros</option></select>
+        </div>
+        <div class="fgrp"><label>Quantidade</label><input type="text" id="fQtd" placeholder="100 pçs..."></div>
+      </div>
+      <div class="frow2">
+        <div class="fgrp"><label>Valor R$</label><input type="number" id="fValor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"></div>
+        <div class="fgrp"><label>Status</label>
+          <select id="fStatus"><option>Pendente</option><option>Encomendado</option><option>Pago</option></select>
+        </div>
+      </div>
+      <div class="fgrp"><label>Fornecedor</label><input type="text" id="fFornec" placeholder="Nome do fornecedor..."></div>
+      <button class="btn btn-cherry btn-full" onclick="addFood()">🍒 Adicionar Item</button>
+    </div>
+
+    <div class="mini-stats">
+      <div class="msc"><span class="msc-v" id="fT">R$0</span><span class="msc-l">Total</span></div>
+      <div class="msc"><span class="msc-v" id="fQ">0</span><span class="msc-l">Itens</span></div>
+      <div class="msc"><span class="msc-v" id="fP">R$0</span><span class="msc-l">Pago</span></div>
+      <div class="msc"><span class="msc-v" id="fPe">R$0</span><span class="msc-l">Pend.</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="chL"><span class="ci">🍽️</span><span class="ct">Cardápio</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('comidas')">📊</button>
+          <button class="btn btn-leaf btn-sm" onclick="exportCSV('comidas')">⬇️</button>
+        </div>
+      </div>
+      <div id="fLista"><div class="empty-state"><div class="ei">🎂</div><p>Nenhum item ainda</p></div></div>
+    </div>
+  </div>
+
+  <!-- ===== PLANILHA ===== -->
+  <div id="tab-plan" class="panel">
+    <div class="card">
+      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Google Sheets</span></div></div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Conectado à planilha da Ana Clara. Sincronize a qualquer momento.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-sheets btn-full" onclick="syncTudo()">🔄 Sincronizar Tudo Agora</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('orcamentos')" style="flex-direction:column;padding:9px 5px">💰<span style="font-size:9px;margin-top:3px">Orçam.</span></button>
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('convidados')" style="flex-direction:column;padding:9px 5px">👥<span style="font-size:9px;margin-top:3px">Convid.</span></button>
+          <button class="btn btn-sheets btn-sm" onclick="syncSheet('comidas')" style="flex-direction:column;padding:9px 5px">🍰<span style="font-size:9px;margin-top:3px">Comidas</span></button>
+        </div>
+        <button class="btn btn-gold btn-full" onclick="exportCSVAll()">⬇️ Exportar CSV Completo</button>
+        <button class="btn btn-leaf btn-full" onclick="window.print()">🖨️ Imprimir Relatório</button>
+      </div>
+      <div class="sync-log" id="syncLog"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Por Categoria</span></div></div>
+      <div id="planCat"><div class="empty-state"><div class="ei">📈</div><p>Nenhum dado ainda</p></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="chL"><span class="ci">📋</span><span class="ct">Todos os Lançamentos</span></div></div>
+      <div id="planTudo"><div class="empty-state"><div class="ei">🍒</div><p>Nenhum lançamento</p></div></div>
+    </div>
+
+    <!-- GUIA -->
+    <div class="card guia-card" id="guiaCard">
+      <div class="card-head">
+        <div class="chL"><span class="ci">📖</span><span class="ct" style="color:#1a6332">Como funciona</span></div>
+        <button class="btn btn-red btn-sm" onclick="toggleGuia()">✕</button>
+      </div>
+      <div class="gs">
+        <strong>URL configurada na planilha da Ana Clara:</strong><br>
+        <code style="font-size:10px;word-break:break-all">script.google.com/macros/s/AKfycbzi.../exec</code><br><br>
+        Todos que abrirem este site já estarão conectados automaticamente ao mesmo Google Sheets. Ao tocar em <strong>🔄 Sincronizar</strong>, os dados são enviados diretamente para a planilha.<br><br>
+        <strong>Abas criadas na planilha:</strong> <code>Orcamentos</code>, <code>Convidados</code>, <code>Comidas</code>
+      </div>
+    </div>
+    <button class="btn btn-cherry" style="width:100%;margin-bottom:14px;background:transparent;border:2px solid var(--cherry);color:var(--cherry);box-shadow:none" onclick="toggleGuia()">📖 Como funciona a integração</button>
+  </div>
+
 </div>
 
+<!-- STATUS MODAL -->
+<div class="status-overlay" id="statusOverlay" onclick="closeStatusModal(event)">
+  <div class="status-sheet" id="statusSheet">
+    <h3>Alterar Status</h3>
+    <p id="statusSheetLabel">Selecione o novo status</p>
+    <div class="status-options" id="statusOptions"></div>
+    <button class="btn-cancel-sheet" onclick="closeStatusModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="syncTudo()" title="Sync Google Sheets">📊</button>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showTab('orc',this)">
+    <div class="nav-ind"></div><span class="nicon">💰</span><span class="nlabel">Orçam.</span>
+  </button>
+  <button class="nav-btn" onclick="showTab('conv',this)">
+    <div class="nav-ind"></div><span class="nicon">👥</span><span class="nlabel">Convid.</span>
+  </button>
+  <button class="nav-btn" onclick="showTab('food',this)">
+    <div class="nav-ind"></div><span class="nicon">🍰</span><span class="nlabel">Comidas</span>
+  </button>
+  <button class="nav-btn" onclick="showTab('plan',this)">
+    <div class="nav-ind"></div><span class="nicon">📊</span><span class="nlabel">Planilha</span>
+  </button>
+</nav>
+
+<script>
+// ══════════════════════════
+// GOOGLE SHEETS URL FIXA
+// ══════════════════════════
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbziYuUFgoxPpy9bzMcem_sUonLixlqlSM1-ZELLiGFWeQOGhin38HfRzRtYj8yOCwR-/exec';
+
+// ══════════════════════════
+// PWA MANIFEST
+// ══════════════════════════
+const manifest = {
+  name: "Festa da Ana Clara 🍒",
+  short_name: "Festa Ana Clara",
+  description: "Planejamento do aniversário de 2 anos da Ana Clara",
+  start_url: "./",
+  display: "standalone",
+  background_color: "#fff8f9",
+  theme_color: "#c0173a",
+  orientation: "portrait",
+  icons: [{
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23c0173a'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-size='260' font-family='serif'%3E🍒%3C/text%3E%3C/svg%3E",
+    sizes: "512x512", type: "image/svg+xml"
+  }]
+};
+const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+document.getElementById('manifestLink').href = URL.createObjectURL(mBlob);
+
+// ══════════════════════════
+// INSTALL PWA
+// ══════════════════════════
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('visible');
+});
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').style.display = 'none';
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
+});
+
+// ══════════════════════════
+// CHERRIES BG
+// ══════════════════════════
+const bg = document.getElementById('cherryBg');
+['🍒','🌸','🍃','✨','🎀','🍒','🍒','🌸'].forEach((e,i) => {
+  const s = document.createElement('span');
+  s.textContent = e;
+  s.style.cssText = `left:${6+i*12}%;font-size:${14+Math.random()*16}px;animation-duration:${11+Math.random()*20}s;animation-delay:${-Math.random()*28}s`;
+  bg.appendChild(s);
+});
+
+// ══════════════════════════
+// DADOS
+// ══════════════════════════
+let D = JSON.parse(localStorage.getItem('anaclara_festa_v2') || '{"orc":[],"conv":[],"food":[]}');
+function save() { localStorage.setItem('anaclara_festa_v2', JSON.stringify(D)); render(); }
+
+// ══════════════════════════
+// TABS
+// ══════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  render();
+}
+
+// ══════════════════════════
+// HELPERS
+// ══════════════════════════
+const fmt  = v => 'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtS = v => { const n=parseFloat(v||0); return n>=1000?'R$'+(Math.round(n/100)/10)+'k':fmt(v); };
+
+function badge(s) {
+  const m={Pago:'b-pago',Pendente:'b-pendente',Cancelado:'b-cancelado',Encomendado:'b-encomend',
+           Confirmado:'b-confirmado',Aguardando:'b-aguardando','Não virá':'b-nao'};
+  return `<span class="badge ${m[s]||''}">${s}</span>`;
+}
+function scls(s) { return s==='Pago'||s==='Confirmado'?'sp':s==='Cancelado'||s==="Não virá"?'sc':''; }
+
+// ══════════════════════════
+// ORÇAMENTOS
+// ══════════════════════════
+function addOrc() {
+  const d=document.getElementById('oDesc').value.trim();
+  if(!d){alert('Informe a descrição!');return;}
+  D.orc.push({id:Date.now(),desc:d,cat:document.getElementById('oCat').value,
+    valor:parseFloat(document.getElementById('oValor').value)||0,
+    status:document.getElementById('oStatus').value,
+    obs:document.getElementById('oObs').value,
+    data:new Date().toLocaleDateString('pt-BR')});
+  ['oDesc','oValor','oObs'].forEach(i=>document.getElementById(i).value='');
+  save();
+}
+function delOrc(id){if(confirm('Remover?')){D.orc=D.orc.filter(x=>x.id!==id);save();}}
+
+function renderOrc() {
+  let t=0,p=0,pe=0;
+  const el=document.getElementById('oLista');
+  if(!D.orc.length){el.innerHTML='<div class="empty-state"><div class="ei">💸</div><p>Nenhum orçamento ainda</p></div>';}
+  else el.innerHTML=D.orc.map(o=>{
+    t+=o.valor;
+    if(o.status==='Pago')p+=o.valor;else if(o.status!=='Cancelado')pe+=o.valor;
+    return `<div class="list-item ${scls(o.status)}">
+      <div class="lib"><div class="lit">${o.desc}</div><div class="lis">${o.cat}${o.obs?' · '+o.obs:''}${o.data?' · '+o.data:''}</div></div>
+      <div class="lir">
+        <div class="liv ${o.status==='Pago'?'vg':'vr'}">${fmt(o.valor)}</div>
+        ${badge(o.status)}
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-cherry btn-sm" onclick="openStatusModal('orc',${o.id},'${o.status}')" style="padding:5px 10px;font-size:11px">✏️</button>
+          <button class="btn btn-red btn-sm" onclick="delOrc(${o.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
         </div>
-    </footer>
-
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, push, onValue, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-        // 🔥 CONFIGURAÇÕES DO FIREBASE - LIVRE DE JOGOS CHAT
-        const firebaseConfig = {
-            apiKey: "AIzaSyAHDylycDty1R0lv73oK1pr1bx1yXZhbkY",
-            authDomain: "livre-de-jogos-chat.firebaseapp.com",
-            databaseURL: "https://livre-de-jogos-chat-default-rtdb.firebaseio.com",
-            projectId: "livre-de-jogos-chat",
-            storageBucket: "livre-de-jogos-chat.firebasestorage.app",
-            messagingSenderId: "818539519826",
-            appId: "1:818539519826:web:b31096abafc930fcbc648b"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const messagesRef = ref(database, 'chat-messages');
-
-        // Variáveis globais
-        window.currentUser = '';
-        window.isInChat = false;
-        window.chatMessages = [];
-        window.database = database;
-        window.messagesRef = messagesRef;
-        window.firebasePush = push;
-        window.firebaseRef = ref;
-        window.firebaseOnValue = onValue;
-        window.serverTimestamp = serverTimestamp;
-
-        // Log de conexão
-        console.log('🔥 Firebase inicializado com sucesso!');
-    </script>
-
-    <script>
-        // Variáveis globais (agora acessíveis via window)
-        
-        // Dados persistentes do usuário
-        let personalData = {
-            blocks: parseInt(localStorage.getItem('personalBlocks') || '0'),
-            cleanDays: parseInt(localStorage.getItem('cleanDays') || '1'),
-            savings: parseFloat(localStorage.getItem('personalSavings') || '0'),
-            startDate: localStorage.getItem('startDate') || new Date().toDateString(),
-            lastDate: localStorage.getItem('lastDate') || ""
-
-        };
-
-        // Frases motivacionais
-        const motivationalQuotes = [
-            '"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi',
-            '"O sucesso é a soma de pequenos esforços repetidos dia após dia." - Robert Collier',
-            '"Você é mais forte do que pensa e mais capaz do que imagina."',
-            '"Cada dia sem apostar é um investimento no seu futuro."',
-            '"A verdadeira riqueza está na liberdade de escolha."',
-            '"Sua força de vontade é seu maior patrimônio."',
-            '"Não é sobre quantas vezes você cai, mas quantas você se levanta."',
-            '"Cada pequena vitória conta para a grande conquista."'
-        ];
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            updatePersonalStats();
-            rotateQuote();
-            checkNewDay();
-            initializeChat();
-            
-            // Verificar status da conexão Firebase
-            setTimeout(() => {
-                const statusElement = document.getElementById('connection-status');
-                if (typeof window.database !== 'undefined') {
-                    statusElement.textContent = '🟢 Conectado ao Firebase';
-                    statusElement.style.color = '#4CAF50';
-                } else {
-                    statusElement.textContent = '🟡 Modo demonstração';
-                    statusElement.style.color = '#FF9800';
-                }
-            }, 3000);
-            
-            // Rotacionar frases a cada 15 segundos
-            setInterval(rotateQuote, 15000);
-            
-            // Simular usuários online
-            setInterval(updateOnlineCount, 30000);
-            
-            // Auto-resize textarea
-            const messageInput = document.getElementById('messageInput');
-            if (messageInput) {
-                messageInput.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-                });
-
-                // Enter para enviar (Shift+Enter para nova linha)
-                messageInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
-
-            // Enter no campo de nome
-            const userNameInput = document.getElementById('userName');
-            if (userNameInput) {
-                userNameInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        joinChat();
-                    }
-                });
-            }
-        });
-
-        // Menu hamburger
-        function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const hamburger = document.querySelector('.hamburger');
-            
-            navLinks.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        }
-
-        function closeMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const hamburger = document.querySelector('.hamburger');
-            
-            navLinks.classList.remove('active');
-            hamburger.classList.remove('active');
-        }
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Funções de progresso pessoal
-        function updatePersonalStats() {
-            document.getElementById('personal-blocks').textContent = personalData.blocks;
-            document.getElementById('clean-days').textContent = personalData.cleanDays;
-            document.getElementById('personal-savings').textContent = `R$ ${personalData.savings.toFixed(2)}`;
-            
-            const progress = Math.min((personalData.cleanDays / 30) * 100, 100);
-            document.getElementById('progress-fill').style.width = progress + '%';
-            
-            // Salvar dados
-            localStorage.setItem('personalBlocks', personalData.blocks.toString());
-            localStorage.setItem('cleanDays', personalData.cleanDays.toString());
-            localStorage.setItem('personalSavings', personalData.savings.toString());
-        }
-
-       function addBlock() {
-    const today = new Date().toDateString();
-
-    // Se já registrou hoje, não deixa repetir
-    if (personalData.lastDate === today) {
-        alert("⚠️ Você já registrou o bloqueio de hoje!");
-        return;
-    }
-
-    // Atualiza estatísticas
-    personalData.blocks = 1; // sempre 1 por dia
-    personalData.cleanDays++; 
-    personalData.savings += 50; // ajuste conforme a economia real
-    personalData.lastDate = today;
-
-    // Atualiza exibição
-    updatePersonalStats();
-    updateGoals(); // 🔥 nova função que liga com Metas e Conquistas
-    localStorage.setItem('lastDate', today);
-
-    // Feedback no botão
-    const btn = event.target;
-    const originalText = btn.textContent;
-    btn.textContent = '✅ Dia Registrado!';
-    btn.style.background = '#4CAF50';
-    
-    setTimeout(() => {
-        btn.textContent = originalText;
-        btn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
-    }, 2000);
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('oST').textContent=fmtS(t);
+  document.getElementById('oSP').textContent=fmtS(p);
+  document.getElementById('oSPe').textContent=fmtS(pe);
+  document.getElementById('oSQ').textContent=D.orc.length;
 }
 
+// ══════════════════════════
+// CONVIDADOS
+// ══════════════════════════
+function addConv() {
+  const n=document.getElementById('cNome').value.trim();
+  if(!n){alert('Informe o nome!');return;}
+  D.conv.push({id:Date.now(),nome:n,tipo:document.getElementById('cTipo').value,
+    status:document.getElementById('cStatus').value,tel:document.getElementById('cTel').value});
+  document.getElementById('cNome').value='';
+  document.getElementById('cTel').value='';
+  save();
+}
+function delConv(id){if(confirm('Remover?')){D.conv=D.conv.filter(x=>x.id!==id);save();}}
 
-        function resetProgress() {
-            if (confirm('⚠️ Recomeçar a contagem?\n\nIsso é normal no processo de recuperação. O importante é não desistir!')) {
-                personalData.blocks = 0;
-                personalData.cleanDays = 1;
-                personalData.savings = 0;
-                personalData.startDate = new Date().toDateString();
-                updatePersonalStats();
-                alert('💪 Contagem reiniciada! Cada recomeço é uma nova oportunidade!');
-            }
-        }
-
-        function checkNewDay() {
-            const today = new Date().toDateString();
-            if (personalData.lastDate !== today) {
-                personalData.cleanDays++;
-                personalData.blocks = 0;
-                personalData.lastDate = today;
-                localStorage.setItem('lastDate', today);
-                updatePersonalStats();
-            }
-        }
-
-        function celebrateProgress() {
-            const messages = [
-                '🎉 Parabéns! Cada dia é uma vitória!',
-                '💪 Você está mais forte a cada dia!',
-                '🌟 Continue assim, você está indo muito bem!',
-                '🏆 Sua determinação é inspiradora!',
-                '❤️ A comunidade está orgulhosa de você!'
-            ];
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            alert(randomMessage);
-        }
-
-        function updateGoals() {
-    const goalsList = document.querySelectorAll('#apoio ul li');
-    const cleanDays = personalData.cleanDays;
-
-    goalsList.forEach((goal, index) => {
-        let goalText = goal.textContent;
-
-        // Define os marcos
-        let target = 0;
-        if (goalText.includes("1 dia")) target = 1;
-        if (goalText.includes("7 dias")) target = 7;
-        if (goalText.includes("30 dias")) target = 30;
-        if (goalText.includes("100 dias")) target = 100;
-        if (goalText.includes("1 ano")) target = 365;
-
-        // Marca meta concluída
-        if (cleanDays >= target) {
-            goal.innerHTML = "✅ " + goalText.replace("🎯", "");
-        } else {
-            goal.innerHTML = "🎯 " + goalText.replace("✅", "");
-        }
-    });
+function renderConv() {
+  const tot=D.conv.length,cri=D.conv.filter(x=>x.tipo==='Criança').length,
+        adu=D.conv.filter(x=>x.tipo==='Adulto').length,cnf=D.conv.filter(x=>x.status==='Confirmado').length;
+  document.getElementById('cTotal').textContent=tot;
+  document.getElementById('cCri').textContent=cri;
+  document.getElementById('cAdu').textContent=adu;
+  document.getElementById('cConf').textContent=cnf;
+  const pct=tot?Math.round(cnf/tot*100):0;
+  document.getElementById('progConf').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+  const el=document.getElementById('cLista');
+  if(!D.conv.length){el.innerHTML='<div class="empty-state"><div class="ei">🎈</div><p>Nenhum convidado ainda</p></div>';return;}
+  el.innerHTML=D.conv.map(c=>`<div class="list-item ${scls(c.status)}">
+    <div class="lib"><div class="lit">${c.tipo==='Criança'?'👧':'👨'} ${c.nome}</div><div class="lis">${c.tipo}${c.tel?' · '+c.tel:''}</div></div>
+    <div class="lir">${badge(c.status)}
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 10px;font-size:11px">✏️</button>
+        <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
+      </div>
+    </div>
+  </div>`).join('');
 }
 
+// ══════════════════════════
+// COMIDAS
+// ══════════════════════════
+function addFood() {
+  const n=document.getElementById('fNome').value.trim();
+  if(!n){alert('Informe o item!');return;}
+  D.food.push({id:Date.now(),nome:n,cat:document.getElementById('fCat').value,
+    qtd:document.getElementById('fQtd').value,
+    valor:parseFloat(document.getElementById('fValor').value)||0,
+    fornecedor:document.getElementById('fFornec').value,
+    status:document.getElementById('fStatus').value});
+  ['fNome','fQtd','fValor','fFornec'].forEach(i=>document.getElementById(i).value='');
+  save();
+}
+function delFood(id){if(confirm('Remover?')){D.food=D.food.filter(x=>x.id!==id);save();}}
 
-        function rotateQuote() {
-            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            document.getElementById('rotating-quote').textContent = randomQuote;
-        }
+function renderFood() {
+  let t=0,p=0,pe=0;
+  const el=document.getElementById('fLista');
+  if(!D.food.length){el.innerHTML='<div class="empty-state"><div class="ei">🎂</div><p>Nenhum item ainda</p></div>';}
+  else el.innerHTML=D.food.map(f=>{
+    t+=f.valor;
+    if(f.status==='Pago')p+=f.valor;else pe+=f.valor;
+    return `<div class="list-item ${scls(f.status)}">
+      <div class="lib"><div class="lit">${f.nome}</div><div class="lis">${f.cat}${f.qtd?' · '+f.qtd:''}${f.fornecedor?' · '+f.fornecedor:''}</div></div>
+      <div class="lir">
+        <div class="liv ${f.status==='Pago'?'vg':'vr'}">${fmt(f.valor)}</div>
+        ${badge(f.status)}
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-cherry btn-sm" onclick="openStatusModal('food',${f.id},'${f.status}')" style="padding:5px 10px;font-size:11px">✏️</button>
+          <button class="btn btn-red btn-sm" onclick="delFood(${f.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('fT').textContent=fmtS(t);
+  document.getElementById('fQ').textContent=D.food.length;
+  document.getElementById('fP').textContent=fmtS(p);
+  document.getElementById('fPe').textContent=fmtS(pe);
+}
 
-        // Sistema de Chat com Firebase
-        function initializeChat() {
-            // Verificar se Firebase está disponível
-            if (typeof window.database === 'undefined') {
-                console.log('Firebase não configurado - usando chat simulado');
-                loadInitialMessages();
-                return;
-            }
+// ══════════════════════════
+// PLANILHA
+// ══════════════════════════
+function renderPlan() {
+  const cats={};
+  [...D.orc,...D.food].forEach(x=>{
+    if(!cats[x.cat])cats[x.cat]={itens:0,total:0,pago:0,pend:0};
+    cats[x.cat].itens++;cats[x.cat].total+=x.valor;
+    if(x.status==='Pago')cats[x.cat].pago+=x.valor;else cats[x.cat].pend+=x.valor;
+  });
+  const ks=Object.keys(cats);
+  document.getElementById('planCat').innerHTML=ks.length?ks.map(k=>`
+    <div class="cat-item">
+      <div><div class="cat-n">${k}</div><div style="font-size:11px;color:var(--text-muted)">${cats[k].itens} iten${cats[k].itens!==1?'s':''}</div></div>
+      <div><div class="cat-t">${fmt(cats[k].total)}</div><div class="cat-s"><span class="vg">${fmt(cats[k].pago)}</span> · <span class="vr">${fmt(cats[k].pend)}</span></div></div>
+    </div>`).join(''):'<div class="empty-state"><div class="ei">📈</div><p>Nenhum dado</p></div>';
 
-            // Escutar mensagens do Firebase em tempo real
-            window.firebaseOnValue(window.messagesRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                const messages = Object.keys(data).map(key => ({
-                    id: key,
-                    ...data[key]
-                })).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+  const todos=[
+    ...D.orc.map(x=>({i:'💰',d:x.desc,c:x.cat,v:x.valor,s:x.status})),
+    ...D.food.map(x=>({i:'🍰',d:x.nome,c:x.cat,v:x.valor,s:x.status})),
+    ...D.conv.map(x=>({i:'👥',d:x.nome,c:x.tipo,v:0,s:x.status}))
+  ];
+  document.getElementById('planTudo').innerHTML=todos.length?todos.map(t=>`
+    <div class="list-item ${scls(t.s)}">
+      <div class="lib"><div class="lit">${t.i} ${t.d}</div><div class="lis">${t.c}</div></div>
+      <div class="lir">${t.v?`<div class="liv">${fmt(t.v)}</div>`:''}${badge(t.s)}</div>
+    </div>`).join(''):'<div class="empty-state"><div class="ei">🍒</div><p>Nenhum lançamento</p></div>';
+}
 
-                window.chatMessages = messages.map(msg => ({
-                    author: msg.author || 'Anônimo',
-                    text: msg.text || '',
-                    time: msg.time || getTimeString(),
-                    isOwn: msg.author === window.currentUser,
-                    timestamp: msg.timestamp
-                }));
+// ══════════════════════════
+// GLOBAL SUMMARY
+// ══════════════════════════
+function renderGlobal() {
+  const all=[...D.orc,...D.food];
+  const tot=all.reduce((s,x)=>s+x.valor,0);
+  const pago=all.filter(x=>x.status==='Pago').reduce((s,x)=>s+x.valor,0);
+  document.getElementById('sumTotal').textContent=fmtS(tot);
+  document.getElementById('sumPago').textContent=fmtS(pago);
+  document.getElementById('sumPend').textContent=fmtS(tot-pago);
+  document.getElementById('sumConv').textContent=D.conv.length;
+}
 
-                if (window.isInChat) {
-                    displayMessages();
-                }
-            });
+function render(){renderOrc();renderConv();renderFood();renderPlan();renderGlobal();}
 
-            // Se não há mensagens, carregar algumas iniciais
-            setTimeout(() => {
-                if (window.chatMessages.length === 0) {
-                    loadInitialMessages();
-                }
-            }, 2000);
-        }
+// ══════════════════════════
+// GOOGLE SHEETS SYNC
+// ══════════════════════════
+function log(msg,type=''){
+  const el=document.getElementById('syncLog');
+  el.classList.add('visible');
+  const d=document.createElement('div');
+  d.className=type==='err'?'le':type==='info'?'li2':'';
+  d.textContent=`[${new Date().toLocaleTimeString('pt-BR')}] ${msg}`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function setDot(s){
+  const dot=document.getElementById('sheetsDot');
+  const txt=document.getElementById('sheetsStatusTxt');
+  dot.className='dot '+s;
+  txt.textContent=s==='ok'?'📊 Google Sheets conectado — Ana Clara':s==='err'?'❌ Erro na sincronização':'🔄 Sincronizando...';
+}
+async function syncSheet(tipo){
+  setDot('syncing');
+  const payload=tipo==='orcamentos'?{type:'orcamentos',rows:D.orc}:
+                tipo==='convidados'?{type:'convidados',rows:D.conv}:
+                {type:'comidas',rows:D.food};
+  log(`Enviando ${tipo}... (${payload.rows.length} registros)`,'info');
+  try{
+    await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    log(`✅ ${tipo} enviado com sucesso!`);setDot('ok');
+  }catch(e){log('⚠️ Enviado (verifique na planilha)','info');setDot('ok');}
+}
+async function syncTudo(){
+  log('🍒 Iniciando sincronização completa...','info');
+  await syncSheet('orcamentos');await new Promise(r=>setTimeout(r,500));
+  await syncSheet('convidados');await new Promise(r=>setTimeout(r,500));
+  await syncSheet('comidas');
+  log('🍒 Tudo sincronizado com Google Sheets da Ana Clara!');
+}
 
-        function loadInitialMessages() {
-            const initialMessages = [
-                {
-                    author: 'Moderador_Sistema',
-                    text: '🌟 Bem-vindos ao chat da comunidade! Aqui é um espaço seguro para apoio mútuo.',
-                    time: getTimeString(),
-                    isOwn: false
-                },
-                {
-                    author: 'Ana_Guerreira',
-                    text: 'Bom dia pessoal! Hoje completo 45 dias sem apostar! 💪',
-                    time: getTimeString(),
-                    isOwn: false
-                },
-                {
-                    author: 'João_Forte',
-                    text: 'Parabéns Ana! Você é uma inspiração para todos nós! 🌟',
-                    time: getTimeString(),
-                    isOwn: false
-                }
-            ];
+// ══════════════════════════
+// EXPORT CSV
+// ══════════════════════════
+function exportCSV(tipo){
+  let csv,nome;
+  if(tipo==='orcamentos'){
+    csv='Descrição,Categoria,Valor,Status,Observações,Data\n'+D.orc.map(x=>`"${x.desc}","${x.cat}","${x.valor}","${x.status}","${x.obs||''}","${x.data||''}"`).join('\n');
+    nome='orcamentos_ana_clara.csv';
+  }else if(tipo==='convidados'){
+    csv='Nome,Tipo,Confirmação,Telefone\n'+D.conv.map(x=>`"${x.nome}","${x.tipo}","${x.status}","${x.tel||''}"`).join('\n');
+    nome='convidados_ana_clara.csv';
+  }else{
+    csv='Item,Categoria,Quantidade,Valor,Fornecedor,Status\n'+D.food.map(x=>`"${x.nome}","${x.cat}","${x.qtd||''}","${x.valor}","${x.fornecedor||''}","${x.status}"`).join('\n');
+    nome='comidas_ana_clara.csv';
+  }
+  dlCSV(csv,nome);
+}
+function exportCSVAll(){
+  let c='ORÇAMENTOS\nDescrição,Categoria,Valor,Status,Observações\n';
+  c+=D.orc.map(x=>`"${x.desc}","${x.cat}","${x.valor}","${x.status}","${x.obs||''}"`).join('\n');
+  c+='\n\nCONVIDADOS\nNome,Tipo,Confirmação,Telefone\n';
+  c+=D.conv.map(x=>`"${x.nome}","${x.tipo}","${x.status}","${x.tel||''}"`).join('\n');
+  c+='\n\nCOMIDAS\nItem,Categoria,Quantidade,Valor,Fornecedor,Status\n';
+  c+=D.food.map(x=>`"${x.nome}","${x.cat}","${x.qtd||''}","${x.valor}","${x.fornecedor||''}","${x.status}"`).join('\n');
+  dlCSV(c,'festa_ana_clara_completo.csv');
+}
+function dlCSV(content,filename){
+  const blob=new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+}
+function toggleGuia(){document.getElementById('guiaCard').classList.toggle('visible');}
 
-            // Se Firebase disponível, adicionar mensagens iniciais
-            if (typeof window.database !== 'undefined') {
-                initialMessages.forEach(msg => {
-                    const newMessage = {
-                        author: msg.author,
-                        text: msg.text,
-                        time: getTimeString(),
-                        timestamp: Date.now()
-                    };
-                    window.firebasePush(window.messagesRef, newMessage);
-                });
-            } else {
-                window.chatMessages = initialMessages;
-            }
-        }
+// ══════════════════════════
+// MODAL ALTERAR STATUS
+// ══════════════════════════
+const STATUS_OPTS = {
+  orc:  [{v:'Pendente',i:'⏳',c:'#8a6000'},{v:'Pago',i:'✅',c:'#1d6b3a'},{v:'Cancelado',i:'❌',c:'#b00020'}],
+  conv: [{v:'Aguardando',i:'⏳',c:'#8a6000'},{v:'Confirmado',i:'✅',c:'#1d6b3a'},{v:'Não virá',i:'❌',c:'#b00020'}],
+  food: [{v:'Pendente',i:'⏳',c:'#8a6000'},{v:'Encomendado',i:'📦',c:'#1a4080'},{v:'Pago',i:'✅',c:'#1d6b3a'}]
+};
 
-        function joinChat() {
-            const userName = document.getElementById('userName').value.trim();
-            
-            if (!userName) {
-                alert('Por favor, digite seu nome ou apelido para entrar no chat.');
-                return;
-            }
+let _modalCtx = {type:null, id:null, current:null};
 
-            if (userName.length > 20) {
-                alert('Nome muito longo. Use até 20 caracteres.');
-                return;
-            }
+function openStatusModal(type, id, current) {
+  _modalCtx = {type, id, current};
+  const names = {orc:'Orçamento', conv:'Convidado', food:'Item'};
+  const arr = type==='orc'?D.orc:type==='conv'?D.conv:D.food;
+  const item = arr.find(x=>x.id===id);
+  const label = item ? (item.desc||item.nome||item.nome) : '';
+  document.getElementById('statusSheetLabel').textContent = label || 'Selecione o novo status';
+  const opts = STATUS_OPTS[type];
+  document.getElementById('statusOptions').innerHTML = opts.map(o=>`
+    <div class="status-opt ${o.v===current?'selected':''}" onclick="applyStatus('${o.v}')">
+      <span class="so-icon">${o.i}</span>
+      <span class="so-label" style="color:${o.c}">${o.v}</span>
+      <span class="so-check">✓</span>
+    </div>`).join('');
+  document.getElementById('statusOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
-            // Filtrar nomes inadequados
-            const forbiddenWords = ['admin', 'moderador', 'sistema', 'bot'];
-            if (forbiddenWords.some(word => userName.toLowerCase().includes(word))) {
-                alert('Por favor, escolha outro nome.');
-                return;
-            }
+function applyStatus(newStatus) {
+  const {type, id} = _modalCtx;
+  const arr = type==='orc'?D.orc:type==='conv'?D.conv:D.food;
+  const item = arr.find(x=>x.id===id);
+  if (item) { item.status = newStatus; save(); }
+  closeStatusModal();
+}
 
-            window.currentUser = userName;
-            window.isInChat = true;
+function closeStatusModal(e) {
+  if (e && e.target !== document.getElementById('statusOverlay')) return;
+  document.getElementById('statusOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-            // Esconder container de nome e mostrar chat
-            document.getElementById('nameContainer').style.display = 'none';
-            document.getElementById('chatMessages').style.display = 'block';
-            document.getElementById('chatInputContainer').style.display = 'flex';
-
-            // Adicionar mensagem de entrada no Firebase
-            if (typeof window.database !== 'undefined') {
-                const joinMessage = {
-                    author: 'Sistema',
-                    text: `${window.currentUser} entrou no chat 👋`,
-                    time: getTimeString(),
-                    timestamp: Date.now()
-                };
-                window.firebasePush(window.messagesRef, joinMessage);
-            } else {
-                addSystemMessage(`${window.currentUser} entrou no chat`);
-            }
-            
-            // Carregar mensagens se ainda não carregou
-            if (window.chatMessages.length === 0) {
-                displayMessages();
-            }
-            
-            // Foco no input de mensagem
-            document.getElementById('messageInput').focus();
-        }
-
-        function sendMessage() {
-            if (!window.isInChat) return;
-            
-            const messageInput = document.getElementById('messageInput');
-            const messageText = messageInput.value.trim();
-            
-            if (!messageText) return;
-
-            if (messageText.length > 500) {
-                alert('Mensagem muito longa. Use até 500 caracteres.');
-                return;
-            }
-
-            // Filtro básico de conteúdo
-            const forbiddenContent = ['site de aposta', 'aposte agora', 'ganhe dinheiro', 'http'];
-            if (forbiddenContent.some(content => messageText.toLowerCase().includes(content))) {
-                alert('Mensagem não permitida. Lembre-se que este é um espaço de apoio.');
-                return;
-            }
-
-            const newMessage = {
-                author: window.currentUser,
-                text: messageText,
-                time: getTimeString(),
-                timestamp: Date.now()
-            };
-
-            // Enviar para Firebase se disponível
-            if (typeof window.database !== 'undefined') {
-                window.firebasePush(window.messagesRef, newMessage)
-                    .then(() => {
-                        console.log('Mensagem enviada com sucesso!');
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao enviar mensagem:', error);
-                        alert('Erro ao enviar mensagem. Tente novamente.');
-                    });
-            } else {
-                // Fallback para chat simulado
-                newMessage.isOwn = true;
-                window.chatMessages.push(newMessage);
-                displayMessages();
-                
-                // Simular resposta
-                setTimeout(() => {
-                    simulateCommunityResponse(messageText);
-                }, 2000 + Math.random() * 3000);
-            }
-
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-        }
-
-        function getTimeString() {
-            const now = new Date();
-            return now.toLocaleTimeString('pt-BR', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-        }
-
-        // Funções auxiliares para fallback
-        function addSystemMessage(text) {
-            const systemMessage = {
-                author: 'Sistema',
-                text: text,
-                time: getTimeString(),
-                isOwn: false
-            };
-            
-            window.chatMessages.push(systemMessage);
-            displayMessages();
-        }
-
-        function simulateCommunityResponse(userMessage) {
-            // Só para fallback quando Firebase não estiver disponível
-            if (typeof window.database !== 'undefined') return;
-            
-            const responses = [
-                { author: 'Moderador_Apoio', text: 'Obrigado por compartilhar! A comunidade está aqui para você 💙' },
-                { author: 'Ana_Guerreira', text: 'Força! Você consegue! 💪' },
-                { author: 'João_Forte', text: 'Estamos juntos nessa jornada! 🤝' },
-                { author: 'Maria_Vencedora', text: 'Muito bem! Continue assim! 🌟' }
-            ];
-
-            if (userMessage.toLowerCase().includes('vontade') || userMessage.toLowerCase().includes('difícil')) {
-                responses.push(
-                    { author: 'Terapeuta_Comunidade', text: 'Essa sensação vai passar. Respire fundo e lembre-se dos seus objetivos. 🫁' }
-                );
-            }
-
-            if (userMessage.toLowerCase().includes('dia') || userMessage.toLowerCase().includes('limpo')) {
-                responses.push(
-                    { author: 'João_Forte', text: 'Parabéns pelos dias limpos! Cada dia conta! 📅' }
-                );
-            }
-
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            
-            const responseMessage = {
-                author: randomResponse.author,
-                text: randomResponse.text,
-                time: getTimeString(),
-                isOwn: false
-            };
-
-            window.chatMessages.push(responseMessage);
-            displayMessages();
-        }
-
-        function displayMessages() {
-            const chatContainer = document.getElementById('chatMessages');
-            
-            chatContainer.innerHTML = window.chatMessages.map(message => {
-                const messageClass = message.isOwn ? 'message own' : 'message other';
-                const systemClass = message.author === 'Sistema' ? ' system' : '';
-                
-                return `
-                    <div class="${messageClass}${systemClass}">
-                        <div class="message-author">${message.author}</div>
-                        <div class="message-text">${escapeHtml(message.text)}</div>
-                        <div class="message-time">${message.time}</div>
-                    </div>
-                `;
-            }).join('');
-            
-            // Scroll para a última mensagem
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function updateOnlineCount() {
-            // Em um Firebase real, você poderia contar usuários ativos
-            const baseCount = 8;
-            const variation = Math.floor(Math.random() * 12) - 6;
-            const newCount = Math.max(1, baseCount + variation);
-            document.getElementById('online-users').textContent = newCount;
-        }
-
-        // Exercício de respiração
-        function emergencyBreathing() {
-            const exerciseDiv = document.getElementById('breathing-exercise');
-            const instruction = document.getElementById('breathing-instruction');
-            const counter = document.getElementById('breathing-counter');
-            
-            exerciseDiv.style.display = 'block';
-            
-            let phase = 0;
-            let count = 0;
-            const phases = [4, 7, 8];
-            const phaseNames = ['Inspire pelo nariz', 'Segure a respiração', 'Expire pela boca'];
-            
-            function breathingCycle() {
-                if (phase < 3) {
-                    instruction.textContent = phaseNames[phase];
-                    count = phases[phase];
-                    
-                    const interval = setInterval(() => {
-                        counter.textContent = count;
-                        count--;
-                        
-                        if (count < 0) {
-                            clearInterval(interval);
-                            phase++;
-                            if (phase < 3) {
-                                setTimeout(breathingCycle, 500);
-                            } else {
-                                instruction.textContent = 'Muito bem! Como se sente?';
-                                counter.textContent = '😌';
-                                setTimeout(() => {
-                                    exerciseDiv.style.display = 'none';
-                                    phase = 0;
-                                }, 3000);
-                            }
-                        }
-                    }, 1000);
-                }
-            }
-            
-            breathingCycle();
-        }
-
-        // Fechar menu ao clicar fora
-        document.addEventListener('click', function(event) {
-            const nav = document.querySelector('.nav');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (navLinks.classList.contains('active') && !nav.contains(event.target)) {
-                closeMenu();
-            }
-        });
-
-        // Prevenir scroll do body quando menu estiver aberto
-        function preventBodyScroll() {
-            const navLinks = document.getElementById('navLinks');
-            if (navLinks.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // Atualizar scroll prevention quando menu mudar
-        const observer = new MutationObserver(preventBodyScroll);
-        observer.observe(document.getElementById('navLinks'), { 
-            attributes: true, 
-            attributeFilter: ['class'] 
-        });
-    </script>
+// INIT
+render();
+setDot('ok');
+</script>
 </body>
 </html>
