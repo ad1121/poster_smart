@@ -11,7 +11,7 @@
 <meta name="description" content="Planejamento da festa de 2 anos da Ana Clara 🍒">
 <link rel="manifest" id="manifestLink">
 <title>🍒 Festa da Ana Clara — 2 Aninhos</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --cherry:#c0173a;--cherry-dark:#8b0f28;--cherry-mid:#e8254f;
@@ -23,7 +23,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(68px + var(--safe-b))}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(68px + var(--safe-b));font-weight:600}
 
 /* BG */
 .cb{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
@@ -35,7 +35,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 /* TOPBAR */
 .topbar{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--cherry-dark),var(--cherry));padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(192,23,58,.4)}
 .topbar-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;line-height:1.1}
-.topbar-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;opacity:.8;font-weight:500}
+.topbar-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;opacity:.8;font-weight:600}
 .topbar-cherry{font-size:26px;animation:sway 3s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 
@@ -47,7 +47,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .ib-close{background:none;border:none;color:white;font-size:18px;padding:0 4px;cursor:pointer}
 
 /* SYNC BAR */
-.sync-bar{background:#1a4a2a;color:white;padding:7px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;min-height:34px}
+.sync-bar{background:#1a4a2a;color:white;padding:7px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;min-height:34px}
 .dot{width:8px;height:8px;border-radius:50%;background:#ffd700;flex-shrink:0;transition:background .3s}
 .dot.ok{background:#7fff00;animation:pulse 2s infinite}
 .dot.err{background:#ff6b6b}
@@ -62,7 +62,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .hero-emoji{font-size:44px;line-height:1;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 12px rgba(192,23,58,.3))}
 .hero h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--cherry-dark);margin-bottom:2px}
 .hero h2 em{font-style:italic;color:var(--cherry-mid)}
-.hero p{font-size:12px;color:var(--text-muted)}
+.hero p{font-size:12px;color:var(--text-muted);font-weight:600}
 .age-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--cherry),var(--cherry-dark));color:white;padding:6px 16px;border-radius:50px;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(192,23,58,.35);margin-top:8px}
 
 /* SUM */
@@ -71,13 +71,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 .sum-card:active{transform:scale(.97)}
 .sum-card.c1{border-color:var(--cherry)}.sum-card.c2{border-color:var(--leaf)}.sum-card.c3{border-color:var(--gold)}.sum-card.c4{border-color:var(--cherry-soft)}
 .sv{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--cherry-dark);display:block;margin-bottom:2px}
-.sl{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.sl{font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase;letter-spacing:.6px}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:white;display:flex;box-shadow:0 -3px 20px rgba(0,0,0,.12);padding-bottom:var(--safe-b);border-top:1.5px solid #fce8ec}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;border:none;background:transparent;cursor:pointer;transition:all .18s;color:var(--text-muted);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;position:relative}
 .nicon{font-size:21px;line-height:1;margin-bottom:3px;transition:transform .18s}
-.nlabel{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.nlabel{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
 .nav-btn.active{color:var(--cherry)}
 .nav-btn.active .nicon{transform:scale(1.2) translateY(-2px)}
 .nav-btn:active .nicon{transform:scale(.9)}
@@ -98,8 +98,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 
 /* FORM */
 .fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
-label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px}
-input[type=text],input[type=number],input[type=tel],select,textarea{border:2px solid #f2dde2;border-radius:11px;padding:11px 12px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--cherry-pale);transition:border-color .18s,background .18s;outline:none;width:100%;-webkit-appearance:none}
+label{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px}
+input[type=text],input[type=number],input[type=tel],select,textarea{border:2px solid #f2dde2;border-radius:11px;padding:11px 12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--text);background:var(--cherry-pale);transition:border-color .18s,background .18s;outline:none;width:100%;-webkit-appearance:none}
 input:focus,select:focus{border-color:var(--cherry);background:white}
 .frow2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
@@ -119,7 +119,7 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .list-item.sp{border-left-color:var(--leaf)}.list-item.sc{border-left-color:#ccc;opacity:.65}
 .lib{flex:1;min-width:0}
 .lit{font-weight:700;font-size:13.5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lis{font-size:11.5px;color:var(--text-muted)}
+.lis{font-size:11.5px;color:var(--text-muted);font-weight:600}
 .lir{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 .liv{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;white-space:nowrap}
 
@@ -127,7 +127,7 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
 .msc{background:white;border-radius:11px;padding:11px 6px;text-align:center;box-shadow:var(--shadow)}
 .msc-v{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--cherry-dark);display:block;margin-bottom:2px}
-.msc-l{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.msc-l{font-size:9px;color:var(--text-muted);font-weight:800;text-transform:uppercase;letter-spacing:.3px}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:50px;font-size:11px;font-weight:700}
@@ -170,7 +170,7 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .fam-card{background:var(--cherry-pale);border-radius:12px;padding:12px 13px;margin-bottom:8px;border-left:3px solid var(--cherry-soft)}
 .fam-card.sp{border-left-color:var(--leaf)}.fam-card.sc{border-left-color:#ccc;opacity:.7}
 .fam-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.fam-nome{font-weight:700;font-size:14px;color:var(--cherry-dark)}
+.fam-nome{font-weight:800;font-size:14px;color:var(--cherry-dark)}
 .fam-pills{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
 .fam-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;background:white}
 .fam-pill.adulto{color:#8a1040;background:#fde8f0}
@@ -297,7 +297,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
       <div class="card-head"><div class="chL"><span class="ci">👨‍👩‍👧</span><span class="ct">Nova Família</span></div></div>
 
       <div class="fgrp">
-        <label>Família (responsável)</label>
+        <label>Nome da Família</label>
         <input type="text" id="cFamilia" placeholder="Ex: Família Danilo, Tia Maria..." autocomplete="off">
       </div>
 
@@ -306,7 +306,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
           <label>👨 Adultos</label>
           <div class="num-input">
             <button type="button" onclick="stepNum('cAdultos',-1)">−</button>
-            <input type="number" id="cAdultos" value="1" min="0" max="20" inputmode="numeric" readonly>
+            <input type="number" id="cAdultos" value="1" min="0" max="20" readonly>
             <button type="button" onclick="stepNum('cAdultos',1)">+</button>
           </div>
         </div>
@@ -314,7 +314,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
           <label>👧 Crianças</label>
           <div class="num-input">
             <button type="button" onclick="stepNum('cCriancas',-1)">−</button>
-            <input type="number" id="cCriancas" value="0" min="0" max="20" inputmode="numeric" readonly>
+            <input type="number" id="cCriancas" value="0" min="0" max="20" readonly>
             <button type="button" onclick="stepNum('cCriancas',1)">+</button>
           </div>
         </div>
@@ -328,21 +328,11 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
       <button class="btn btn-cherry btn-full" onclick="addConv()">🍒 Adicionar Família</button>
     </div>
 
-    <!-- MINI STATS -->
-    <div class="mini-stats" style="grid-template-columns:repeat(4,1fr)">
-      <div class="msc"><span class="msc-v" id="cTotFam">0</span><span class="msc-l">Famílias</span></div>
-      <div class="msc"><span class="msc-v" id="cTotPessoas">0</span><span class="msc-l">Pessoas</span></div>
-      <div class="msc"><span class="msc-v" id="cTotCri">0</span><span class="msc-l">👧 Crian.</span></div>
-      <div class="msc"><span class="msc-v" id="cTotAdultos">0</span><span class="msc-l">👨 Adult.</span></div>
-    </div>
-
-    <!-- BARRA CONFIRMADOS -->
-    <div class="card" style="padding:13px 14px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-        <span style="font-size:12px;font-weight:700;color:var(--text-muted)">Famílias confirmadas</span>
-        <span style="font-size:12px;font-weight:700;color:var(--leaf)" id="progPct">0%</span>
-      </div>
-      <div class="prog-wrap"><div class="prog-bar" id="progConf" style="width:0%"></div></div>
+    <!-- TOTAIS SIMPLES -->
+    <div class="mini-stats" style="grid-template-columns:repeat(3,1fr)">
+      <div class="msc"><span class="msc-v" id="cTotAdultos">0</span><span class="msc-l">👨 Adultos</span></div>
+      <div class="msc"><span class="msc-v" id="cTotCri">0</span><span class="msc-l">👧 Crianças</span></div>
+      <div class="msc"><span class="msc-v" id="cTotPessoas">0</span><span class="msc-l">👥 Total</span></div>
     </div>
 
     <!-- LISTA -->
@@ -352,12 +342,6 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
         <button class="btn btn-leaf btn-sm" onclick="exportCSV('convidados')">⬇️ CSV</button>
       </div>
       <div id="cLista"><div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div></div>
-    </div>
-
-    <!-- RESUMO DETALHADO -->
-    <div class="card" id="resumoConvCard" style="display:none">
-      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Resumo de Convidados</span></div></div>
-      <div id="resumoConvBody"></div>
     </div>
   </div>
 
@@ -659,83 +643,52 @@ function delConv(id){
 }
 
 function renderConv(){
-  const totFam      = D.conv.length;
-  const totAdultos  = D.conv.reduce((s,x)=>s+(parseInt(x.adultos)||0),0);
-  const totCriancas = D.conv.reduce((s,x)=>s+(parseInt(x.criancas)||0),0);
-  const totPessoas  = totAdultos + totCriancas;
-  const cnfFam      = D.conv.filter(x=>x.status==='Confirmado').length;
-  const cnfAdultos  = D.conv.filter(x=>x.status==='Confirmado').reduce((s,x)=>s+(parseInt(x.adultos)||0),0);
-  const cnfCriancas = D.conv.filter(x=>x.status==='Confirmado').reduce((s,x)=>s+(parseInt(x.criancas)||0),0);
-  const naoVirao    = D.conv.filter(x=>x.status==="Não virá");
-  const aguardando  = D.conv.filter(x=>x.status==='Aguardando');
+  // Garante números sempre — valores podem vir como string do Sheets
+  const num = v => Math.max(0, parseInt(v) || 0);
 
-  // mini stats
-  document.getElementById('cTotFam').textContent      = totFam;
-  document.getElementById('cTotPessoas').textContent   = totPessoas;
-  document.getElementById('cTotCri').textContent       = totCriancas;
-  document.getElementById('cTotAdultos').textContent   = totAdultos;
+  let totAdultos  = 0;
+  let totCriancas = 0;
 
-  // barra confirmação (por família)
-  const pct = totFam ? Math.round(cnfFam/totFam*100) : 0;
-  document.getElementById('progConf').style.width = pct+'%';
-  document.getElementById('progPct').textContent  = pct+'%';
+  D.conv.forEach(c => {
+    totAdultos  += num(c.adultos);
+    totCriancas += num(c.criancas);
+  });
 
-  // update global sumConv
-  document.getElementById('sumConv').textContent = totPessoas;
+  const totPessoas = totAdultos + totCriancas;
 
-  // lista
+  document.getElementById('cTotAdultos').textContent = totAdultos;
+  document.getElementById('cTotCri').textContent     = totCriancas;
+  document.getElementById('cTotPessoas').textContent = totPessoas;
+  document.getElementById('sumConv').textContent     = totPessoas;
+
   const el = document.getElementById('cLista');
-  if(!D.conv.length){
-    el.innerHTML='<div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div>';
-  } else {
-    el.innerHTML = D.conv.map(c=>{
-      const total = (parseInt(c.adultos)||0) + (parseInt(c.criancas)||0);
-      return `<div class="fam-card ${scls(c.status)}">
-        <div class="fam-top">
-          <div>
-            <div class="fam-nome">👨‍👩‍👧 ${c.familia}</div>
-            <div class="fam-pills">
-              ${(parseInt(c.adultos)||0)>0?`<span class="fam-pill adulto">👨 ${c.adultos} adult${c.adultos==1?'o':'os'}</span>`:''}
-              ${(parseInt(c.criancas)||0)>0?`<span class="fam-pill crianca">👧 ${c.criancas} criança${c.criancas==1?'':'s'}</span>`:''}
-              <span class="fam-pill" style="background:#f0f0f0;color:#555">👥 ${total} total</span>
-            </div>
-          </div>
-          <div class="fam-actions">
-            ${badge(c.status)}
-          </div>
-        </div>
-        <div style="display:flex;gap:5px;margin-top:9px;justify-content:flex-end">
-          <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 10px;font-size:11px">✏️ Status</button>
-          <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
-        </div>
-      </div>`;
-    }).join('');
+  if (!D.conv.length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">🎈</div><p>Nenhuma família ainda</p></div>';
+    return;
   }
 
-  // resumo detalhado
-  const resumoCard = document.getElementById('resumoConvCard');
-  if(totFam > 0){
-    resumoCard.style.display = 'block';
-    document.getElementById('resumoConvBody').innerHTML = `
-      <div class="resumo-section">
-        <div class="resumo-section-title">✅ Confirmados</div>
-        <div class="resumo-row"><span class="resumo-label">Famílias confirmadas</span><span class="resumo-val">${cnfFam}</span></div>
-        <div class="resumo-row"><span class="resumo-label">👨 Adultos confirmados</span><span class="resumo-val vg">${cnfAdultos}</span></div>
-        <div class="resumo-row"><span class="resumo-label">👧 Crianças confirmadas</span><span class="resumo-val vg">${cnfCriancas}</span></div>
-        <div class="resumo-row" style="border-top:2px solid #d6f5e3;margin-top:4px;padding-top:10px"><span class="resumo-label" style="font-weight:700">Total confirmado</span><span class="resumo-val" style="color:var(--leaf)">${cnfAdultos+cnfCriancas} pessoas</span></div>
+  el.innerHTML = D.conv.map(c => {
+    const a   = num(c.adultos);
+    const cr  = num(c.criancas);
+    const tot = a + cr;
+    return `<div class="fam-card ${scls(c.status)}">
+      <div class="fam-top">
+        <div style="flex:1;min-width:0">
+          <div class="fam-nome">👨‍👩‍👧 ${c.familia || '—'}</div>
+          <div class="fam-pills" style="margin-top:6px">
+            ${a  > 0 ? `<span class="fam-pill adulto">👨 ${a} adult${a===1?'o':'os'}</span>` : ''}
+            ${cr > 0 ? `<span class="fam-pill crianca">👧 ${cr} criança${cr===1?'':'s'}</span>` : ''}
+            <span class="fam-pill" style="background:#f0f0f0;color:#555">👥 ${tot}</span>
+          </div>
+        </div>
+        <div>${badge(c.status)}</div>
       </div>
-      <div class="resumo-section">
-        <div class="resumo-section-title">📊 Geral</div>
-        <div class="resumo-row"><span class="resumo-label">Total de famílias</span><span class="resumo-val">${totFam}</span></div>
-        <div class="resumo-row"><span class="resumo-label">Total de adultos</span><span class="resumo-val">${totAdultos}</span></div>
-        <div class="resumo-row"><span class="resumo-label">Total de crianças</span><span class="resumo-val">${totCriancas}</span></div>
-        <div class="resumo-row"><span class="resumo-label">⏳ Aguardando resposta</span><span class="resumo-val" style="color:#8a6000">${aguardando.length} famílias</span></div>
-        <div class="resumo-row"><span class="resumo-label">❌ Não virão</span><span class="resumo-val" style="color:#b00020">${naoVirao.length} famílias</span></div>
-        <div class="resumo-row" style="border-top:2px solid var(--cherry-pale);margin-top:4px;padding-top:10px"><span class="resumo-label" style="font-weight:700">Total de pessoas</span><span class="resumo-val">${totPessoas} pessoas</span></div>
-      </div>`;
-  } else {
-    resumoCard.style.display = 'none';
-  }
+      <div style="display:flex;gap:5px;margin-top:10px;justify-content:flex-end">
+        <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 12px;font-size:12px">✏️ Status</button>
+        <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 12px;font-size:12px">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ════════════════════════════════════
