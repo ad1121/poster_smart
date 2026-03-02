@@ -13,77 +13,67 @@
 <title>🍒 Festa da Ana Clara — 2 Aninhos</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cherry:      #c0173a;
-  --cherry-dark: #8b0f28;
-  --cherry-mid:  #e8254f;
-  --cherry-soft: #f5b8c8;
-  --cherry-pale: #fdf0f3;
-  --leaf:        #3a7d44;
-  --leaf-light:  #6ab87a;
-  --cream:       #fff8f9;
-  --text:        #2d0a12;
-  --text-muted:  #9a5060;
-  --gold:        #d4a853;
-  --shadow:      0 4px 20px rgba(192,23,58,0.13);
-  --shadow-lg:   0 8px 32px rgba(192,23,58,0.22);
-  --r:           16px;
-  --safe-b:      env(safe-area-inset-bottom, 12px);
+:root{
+  --cherry:#c0173a;--cherry-dark:#8b0f28;--cherry-mid:#e8254f;
+  --cherry-soft:#f5b8c8;--cherry-pale:#fdf0f3;
+  --leaf:#3a7d44;--leaf-light:#6ab87a;
+  --cream:#fff8f9;--text:#2d0a12;--text-muted:#9a5060;--gold:#d4a853;
+  --shadow:0 4px 20px rgba(192,23,58,0.13);--r:16px;
+  --safe-b:env(safe-area-inset-bottom,12px);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(70px + var(--safe-b))}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(68px + var(--safe-b))}
 
-/* CHERRIES BG */
+/* BG */
 .cb{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .cb span{position:absolute;opacity:.07;animation:floatUp linear infinite}
-@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0}8%{opacity:.07}92%{opacity:.07}100%{transform:translateY(-10vh) rotate(380deg);opacity:0}}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0);opacity:0}8%{opacity:.07}92%{opacity:.07}100%{transform:translateY(-10vh) rotate(380deg);opacity:0}}
 
 .wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 13px}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--cherry-dark),var(--cherry));padding:13px 16px 11px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(192,23,58,.4)}
+.topbar{position:sticky;top:0;z-index:200;background:linear-gradient(135deg,var(--cherry-dark),var(--cherry));padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(192,23,58,.4)}
 .topbar-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;line-height:1.1}
 .topbar-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;opacity:.8;font-weight:500}
 .topbar-cherry{font-size:26px;animation:sway 3s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 
-/* INSTALL BANNER */
+/* INSTALL */
 .install-banner{background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;padding:11px 14px;display:none;align-items:center;gap:10px;font-size:13px;font-weight:600;border-bottom:2px solid rgba(255,255,255,.1)}
 .install-banner.visible{display:flex}
-.ib-icon{font-size:22px}
-.ib-txt{flex:1}
-.ib-txt span{display:block;font-size:11px;opacity:.75;font-weight:400}
+.ib-txt{flex:1}.ib-txt span{display:block;font-size:11px;opacity:.75;font-weight:400}
 .ib-btn{background:var(--cherry);border:none;border-radius:8px;color:white;font-weight:700;font-size:12px;padding:7px 13px;cursor:pointer;font-family:'DM Sans',sans-serif}
 .ib-close{background:none;border:none;color:white;font-size:18px;padding:0 4px;cursor:pointer}
 
-/* SHEETS BAR */
-.sheets-bar{background:#1a4a2a;color:white;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}
-.dot{width:8px;height:8px;border-radius:50%;background:#ffd700;flex-shrink:0}
-.dot.ok{background:#7fff00;animation:pulse 1.5s infinite}
+/* SYNC BAR */
+.sync-bar{background:#1a4a2a;color:white;padding:7px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;min-height:34px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ffd700;flex-shrink:0;transition:background .3s}
+.dot.ok{background:#7fff00;animation:pulse 2s infinite}
 .dot.err{background:#ff6b6b}
-.dot.syncing{background:#79c0ff;animation:pulse .6s infinite}
+.dot.syncing{background:#79c0ff;animation:pulse .5s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.sync-all-btn{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:white;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.last-sync{font-size:10px;opacity:.7;margin-left:2px}
+.sync-now-btn{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:white;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
 
 /* HERO */
-.hero{background:white;border-radius:0 0 24px 24px;padding:18px 18px 20px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px;position:relative;overflow:hidden}
+.hero{background:white;border-radius:0 0 24px 24px;padding:16px 18px 18px;text-align:center;box-shadow:var(--shadow);margin-bottom:13px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cherry-mid),var(--cherry-dark),var(--leaf))}
-.hero-emoji{font-size:48px;line-height:1;margin-bottom:5px;display:block;filter:drop-shadow(0 4px 12px rgba(192,23,58,.3))}
-.hero h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:900;color:var(--cherry-dark);margin-bottom:2px}
+.hero-emoji{font-size:44px;line-height:1;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 12px rgba(192,23,58,.3))}
+.hero h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--cherry-dark);margin-bottom:2px}
 .hero h2 em{font-style:italic;color:var(--cherry-mid)}
 .hero p{font-size:12px;color:var(--text-muted)}
-.age-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--cherry),var(--cherry-dark));color:white;padding:7px 17px;border-radius:50px;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(192,23,58,.35);margin-top:9px}
+.age-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--cherry),var(--cherry-dark));color:white;padding:6px 16px;border-radius:50px;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(192,23,58,.35);margin-top:8px}
 
-/* SUM GRID */
-.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
-.sum-card{background:white;border-radius:var(--r);padding:14px 12px;text-align:center;box-shadow:var(--shadow);border-top:3px solid transparent;transition:transform .18s}
+/* SUM */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.sum-card{background:white;border-radius:var(--r);padding:13px 11px;text-align:center;box-shadow:var(--shadow);border-top:3px solid transparent;transition:transform .18s}
 .sum-card:active{transform:scale(.97)}
 .sum-card.c1{border-color:var(--cherry)}.sum-card.c2{border-color:var(--leaf)}.sum-card.c3{border-color:var(--gold)}.sum-card.c4{border-color:var(--cherry-soft)}
-.sv{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--cherry-dark);display:block;margin-bottom:2px}
+.sv{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--cherry-dark);display:block;margin-bottom:2px}
 .sl{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
 
-/* BOTTOM NAV */
+/* NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:white;display:flex;box-shadow:0 -3px 20px rgba(0,0,0,.12);padding-bottom:var(--safe-b);border-top:1.5px solid #fce8ec}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px 7px;border:none;background:transparent;cursor:pointer;transition:all .18s;color:var(--text-muted);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;position:relative}
 .nicon{font-size:21px;line-height:1;margin-bottom:3px;transition:transform .18s}
@@ -100,17 +90,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* CARD */
-.card{background:white;border-radius:var(--r);padding:16px 15px;box-shadow:var(--shadow);margin-bottom:13px;position:relative;overflow:hidden}
+.card{background:white;border-radius:var(--r);padding:15px 14px;box-shadow:var(--shadow);margin-bottom:12px;position:relative;overflow:hidden}
 .ca{position:absolute;right:-6px;top:-6px;font-size:55px;opacity:.04;pointer-events:none}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:11px;border-bottom:1.5px solid var(--cherry-pale);flex-wrap:wrap;gap:7px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;padding-bottom:10px;border-bottom:1.5px solid var(--cherry-pale);flex-wrap:wrap;gap:7px}
 .chL{display:flex;align-items:center;gap:8px}
-.ci{font-size:19px}
-.ct{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cherry-dark)}
+.ci{font-size:19px}.ct{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cherry-dark)}
 
 /* FORM */
 .fgrp{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
 label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px}
-input[type=text],input[type=number],input[type=tel],select,textarea{border:2px solid #f2dde2;border-radius:11px;padding:12px 12px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--cherry-pale);transition:border-color .18s,background .18s;outline:none;width:100%;-webkit-appearance:none}
+input[type=text],input[type=number],input[type=tel],select,textarea{border:2px solid #f2dde2;border-radius:11px;padding:11px 12px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--cherry-pale);transition:border-color .18s,background .18s;outline:none;width:100%;-webkit-appearance:none}
 input:focus,select:focus{border-color:var(--cherry);background:white}
 .frow2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
@@ -125,11 +114,9 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#b8891e);color:white}
 .btn-sm{padding:7px 12px;font-size:12px;border-radius:9px}
 
-/* LIST ITEMS */
+/* LIST */
 .list-item{background:var(--cherry-pale);border-radius:12px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:9px;border-left:3px solid var(--cherry-soft);transition:background .15s}
-.list-item:active{background:#fce8ec}
-.list-item.sp{border-left-color:var(--leaf)}
-.list-item.sc{border-left-color:#ccc;opacity:.65}
+.list-item.sp{border-left-color:var(--leaf)}.list-item.sc{border-left-color:#ccc;opacity:.65}
 .lib{flex:1;min-width:0}
 .lit{font-weight:700;font-size:13.5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lis{font-size:11.5px;color:var(--text-muted)}
@@ -137,64 +124,37 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .liv{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;white-space:nowrap}
 
 /* MINI STATS */
-.mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:13px}
+.mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
 .msc{background:white;border-radius:11px;padding:11px 6px;text-align:center;box-shadow:var(--shadow)}
 .msc-v{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--cherry-dark);display:block;margin-bottom:2px}
 .msc-l{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:50px;font-size:11px;font-weight:700}
-.b-pago{background:#d6f5e3;color:#1d6b3a}
-.b-pendente{background:#fff3d6;color:#8a6000}
-.b-cancelado{background:#ffe3e3;color:#b00020}
-.b-encomend{background:#e3eeff;color:#1a4080}
-.b-confirmado{background:#d6f5e3;color:#1d6b3a}
-.b-aguardando{background:#fff3d6;color:#8a6000}
-.b-nao{background:#ffe3e3;color:#b00020}
-.b-crianca{background:#e8f4ff;color:#1a5090}
-.b-adulto{background:#fde8f0;color:#8a1040}
-.vg{color:#1d6b3a;font-weight:700}
-.vr{color:var(--cherry);font-weight:700}
+.b-pago{background:#d6f5e3;color:#1d6b3a}.b-pendente{background:#fff3d6;color:#8a6000}
+.b-cancelado{background:#ffe3e3;color:#b00020}.b-encomend{background:#e3eeff;color:#1a4080}
+.b-confirmado{background:#d6f5e3;color:#1d6b3a}.b-aguardando{background:#fff3d6;color:#8a6000}
+.b-nao{background:#ffe3e3;color:#b00020}.b-crianca{background:#e8f4ff;color:#1a5090}.b-adulto{background:#fde8f0;color:#8a1040}
+.vg{color:#1d6b3a;font-weight:700}.vr{color:var(--cherry);font-weight:700}
 
 /* PROGRESS */
 .prog-wrap{background:#f2dde2;border-radius:50px;height:11px;overflow:hidden;margin:5px 0}
 .prog-bar{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--leaf-light),var(--leaf));transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-/* SYNC LOG */
-.sync-log{background:#0d1117;border-radius:9px;padding:11px;font-family:monospace;font-size:11px;color:#7ee787;max-height:90px;overflow-y:auto;margin-top:9px;display:none}
-.sync-log.visible{display:block}
-.le{color:#ff7070}
-.li2{color:#79c0ff}
-
 /* CATEGORIA */
 .cat-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--cherry-pale);font-size:13.5px}
 .cat-item:last-child{border-bottom:none}
-.cat-n{font-weight:600}
-.cat-t{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--cherry-dark);text-align:right}
+.cat-n{font-weight:600}.cat-t{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--cherry-dark);text-align:right}
 .cat-s{font-size:11px;color:var(--text-muted);text-align:right}
 
 /* EMPTY */
 .empty-state{text-align:center;padding:28px 18px;color:var(--text-muted)}
-.ei{font-size:38px;margin-bottom:7px}
-.empty-state p{font-size:13.5px}
+.ei{font-size:38px;margin-bottom:7px}.empty-state p{font-size:13.5px}
 
-/* STATUS MODAL */
-.status-overlay{position:fixed;inset:0;background:rgba(45,10,18,.45);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
-.status-overlay.open{display:flex;animation:fadeIn .18s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.status-sheet{background:white;border-radius:24px 24px 0 0;padding:20px 16px calc(20px + var(--safe-b));width:100%;max-width:480px;animation:slideSheet .22s cubic-bezier(.4,0,.2,1)}
-@keyframes slideSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.status-sheet h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cherry-dark);margin-bottom:4px;text-align:center}
-.status-sheet p{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:16px}
-.status-options{display:flex;flex-direction:column;gap:9px}
-.status-opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;border:2px solid transparent;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;background:var(--cherry-pale);-webkit-tap-highlight-color:transparent}
-.status-opt:active{transform:scale(.97)}
-.status-opt.selected{border-color:var(--cherry);background:white}
-.status-opt .so-icon{font-size:20px;width:28px;text-align:center}
-.status-opt .so-label{flex:1}
-.status-opt .so-check{font-size:16px;opacity:0}
-.status-opt.selected .so-check{opacity:1}
-.btn-cancel-sheet{width:100%;margin-top:12px;padding:13px;border:2px solid #f2dde2;border-radius:13px;background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* SYNC LOG */
+.sync-log{background:#0d1117;border-radius:9px;padding:11px;font-family:monospace;font-size:11px;color:#7ee787;max-height:90px;overflow-y:auto;margin-top:9px;display:none}
+.sync-log.visible{display:block}
+.le{color:#ff7070}.li2{color:#79c0ff}
 
 /* GUIA */
 .guia-card{display:none;border:2px solid #34a853}
@@ -204,8 +164,24 @@ input:focus,select:focus{border-color:var(--cherry);background:white}
 .gs strong{color:var(--cherry-dark)}
 code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color:var(--cherry-dark)}
 
+/* STATUS MODAL */
+.status-overlay{position:fixed;inset:0;background:rgba(45,10,18,.45);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.status-overlay.open{display:flex;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.status-sheet{background:white;border-radius:24px 24px 0 0;padding:20px 16px calc(20px + var(--safe-b));width:100%;max-width:480px;animation:slideSheet .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.status-sheet h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--cherry-dark);margin-bottom:3px;text-align:center}
+.status-sheet p{font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-options{display:flex;flex-direction:column;gap:8px}
+.status-opt{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;border:2px solid transparent;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;background:var(--cherry-pale);-webkit-tap-highlight-color:transparent}
+.status-opt:active{transform:scale(.97)}
+.status-opt.selected{border-color:var(--cherry);background:white}
+.so-icon{font-size:20px;width:28px;text-align:center}.so-label{flex:1}.so-check{font-size:16px;opacity:0}
+.status-opt.selected .so-check{opacity:1}
+.btn-cancel-sheet{width:100%;margin-top:10px;padding:12px;border:2px solid #f2dde2;border-radius:13px;background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+
 /* FAB */
-.fab{position:fixed;bottom:calc(78px + var(--safe-b));right:14px;z-index:250;background:linear-gradient(135deg,#34a853,#1a6332);color:white;border:none;border-radius:50%;width:48px;height:48px;font-size:20px;box-shadow:0 4px 16px rgba(52,168,83,.45);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.fab{position:fixed;bottom:calc(76px + var(--safe-b));right:14px;z-index:250;background:linear-gradient(135deg,#34a853,#1a6332);color:white;border:none;border-radius:50%;width:46px;height:46px;font-size:20px;box-shadow:0 4px 16px rgba(52,168,83,.45);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:transform .2s}
 .fab:active{transform:scale(.91)}
 </style>
 </head>
@@ -215,26 +191,24 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-title">
-    🍒 Festa da Ana Clara
-    <small>Planejamento — 2 Aninhos</small>
-  </div>
+  <div class="topbar-title">🍒 Festa da Ana Clara<small>Planejamento — 2 Aninhos</small></div>
   <span class="topbar-cherry">🍒</span>
 </div>
 
-<!-- INSTALL BANNER -->
+<!-- INSTALL -->
 <div class="install-banner" id="installBanner">
-  <span class="ib-icon">📲</span>
+  <span style="font-size:22px">📲</span>
   <div class="ib-txt">Instalar como App<span>Acesse rápido pela tela inicial</span></div>
   <button class="ib-btn" id="installBtn">Instalar</button>
   <button class="ib-close" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
 </div>
 
-<!-- SHEETS STATUS -->
-<div class="sheets-bar">
-  <span class="dot ok" id="sheetsDot"></span>
-  <span id="sheetsStatusTxt" style="flex:1">📊 Google Sheets conectado — Ana Clara</span>
-  <button class="sync-all-btn" onclick="syncTudo()">🔄 Sync tudo</button>
+<!-- SYNC BAR -->
+<div class="sync-bar">
+  <span class="dot" id="sheetsDot"></span>
+  <span id="sheetsStatusTxt">Conectando...</span>
+  <span class="last-sync" id="lastSyncTxt"></span>
+  <button class="sync-now-btn" onclick="syncNow()">🔄 Sync</button>
 </div>
 
 <div class="wrap">
@@ -260,7 +234,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
     <div class="card">
       <div class="ca">💰</div>
       <div class="card-head"><div class="chL"><span class="ci">💰</span><span class="ct">Novo Orçamento</span></div></div>
-      <div class="fgrp"><label>Descrição</label><input type="text" id="oDesc" placeholder="Ex: Decoração, Buffet, DJ..."></div>
+      <div class="fgrp"><label>Descrição</label><input type="text" id="oDesc" placeholder="Ex: Decoração, Buffet, DJ..." autocomplete="off"></div>
       <div class="frow2">
         <div class="fgrp"><label>Categoria</label>
           <select id="oCat"><option>🎊 Decoração</option><option>🍽️ Buffet</option><option>🍰 Comida</option><option>🥤 Bebida</option><option>🎵 Música/DJ</option><option>📷 Foto/Vídeo</option><option>💌 Convites</option><option>🎁 Brindes</option><option>👗 Fantasia</option><option>🏠 Local</option><option>📦 Outros</option></select>
@@ -271,7 +245,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
         <div class="fgrp"><label>Status</label>
           <select id="oStatus"><option>Pendente</option><option>Pago</option><option>Cancelado</option></select>
         </div>
-        <div class="fgrp"><label>Observações</label><input type="text" id="oObs" placeholder="Fornecedor..."></div>
+        <div class="fgrp"><label>Observações</label><input type="text" id="oObs" placeholder="Fornecedor..." autocomplete="off"></div>
       </div>
       <button class="btn btn-cherry btn-full" onclick="addOrc()">🍒 Adicionar Orçamento</button>
     </div>
@@ -286,10 +260,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
     <div class="card">
       <div class="card-head">
         <div class="chL"><span class="ci">📋</span><span class="ct">Orçamentos</span></div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('orcamentos')">📊</button>
-          <button class="btn btn-leaf btn-sm" onclick="exportCSV('orcamentos')">⬇️</button>
-        </div>
+        <button class="btn btn-leaf btn-sm" onclick="exportCSV('orcamentos')">⬇️ CSV</button>
       </div>
       <div id="oLista"><div class="empty-state"><div class="ei">💸</div><p>Nenhum orçamento ainda</p></div></div>
     </div>
@@ -300,7 +271,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
     <div class="card">
       <div class="ca">👥</div>
       <div class="card-head"><div class="chL"><span class="ci">👥</span><span class="ct">Novo Convidado</span></div></div>
-      <div class="fgrp"><label>Nome</label><input type="text" id="cNome" placeholder="Nome completo..."></div>
+      <div class="fgrp"><label>Nome</label><input type="text" id="cNome" placeholder="Nome completo..." autocomplete="off"></div>
       <div class="frow2">
         <div class="fgrp"><label>Tipo</label>
           <select id="cTipo"><option>Criança</option><option>Adulto</option></select>
@@ -331,70 +302,21 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
     <div class="card">
       <div class="card-head">
         <div class="chL"><span class="ci">📋</span><span class="ct">Convidados</span></div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('convidados')">📊</button>
-          <button class="btn btn-leaf btn-sm" onclick="exportCSV('convidados')">⬇️</button>
-        </div>
+        <button class="btn btn-leaf btn-sm" onclick="exportCSV('convidados')">⬇️ CSV</button>
       </div>
       <div id="cLista"><div class="empty-state"><div class="ei">🎈</div><p>Nenhum convidado ainda</p></div></div>
-    </div>
-  </div>
-
-  <!-- ===== COMIDAS ===== -->
-  <div id="tab-food" class="panel">
-    <div class="card">
-      <div class="ca">🍰</div>
-      <div class="card-head"><div class="chL"><span class="ci">🍰</span><span class="ct">Nova Comida / Bebida</span></div></div>
-      <div class="fgrp"><label>Item</label><input type="text" id="fNome" placeholder="Ex: Bolo de cereja..."></div>
-      <div class="frow2">
-        <div class="fgrp"><label>Categoria</label>
-          <select id="fCat"><option>🎂 Bolo</option><option>🍬 Doces</option><option>🥐 Salgados</option><option>🍽️ Prato Principal</option><option>🧃 Bebida Criança</option><option>🍹 Bebida Adulto</option><option>🥪 Petisco</option><option>🍮 Sobremesa</option><option>🍴 Outros</option></select>
-        </div>
-        <div class="fgrp"><label>Quantidade</label><input type="text" id="fQtd" placeholder="100 pçs..."></div>
-      </div>
-      <div class="frow2">
-        <div class="fgrp"><label>Valor R$</label><input type="number" id="fValor" placeholder="0,00" min="0" step="0.01" inputmode="decimal"></div>
-        <div class="fgrp"><label>Status</label>
-          <select id="fStatus"><option>Pendente</option><option>Encomendado</option><option>Pago</option></select>
-        </div>
-      </div>
-      <div class="fgrp"><label>Fornecedor</label><input type="text" id="fFornec" placeholder="Nome do fornecedor..."></div>
-      <button class="btn btn-cherry btn-full" onclick="addFood()">🍒 Adicionar Item</button>
-    </div>
-
-    <div class="mini-stats">
-      <div class="msc"><span class="msc-v" id="fT">R$0</span><span class="msc-l">Total</span></div>
-      <div class="msc"><span class="msc-v" id="fQ">0</span><span class="msc-l">Itens</span></div>
-      <div class="msc"><span class="msc-v" id="fP">R$0</span><span class="msc-l">Pago</span></div>
-      <div class="msc"><span class="msc-v" id="fPe">R$0</span><span class="msc-l">Pend.</span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <div class="chL"><span class="ci">🍽️</span><span class="ct">Cardápio</span></div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('comidas')">📊</button>
-          <button class="btn btn-leaf btn-sm" onclick="exportCSV('comidas')">⬇️</button>
-        </div>
-      </div>
-      <div id="fLista"><div class="empty-state"><div class="ei">🎂</div><p>Nenhum item ainda</p></div></div>
     </div>
   </div>
 
   <!-- ===== PLANILHA ===== -->
   <div id="tab-plan" class="panel">
     <div class="card">
-      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Google Sheets</span></div></div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Conectado à planilha da Ana Clara. Sincronize a qualquer momento.</p>
+      <div class="card-head"><div class="chL"><span class="ci">📊</span><span class="ct">Sincronização</span></div></div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Os dados sincronizam automaticamente a cada <strong>10 segundos</strong> entre todos os dispositivos. Todos que acessarem este link verão os mesmos dados.</p>
       <div style="display:flex;flex-direction:column;gap:8px">
-        <button class="btn btn-sheets btn-full" onclick="syncTudo()">🔄 Sincronizar Tudo Agora</button>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('orcamentos')" style="flex-direction:column;padding:9px 5px">💰<span style="font-size:9px;margin-top:3px">Orçam.</span></button>
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('convidados')" style="flex-direction:column;padding:9px 5px">👥<span style="font-size:9px;margin-top:3px">Convid.</span></button>
-          <button class="btn btn-sheets btn-sm" onclick="syncSheet('comidas')" style="flex-direction:column;padding:9px 5px">🍰<span style="font-size:9px;margin-top:3px">Comidas</span></button>
-        </div>
+        <button class="btn btn-sheets btn-full" onclick="syncNow()">🔄 Sincronizar Agora</button>
         <button class="btn btn-gold btn-full" onclick="exportCSVAll()">⬇️ Exportar CSV Completo</button>
-        <button class="btn btn-leaf btn-full" onclick="window.print()">🖨️ Imprimir Relatório</button>
+        <button class="btn btn-leaf btn-full" onclick="window.print()">🖨️ Imprimir</button>
       </div>
       <div class="sync-log" id="syncLog"></div>
     </div>
@@ -409,20 +331,82 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
       <div id="planTudo"><div class="empty-state"><div class="ei">🍒</div><p>Nenhum lançamento</p></div></div>
     </div>
 
-    <!-- GUIA -->
+    <!-- ATUALIZAR APPS SCRIPT -->
     <div class="card guia-card" id="guiaCard">
       <div class="card-head">
-        <div class="chL"><span class="ci">📖</span><span class="ct" style="color:#1a6332">Como funciona</span></div>
+        <div class="chL"><span class="ci">⚠️</span><span class="ct" style="color:#b07000">Atualizar Apps Script</span></div>
         <button class="btn btn-red btn-sm" onclick="toggleGuia()">✕</button>
       </div>
       <div class="gs">
-        <strong>URL configurada na planilha da Ana Clara:</strong><br>
-        <code style="font-size:10px;word-break:break-all">script.google.com/macros/s/AKfycbzi.../exec</code><br><br>
-        Todos que abrirem este site já estarão conectados automaticamente ao mesmo Google Sheets. Ao tocar em <strong>🔄 Sincronizar</strong>, os dados são enviados diretamente para a planilha.<br><br>
-        <strong>Abas criadas na planilha:</strong> <code>Orcamentos</code>, <code>Convidados</code>, <code>Comidas</code>
+        Para o <strong>sincronismo entre dispositivos funcionar</strong>, é necessário atualizar o código do Apps Script para a versão com leitura (GET) e escrita (POST).<br><br>
+        <strong>Passo 1:</strong> Abra sua planilha → <strong>Extensões → Apps Script</strong><br>
+        <strong>Passo 2:</strong> Substitua todo o código pelo código abaixo:<br>
+      </div>
+      <div class="guia-code">const SS = SpreadsheetApp.getActiveSpreadsheet();
+
+function doGet(e) {
+  try {
+    const tipo = e.parameter.tipo || 'all';
+    const result = {};
+    if (tipo === 'all' || tipo === 'orcamentos') {
+      const sh = SS.getSheetByName('Orcamentos');
+      result.orcamentos = sh ? sheetToJson(sh) : [];
+    }
+    if (tipo === 'all' || tipo === 'convidados') {
+      const sh = SS.getSheetByName('Convidados');
+      result.convidados = sh ? sheetToJson(sh) : [];
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:true, data:result}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:false,error:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function sheetToJson(sh) {
+  const rows = sh.getDataRange().getValues();
+  if (rows.length < 2) return [];
+  const headers = rows[0];
+  return rows.slice(1).map(r => {
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = r[i]);
+    return obj;
+  });
+}
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    if (data.type === 'orcamentos') writeSheet('Orcamentos', data.rows,
+      ['id','desc','cat','valor','status','obs','data']);
+    if (data.type === 'convidados') writeSheet('Convidados', data.rows,
+      ['id','nome','tipo','status','tel']);
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:true}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ok:false,error:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function writeSheet(name, rows, fields) {
+  let sh = SS.getSheetByName(name);
+  if (!sh) sh = SS.insertSheet(name);
+  sh.clearContents();
+  sh.appendRow(fields);
+  rows.forEach(r => sh.appendRow(fields.map(f => r[f] ?? '')));
+}</div>
+      <div class="gs" style="margin-top:8px">
+        <strong>Passo 3:</strong> Clique em <strong>Implantar → Gerenciar implantações → ✏️ Editar → Nova versão → Implantar</strong><br>
+        <strong>⚠️ Importante:</strong> Quem pode acessar: <strong>Qualquer pessoa (anônimo)</strong>
       </div>
     </div>
-    <button class="btn btn-cherry" style="width:100%;margin-bottom:14px;background:transparent;border:2px solid var(--cherry);color:var(--cherry);box-shadow:none" onclick="toggleGuia()">📖 Como funciona a integração</button>
+    <button class="btn btn-cherry" style="width:100%;margin-bottom:13px;background:transparent;border:2px solid var(--cherry);color:var(--cherry);box-shadow:none" onclick="toggleGuia()">⚠️ Como atualizar o Apps Script para sync real</button>
   </div>
 
 </div>
@@ -438,7 +422,7 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
 </div>
 
 <!-- FAB -->
-<button class="fab" onclick="syncTudo()" title="Sync Google Sheets">📊</button>
+<button class="fab" onclick="syncNow()" title="Sincronizar agora">🔄</button>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
@@ -448,80 +432,74 @@ code{background:#fce8ec;padding:2px 6px;border-radius:5px;font-size:11.5px;color
   <button class="nav-btn" onclick="showTab('conv',this)">
     <div class="nav-ind"></div><span class="nicon">👥</span><span class="nlabel">Convid.</span>
   </button>
-  <button class="nav-btn" onclick="showTab('food',this)">
-    <div class="nav-ind"></div><span class="nicon">🍰</span><span class="nlabel">Comidas</span>
-  </button>
   <button class="nav-btn" onclick="showTab('plan',this)">
     <div class="nav-ind"></div><span class="nicon">📊</span><span class="nlabel">Planilha</span>
   </button>
 </nav>
 
 <script>
-// ══════════════════════════
-// GOOGLE SHEETS URL FIXA
-// ══════════════════════════
+// ════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbziYuUFgoxPpy9bzMcem_sUonLixlqlSM1-ZELLiGFWeQOGhin38HfRzRtYj8yOCwR-/exec';
+const POLL_INTERVAL = 10000; // 10 segundos
 
-// ══════════════════════════
+// ════════════════════════════════════
 // PWA MANIFEST
-// ══════════════════════════
+// ════════════════════════════════════
 const manifest = {
-  name: "Festa da Ana Clara 🍒",
-  short_name: "Festa Ana Clara",
-  description: "Planejamento do aniversário de 2 anos da Ana Clara",
-  start_url: "./",
-  display: "standalone",
-  background_color: "#fff8f9",
-  theme_color: "#c0173a",
-  orientation: "portrait",
-  icons: [{
-    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23c0173a'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-size='260' font-family='serif'%3E🍒%3C/text%3E%3C/svg%3E",
-    sizes: "512x512", type: "image/svg+xml"
-  }]
+  name:"Festa da Ana Clara 🍒",short_name:"Festa Ana Clara",
+  description:"Planejamento do aniversário de 2 anos da Ana Clara",
+  start_url:"./",display:"standalone",background_color:"#fff8f9",
+  theme_color:"#c0173a",orientation:"portrait",
+  icons:[{src:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Ccircle cx='256' cy='256' r='256' fill='%23c0173a'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-size='260'%3E🍒%3C/text%3E%3C/svg%3E",sizes:"512x512",type:"image/svg+xml"}]
 };
-const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-document.getElementById('manifestLink').href = URL.createObjectURL(mBlob);
+const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+document.getElementById('manifestLink').href=URL.createObjectURL(mBlob);
 
-// ══════════════════════════
-// INSTALL PWA
-// ══════════════════════════
+// ════════════════════════════════════
+// PWA INSTALL
+// ════════════════════════════════════
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredPrompt = e;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
   document.getElementById('installBanner').classList.add('visible');
 });
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  document.getElementById('installBanner').style.display = 'none';
+document.getElementById('installBtn').addEventListener('click',async()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();await deferredPrompt.userChoice;
+  deferredPrompt=null;document.getElementById('installBanner').style.display='none';
 });
-window.addEventListener('appinstalled', () => {
-  document.getElementById('installBanner').style.display = 'none';
-});
+window.addEventListener('appinstalled',()=>{document.getElementById('installBanner').style.display='none';});
 
-// ══════════════════════════
-// CHERRIES BG
-// ══════════════════════════
-const bg = document.getElementById('cherryBg');
-['🍒','🌸','🍃','✨','🎀','🍒','🍒','🌸'].forEach((e,i) => {
-  const s = document.createElement('span');
-  s.textContent = e;
-  s.style.cssText = `left:${6+i*12}%;font-size:${14+Math.random()*16}px;animation-duration:${11+Math.random()*20}s;animation-delay:${-Math.random()*28}s`;
+// ════════════════════════════════════
+// CHERRIES
+// ════════════════════════════════════
+const bg=document.getElementById('cherryBg');
+['🍒','🌸','🍃','✨','🎀','🍒','🍒','🌸'].forEach((e,i)=>{
+  const s=document.createElement('span');
+  s.textContent=e;
+  s.style.cssText=`left:${6+i*12}%;font-size:${14+Math.random()*16}px;animation-duration:${11+Math.random()*20}s;animation-delay:${-Math.random()*28}s`;
   bg.appendChild(s);
 });
 
-// ══════════════════════════
-// DADOS
-// ══════════════════════════
-let D = JSON.parse(localStorage.getItem('anaclara_festa_v2') || '{"orc":[],"conv":[],"food":[]}');
-function save() { localStorage.setItem('anaclara_festa_v2', JSON.stringify(D)); render(); }
+// ════════════════════════════════════
+// DADOS — estado local
+// ════════════════════════════════════
+// D é sempre a versão mais recente vinda do servidor (ou localStorage como fallback)
+let D = JSON.parse(localStorage.getItem('anaclara_v3') || '{"orc":[],"conv":[]}');
+let isSyncing = false;
+let lastSyncTime = null;
+let pollTimer = null;
 
-// ══════════════════════════
+function saveLocal() {
+  localStorage.setItem('anaclara_v3', JSON.stringify(D));
+}
+
+// ════════════════════════════════════
 // TABS
-// ══════════════════════════
-function showTab(id, btn) {
+// ════════════════════════════════════
+function showTab(id,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
@@ -529,44 +507,52 @@ function showTab(id, btn) {
   render();
 }
 
-// ══════════════════════════
+// ════════════════════════════════════
 // HELPERS
-// ══════════════════════════
-const fmt  = v => 'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtS = v => { const n=parseFloat(v||0); return n>=1000?'R$'+(Math.round(n/100)/10)+'k':fmt(v); };
+// ════════════════════════════════════
+const fmt  = v=>'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtS = v=>{ const n=parseFloat(v||0); return n>=1000?'R$'+(Math.round(n/100)/10)+'k':fmt(v); };
 
-function badge(s) {
+function badge(s){
   const m={Pago:'b-pago',Pendente:'b-pendente',Cancelado:'b-cancelado',Encomendado:'b-encomend',
            Confirmado:'b-confirmado',Aguardando:'b-aguardando','Não virá':'b-nao'};
   return `<span class="badge ${m[s]||''}">${s}</span>`;
 }
-function scls(s) { return s==='Pago'||s==='Confirmado'?'sp':s==='Cancelado'||s==="Não virá"?'sc':''; }
+function scls(s){return s==='Pago'||s==='Confirmado'?'sp':s==='Cancelado'||s==="Não virá"?'sc':'';}
 
-// ══════════════════════════
+// ════════════════════════════════════
 // ORÇAMENTOS
-// ══════════════════════════
-function addOrc() {
+// ════════════════════════════════════
+function addOrc(){
   const d=document.getElementById('oDesc').value.trim();
   if(!d){alert('Informe a descrição!');return;}
-  D.orc.push({id:Date.now(),desc:d,cat:document.getElementById('oCat').value,
+  const item={id:Date.now(),desc:d,cat:document.getElementById('oCat').value,
     valor:parseFloat(document.getElementById('oValor').value)||0,
     status:document.getElementById('oStatus').value,
     obs:document.getElementById('oObs').value,
-    data:new Date().toLocaleDateString('pt-BR')});
-  ['oDesc','oValor','oObs'].forEach(i=>document.getElementById(i).value='');
-  save();
+    data:new Date().toLocaleDateString('pt-BR')};
+  D.orc.push(item);
+  // Limpa campos SEM tirar o foco de outros
+  document.getElementById('oDesc').value='';
+  document.getElementById('oValor').value='';
+  document.getElementById('oObs').value='';
+  saveLocal();render();
+  pushSheet('orcamentos'); // envia imediatamente ao Sheets
 }
-function delOrc(id){if(confirm('Remover?')){D.orc=D.orc.filter(x=>x.id!==id);save();}}
+function delOrc(id){if(confirm('Remover?')){D.orc=D.orc.filter(x=>x.id!==id);saveLocal();render();pushSheet('orcamentos');}}
 
-function renderOrc() {
+function renderOrc(){
   let t=0,p=0,pe=0;
   const el=document.getElementById('oLista');
   if(!D.orc.length){el.innerHTML='<div class="empty-state"><div class="ei">💸</div><p>Nenhum orçamento ainda</p></div>';}
   else el.innerHTML=D.orc.map(o=>{
-    t+=o.valor;
-    if(o.status==='Pago')p+=o.valor;else if(o.status!=='Cancelado')pe+=o.valor;
+    t+=parseFloat(o.valor)||0;
+    if(o.status==='Pago')p+=parseFloat(o.valor)||0;else if(o.status!=='Cancelado')pe+=parseFloat(o.valor)||0;
     return `<div class="list-item ${scls(o.status)}">
-      <div class="lib"><div class="lit">${o.desc}</div><div class="lis">${o.cat}${o.obs?' · '+o.obs:''}${o.data?' · '+o.data:''}</div></div>
+      <div class="lib">
+        <div class="lit">${o.desc}</div>
+        <div class="lis">${o.cat}${o.obs?' · '+o.obs:''}${o.data?' · '+o.data:''}</div>
+      </div>
       <div class="lir">
         <div class="liv ${o.status==='Pago'?'vg':'vr'}">${fmt(o.valor)}</div>
         ${badge(o.status)}
@@ -583,23 +569,26 @@ function renderOrc() {
   document.getElementById('oSQ').textContent=D.orc.length;
 }
 
-// ══════════════════════════
+// ════════════════════════════════════
 // CONVIDADOS
-// ══════════════════════════
-function addConv() {
+// ════════════════════════════════════
+function addConv(){
   const n=document.getElementById('cNome').value.trim();
   if(!n){alert('Informe o nome!');return;}
   D.conv.push({id:Date.now(),nome:n,tipo:document.getElementById('cTipo').value,
     status:document.getElementById('cStatus').value,tel:document.getElementById('cTel').value});
   document.getElementById('cNome').value='';
   document.getElementById('cTel').value='';
-  save();
+  saveLocal();render();
+  pushSheet('convidados');
 }
-function delConv(id){if(confirm('Remover?')){D.conv=D.conv.filter(x=>x.id!==id);save();}}
+function delConv(id){if(confirm('Remover?')){D.conv=D.conv.filter(x=>x.id!==id);saveLocal();render();pushSheet('convidados');}}
 
-function renderConv() {
-  const tot=D.conv.length,cri=D.conv.filter(x=>x.tipo==='Criança').length,
-        adu=D.conv.filter(x=>x.tipo==='Adulto').length,cnf=D.conv.filter(x=>x.status==='Confirmado').length;
+function renderConv(){
+  const tot=D.conv.length,
+        cri=D.conv.filter(x=>x.tipo==='Criança').length,
+        adu=D.conv.filter(x=>x.tipo==='Adulto').length,
+        cnf=D.conv.filter(x=>x.status==='Confirmado').length;
   document.getElementById('cTotal').textContent=tot;
   document.getElementById('cCri').textContent=cri;
   document.getElementById('cAdu').textContent=adu;
@@ -610,8 +599,12 @@ function renderConv() {
   const el=document.getElementById('cLista');
   if(!D.conv.length){el.innerHTML='<div class="empty-state"><div class="ei">🎈</div><p>Nenhum convidado ainda</p></div>';return;}
   el.innerHTML=D.conv.map(c=>`<div class="list-item ${scls(c.status)}">
-    <div class="lib"><div class="lit">${c.tipo==='Criança'?'👧':'👨'} ${c.nome}</div><div class="lis">${c.tipo}${c.tel?' · '+c.tel:''}</div></div>
-    <div class="lir">${badge(c.status)}
+    <div class="lib">
+      <div class="lit">${c.tipo==='Criança'?'👧':'👨'} ${c.nome}</div>
+      <div class="lis">${c.tipo}${c.tel?' · '+c.tel:''}</div>
+    </div>
+    <div class="lir">
+      ${badge(c.status)}
       <div style="display:flex;gap:5px">
         <button class="btn btn-cherry btn-sm" onclick="openStatusModal('conv',${c.id},'${c.status}')" style="padding:5px 10px;font-size:11px">✏️</button>
         <button class="btn btn-red btn-sm" onclick="delConv(${c.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
@@ -620,56 +613,15 @@ function renderConv() {
   </div>`).join('');
 }
 
-// ══════════════════════════
-// COMIDAS
-// ══════════════════════════
-function addFood() {
-  const n=document.getElementById('fNome').value.trim();
-  if(!n){alert('Informe o item!');return;}
-  D.food.push({id:Date.now(),nome:n,cat:document.getElementById('fCat').value,
-    qtd:document.getElementById('fQtd').value,
-    valor:parseFloat(document.getElementById('fValor').value)||0,
-    fornecedor:document.getElementById('fFornec').value,
-    status:document.getElementById('fStatus').value});
-  ['fNome','fQtd','fValor','fFornec'].forEach(i=>document.getElementById(i).value='');
-  save();
-}
-function delFood(id){if(confirm('Remover?')){D.food=D.food.filter(x=>x.id!==id);save();}}
-
-function renderFood() {
-  let t=0,p=0,pe=0;
-  const el=document.getElementById('fLista');
-  if(!D.food.length){el.innerHTML='<div class="empty-state"><div class="ei">🎂</div><p>Nenhum item ainda</p></div>';}
-  else el.innerHTML=D.food.map(f=>{
-    t+=f.valor;
-    if(f.status==='Pago')p+=f.valor;else pe+=f.valor;
-    return `<div class="list-item ${scls(f.status)}">
-      <div class="lib"><div class="lit">${f.nome}</div><div class="lis">${f.cat}${f.qtd?' · '+f.qtd:''}${f.fornecedor?' · '+f.fornecedor:''}</div></div>
-      <div class="lir">
-        <div class="liv ${f.status==='Pago'?'vg':'vr'}">${fmt(f.valor)}</div>
-        ${badge(f.status)}
-        <div style="display:flex;gap:5px">
-          <button class="btn btn-cherry btn-sm" onclick="openStatusModal('food',${f.id},'${f.status}')" style="padding:5px 10px;font-size:11px">✏️</button>
-          <button class="btn btn-red btn-sm" onclick="delFood(${f.id})" style="padding:5px 10px;font-size:11px">🗑️</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('fT').textContent=fmtS(t);
-  document.getElementById('fQ').textContent=D.food.length;
-  document.getElementById('fP').textContent=fmtS(p);
-  document.getElementById('fPe').textContent=fmtS(pe);
-}
-
-// ══════════════════════════
+// ════════════════════════════════════
 // PLANILHA
-// ══════════════════════════
-function renderPlan() {
+// ════════════════════════════════════
+function renderPlan(){
   const cats={};
-  [...D.orc,...D.food].forEach(x=>{
+  D.orc.forEach(x=>{
     if(!cats[x.cat])cats[x.cat]={itens:0,total:0,pago:0,pend:0};
-    cats[x.cat].itens++;cats[x.cat].total+=x.valor;
-    if(x.status==='Pago')cats[x.cat].pago+=x.valor;else cats[x.cat].pend+=x.valor;
+    cats[x.cat].itens++;cats[x.cat].total+=parseFloat(x.valor)||0;
+    if(x.status==='Pago')cats[x.cat].pago+=parseFloat(x.valor)||0;else cats[x.cat].pend+=parseFloat(x.valor)||0;
   });
   const ks=Object.keys(cats);
   document.getElementById('planCat').innerHTML=ks.length?ks.map(k=>`
@@ -680,7 +632,6 @@ function renderPlan() {
 
   const todos=[
     ...D.orc.map(x=>({i:'💰',d:x.desc,c:x.cat,v:x.valor,s:x.status})),
-    ...D.food.map(x=>({i:'🍰',d:x.nome,c:x.cat,v:x.valor,s:x.status})),
     ...D.conv.map(x=>({i:'👥',d:x.nome,c:x.tipo,v:0,s:x.status}))
   ];
   document.getElementById('planTudo').innerHTML=todos.length?todos.map(t=>`
@@ -690,24 +641,96 @@ function renderPlan() {
     </div>`).join(''):'<div class="empty-state"><div class="ei">🍒</div><p>Nenhum lançamento</p></div>';
 }
 
-// ══════════════════════════
-// GLOBAL SUMMARY
-// ══════════════════════════
-function renderGlobal() {
-  const all=[...D.orc,...D.food];
-  const tot=all.reduce((s,x)=>s+x.valor,0);
-  const pago=all.filter(x=>x.status==='Pago').reduce((s,x)=>s+x.valor,0);
+// GLOBAL
+function renderGlobal(){
+  const tot=D.orc.reduce((s,x)=>s+(parseFloat(x.valor)||0),0);
+  const pago=D.orc.filter(x=>x.status==='Pago').reduce((s,x)=>s+(parseFloat(x.valor)||0),0);
   document.getElementById('sumTotal').textContent=fmtS(tot);
   document.getElementById('sumPago').textContent=fmtS(pago);
   document.getElementById('sumPend').textContent=fmtS(tot-pago);
   document.getElementById('sumConv').textContent=D.conv.length;
 }
 
-function render(){renderOrc();renderConv();renderFood();renderPlan();renderGlobal();}
+function render(){renderOrc();renderConv();renderPlan();renderGlobal();}
 
-// ══════════════════════════
-// GOOGLE SHEETS SYNC
-// ══════════════════════════
+// ════════════════════════════════════
+// GOOGLE SHEETS — ESCRITA (POST)
+// ════════════════════════════════════
+async function pushSheet(tipo){
+  const payload = tipo==='orcamentos'
+    ? {type:'orcamentos', rows:D.orc}
+    : {type:'convidados', rows:D.conv};
+  try{
+    await fetch(SHEETS_URL,{
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+  }catch(e){ /* no-cors: ignora erro de rede silenciosamente */ }
+}
+
+// ════════════════════════════════════
+// GOOGLE SHEETS — LEITURA (GET)
+// Sincronismo real entre dispositivos
+// ════════════════════════════════════
+async function pullSheet(){
+  if(isSyncing) return;
+  isSyncing = true;
+  setDot('syncing','Buscando dados...');
+  try {
+    // Precisamos de CORS para ler — o Apps Script retorna JSON com CORS habilitado via doGet
+    const res = await fetch(SHEETS_URL + '?tipo=all&cb='+Date.now(), {method:'GET', mode:'cors'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json = await res.json();
+    if(!json.ok) throw new Error(json.error||'Erro desconhecido');
+
+    const remote = json.data;
+    let updated = false;
+
+    // Mescla orçamentos: remoto é a fonte da verdade
+    if(remote.orcamentos && Array.isArray(remote.orcamentos)){
+      // Converte rows do sheets para o formato interno
+      const remoteOrc = remote.orcamentos.map(r=>({
+        id: parseInt(r.id)||Date.now(),
+        desc: r.desc||'', cat: r.cat||'', valor: parseFloat(r.valor)||0,
+        status: r.status||'Pendente', obs: r.obs||'', data: r.data||''
+      }));
+      // Detecta se houve mudança real
+      if(JSON.stringify(remoteOrc)!==JSON.stringify(D.orc)){
+        D.orc = remoteOrc; updated=true;
+      }
+    }
+    if(remote.convidados && Array.isArray(remote.convidados)){
+      const remoteConv = remote.convidados.map(r=>({
+        id: parseInt(r.id)||Date.now(),
+        nome: r.nome||'', tipo: r.tipo||'Adulto',
+        status: r.status||'Aguardando', tel: r.tel||''
+      }));
+      if(JSON.stringify(remoteConv)!==JSON.stringify(D.conv)){
+        D.conv = remoteConv; updated=true;
+      }
+    }
+
+    if(updated){ saveLocal(); render(); log('🍒 Dados atualizados do servidor!',''); }
+
+    lastSyncTime = new Date();
+    setDot('ok','✅ Sincronizado — Ana Clara');
+    document.getElementById('lastSyncTxt').textContent = 'Último sync: '+lastSyncTime.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+  } catch(e) {
+    // Se GET falhar (Apps Script antigo sem doGet), cai em modo offline/local
+    setDot('err','⚠️ Sync offline — atualize o Apps Script');
+    log('Erro ao ler do servidor. Verifique se atualizou o Apps Script (aba Planilha → botão laranja)','err');
+  } finally {
+    isSyncing = false;
+  }
+}
+
+function setDot(state, msg){
+  document.getElementById('sheetsDot').className='dot '+state;
+  if(msg) document.getElementById('sheetsStatusTxt').textContent=msg;
+}
+
 function log(msg,type=''){
   const el=document.getElementById('syncLog');
   el.classList.add('visible');
@@ -716,109 +739,116 @@ function log(msg,type=''){
   d.textContent=`[${new Date().toLocaleTimeString('pt-BR')}] ${msg}`;
   el.appendChild(d);el.scrollTop=el.scrollHeight;
 }
-function setDot(s){
-  const dot=document.getElementById('sheetsDot');
-  const txt=document.getElementById('sheetsStatusTxt');
-  dot.className='dot '+s;
-  txt.textContent=s==='ok'?'📊 Google Sheets conectado — Ana Clara':s==='err'?'❌ Erro na sincronização':'🔄 Sincronizando...';
-}
-async function syncSheet(tipo){
-  setDot('syncing');
-  const payload=tipo==='orcamentos'?{type:'orcamentos',rows:D.orc}:
-                tipo==='convidados'?{type:'convidados',rows:D.conv}:
-                {type:'comidas',rows:D.food};
-  log(`Enviando ${tipo}... (${payload.rows.length} registros)`,'info');
-  try{
-    await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    log(`✅ ${tipo} enviado com sucesso!`);setDot('ok');
-  }catch(e){log('⚠️ Enviado (verifique na planilha)','info');setDot('ok');}
-}
-async function syncTudo(){
-  log('🍒 Iniciando sincronização completa...','info');
-  await syncSheet('orcamentos');await new Promise(r=>setTimeout(r,500));
-  await syncSheet('convidados');await new Promise(r=>setTimeout(r,500));
-  await syncSheet('comidas');
-  log('🍒 Tudo sincronizado com Google Sheets da Ana Clara!');
+
+// Sync manual
+async function syncNow(){
+  // Empurra dados locais primeiro, depois puxa do servidor
+  setDot('syncing','Sincronizando...');
+  await pushSheet('orcamentos');
+  await new Promise(r=>setTimeout(r,300));
+  await pushSheet('convidados');
+  await new Promise(r=>setTimeout(r,300));
+  await pullSheet();
 }
 
-// ══════════════════════════
+// Polling automático — só roda quando a página está visível e não há input ativo
+function startPolling(){
+  pollTimer = setInterval(()=>{
+    // Não sincroniza se um input estiver em foco (usuário digitando)
+    const activeEl = document.activeElement;
+    const isTyping = activeEl && (activeEl.tagName==='INPUT'||activeEl.tagName==='TEXTAREA'||activeEl.tagName==='SELECT');
+    if(!isTyping && !isSyncing){
+      pullSheet();
+    }
+  }, POLL_INTERVAL);
+}
+
+// Pausa polling quando aba não está visível (economiza recursos)
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    clearInterval(pollTimer);
+  } else {
+    pullSheet(); // atualiza imediatamente ao voltar para a aba
+    startPolling();
+  }
+});
+
+// ════════════════════════════════════
 // EXPORT CSV
-// ══════════════════════════
+// ════════════════════════════════════
 function exportCSV(tipo){
   let csv,nome;
   if(tipo==='orcamentos'){
     csv='Descrição,Categoria,Valor,Status,Observações,Data\n'+D.orc.map(x=>`"${x.desc}","${x.cat}","${x.valor}","${x.status}","${x.obs||''}","${x.data||''}"`).join('\n');
     nome='orcamentos_ana_clara.csv';
-  }else if(tipo==='convidados'){
+  } else {
     csv='Nome,Tipo,Confirmação,Telefone\n'+D.conv.map(x=>`"${x.nome}","${x.tipo}","${x.status}","${x.tel||''}"`).join('\n');
     nome='convidados_ana_clara.csv';
-  }else{
-    csv='Item,Categoria,Quantidade,Valor,Fornecedor,Status\n'+D.food.map(x=>`"${x.nome}","${x.cat}","${x.qtd||''}","${x.valor}","${x.fornecedor||''}","${x.status}"`).join('\n');
-    nome='comidas_ana_clara.csv';
   }
   dlCSV(csv,nome);
 }
 function exportCSVAll(){
-  let c='ORÇAMENTOS\nDescrição,Categoria,Valor,Status,Observações\n';
-  c+=D.orc.map(x=>`"${x.desc}","${x.cat}","${x.valor}","${x.status}","${x.obs||''}"`).join('\n');
+  let c='ORÇAMENTOS\nDescrição,Categoria,Valor,Status,Observações,Data\n';
+  c+=D.orc.map(x=>`"${x.desc}","${x.cat}","${x.valor}","${x.status}","${x.obs||''}","${x.data||''}"`).join('\n');
   c+='\n\nCONVIDADOS\nNome,Tipo,Confirmação,Telefone\n';
   c+=D.conv.map(x=>`"${x.nome}","${x.tipo}","${x.status}","${x.tel||''}"`).join('\n');
-  c+='\n\nCOMIDAS\nItem,Categoria,Quantidade,Valor,Fornecedor,Status\n';
-  c+=D.food.map(x=>`"${x.nome}","${x.cat}","${x.qtd||''}","${x.valor}","${x.fornecedor||''}","${x.status}"`).join('\n');
   dlCSV(c,'festa_ana_clara_completo.csv');
 }
 function dlCSV(content,filename){
   const blob=new Blob(['\ufeff'+content],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
 }
+
 function toggleGuia(){document.getElementById('guiaCard').classList.toggle('visible');}
 
-// ══════════════════════════
-// MODAL ALTERAR STATUS
-// ══════════════════════════
-const STATUS_OPTS = {
-  orc:  [{v:'Pendente',i:'⏳',c:'#8a6000'},{v:'Pago',i:'✅',c:'#1d6b3a'},{v:'Cancelado',i:'❌',c:'#b00020'}],
-  conv: [{v:'Aguardando',i:'⏳',c:'#8a6000'},{v:'Confirmado',i:'✅',c:'#1d6b3a'},{v:'Não virá',i:'❌',c:'#b00020'}],
-  food: [{v:'Pendente',i:'⏳',c:'#8a6000'},{v:'Encomendado',i:'📦',c:'#1a4080'},{v:'Pago',i:'✅',c:'#1d6b3a'}]
+// ════════════════════════════════════
+// MODAL STATUS
+// ════════════════════════════════════
+const STATUS_OPTS={
+  orc: [{v:'Pendente',i:'⏳',c:'#8a6000'},{v:'Pago',i:'✅',c:'#1d6b3a'},{v:'Cancelado',i:'❌',c:'#b00020'}],
+  conv:[{v:'Aguardando',i:'⏳',c:'#8a6000'},{v:'Confirmado',i:'✅',c:'#1d6b3a'},{v:'Não virá',i:'❌',c:'#b00020'}]
 };
+let _mc={type:null,id:null,current:null};
 
-let _modalCtx = {type:null, id:null, current:null};
-
-function openStatusModal(type, id, current) {
-  _modalCtx = {type, id, current};
-  const names = {orc:'Orçamento', conv:'Convidado', food:'Item'};
-  const arr = type==='orc'?D.orc:type==='conv'?D.conv:D.food;
-  const item = arr.find(x=>x.id===id);
-  const label = item ? (item.desc||item.nome||item.nome) : '';
-  document.getElementById('statusSheetLabel').textContent = label || 'Selecione o novo status';
-  const opts = STATUS_OPTS[type];
-  document.getElementById('statusOptions').innerHTML = opts.map(o=>`
+function openStatusModal(type,id,current){
+  _mc={type,id,current};
+  const arr=type==='orc'?D.orc:D.conv;
+  const item=arr.find(x=>x.id===id);
+  const label=item?(item.desc||item.nome):'';
+  document.getElementById('statusSheetLabel').textContent=label||'Selecione o novo status';
+  document.getElementById('statusOptions').innerHTML=STATUS_OPTS[type].map(o=>`
     <div class="status-opt ${o.v===current?'selected':''}" onclick="applyStatus('${o.v}')">
       <span class="so-icon">${o.i}</span>
       <span class="so-label" style="color:${o.c}">${o.v}</span>
       <span class="so-check">✓</span>
     </div>`).join('');
   document.getElementById('statusOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
 
-function applyStatus(newStatus) {
-  const {type, id} = _modalCtx;
-  const arr = type==='orc'?D.orc:type==='conv'?D.conv:D.food;
-  const item = arr.find(x=>x.id===id);
-  if (item) { item.status = newStatus; save(); }
+function applyStatus(newStatus){
+  const arr=_mc.type==='orc'?D.orc:D.conv;
+  const item=arr.find(x=>x.id===_mc.id);
+  if(item){
+    item.status=newStatus;
+    saveLocal();render();
+    pushSheet(_mc.type==='orc'?'orcamentos':'convidados');
+  }
   closeStatusModal();
 }
 
-function closeStatusModal(e) {
-  if (e && e.target !== document.getElementById('statusOverlay')) return;
+function closeStatusModal(e){
+  if(e&&e.target!==document.getElementById('statusOverlay'))return;
   document.getElementById('statusOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 }
 
+// ════════════════════════════════════
 // INIT
+// ════════════════════════════════════
 render();
-setDot('ok');
+pullSheet();   // busca dados do servidor imediatamente
+startPolling(); // inicia polling automático
 </script>
 </body>
 </html>
