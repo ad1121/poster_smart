@@ -3,99 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Divisor de Imagem para A4</title>
+    <title>Poster Maker Pro - Divisor A4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f9; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .controls { display: flex; gap: 15px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
-        input[type="number"] { width: 50px; padding: 5px; }
-        #preview { display: grid; gap: 2px; margin-top: 20px; border: 1px solid #ccc; background: #eee; overflow: auto; max-height: 500px; }
-        canvas { max-width: 100%; height: auto; border: 1px solid #000; }
-        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
-        button:hover { background: #0056b3; }
+        .preview-grid canvas {
+            width: 100%;
+            height: auto;
+            border: 1px dashed #cbd5e1;
+            transition: transform 0.2s;
+        }
+        .preview-grid canvas:hover {
+            transform: scale(1.02);
+            border-style: solid;
+            border-color: #3b82f6;
+            z-index: 10;
+        }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8">
 
-<div class="container">
-    <h1>Divisor de Imagem (Poster A4)</h1>
-    <p>Escolha uma imagem e defina em quantas folhas A4 deseja dividi-la.</p>
-    
-    <input type="file" id="upload" accept="image/*">
-    
-    <div class="controls">
-        <label>Colunas: <input type="number" id="cols" value="2" min="1"></label>
-        <label>Linhas: <input type="number" id="rows" value="2" min="1"></label>
-        <button onclick="processarImagem()">Gerar Partes</button>
-        <button id="downloadBtn" style="display:none;" onclick="baixarTudo()">Baixar Todas as Partes</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-800 mb-2">Poster Maker Pro</h1>
+            <p class="text-slate-600">Transforme uma imagem em um poster gigante dividido em folhas A4.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <aside class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 h-fit sticky top-8">
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">1. Escolha a Imagem</label>
+                    <input type="file" id="upload" accept="image/*" 
+                        class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"/>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Colunas</label>
+                        <input type="number" id="cols" value="2" min="1" max="10" 
+                            class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Linhas</label>
+                        <input type="number" id="rows" value="2" min="1" max="10" 
+                            class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <button id="downloadBtn" disabled
+                        class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                        <span>Baixar Todas as Partes</span>
+                    </button>
+                    <p class="text-[10px] text-slate-400 text-center uppercase tracking-wider font-bold">Resolução Original Preservada</p>
+                </div>
+            </aside>
+
+            <main class="lg:col-span-3">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 min-h-[400px]">
+                    <div id="emptyState" class="flex flex-col items-center justify-center h-[400px] text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.587-1.587a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p>A pré-visualização aparecerá aqui</p>
+                    </div>
+                    <div id="preview" class="preview-grid grid gap-1"></div>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <div id="preview"></div>
-</div>
-
-<script>
-    let partesGeradas = [];
-
-    function processarImagem() {
-        const file = document.getElementById('upload').files[0];
-        const cols = parseInt(document.getElementById('cols').value);
-        const rows = parseInt(document.getElementById('rows').value);
+    <script>
+        const upload = document.getElementById('upload');
+        const colsInput = document.getElementById('cols');
+        const rowsInput = document.getElementById('rows');
         const preview = document.getElementById('preview');
-        
-        if (!file) return alert("Selecione uma imagem primeiro!");
+        const emptyState = document.getElementById('emptyState');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const img = new Image();
-            img.onload = function() {
-                preview.innerHTML = '';
-                partesGeradas = [];
-                preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        let imgOriginal = null;
+        let partesGeradas = [];
 
-                // Proporção A4 (210/297 = ~0.707)
-                const a4Ratio = 210 / 297;
-                
-                // Calcula a largura e altura de cada pedaço baseado na imagem original (Alta Qualidade)
-                const pieceWidth = img.width / cols;
-                const pieceHeight = img.height / rows;
-
-                for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Define o tamanho do canvas para a qualidade total do recorte
-                        canvas.width = pieceWidth;
-                        canvas.height = pieceHeight;
-
-                        // Recorta a parte específica da imagem original
-                        ctx.drawImage(img, c * pieceWidth, r * pieceHeight, pieceWidth, pieceHeight, 0, 0, pieceWidth, pieceHeight);
-                        
-                        preview.appendChild(canvas);
-                        partesGeradas.push({
-                            data: canvas.toDataURL('image/png', 1.0),
-                            name: `parte_${r+1}_${c+1}.png`
-                        });
-                    }
-                }
-                document.getElementById('downloadBtn').style.display = 'inline-block';
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function baixarTudo() {
-        partesGeradas.forEach((imgObj, index) => {
-            setTimeout(() => {
-                const link = document.createElement('a');
-                link.href = imgObj.data;
-                link.download = imgObj.name;
-                link.click();
-            }, index * 200); // Pequeno atraso para não travar o navegador
+        // Atualiza em tempo real ao mudar números ou arquivo
+        [colsInput, rowsInput].forEach(input => {
+            input.addEventListener('input', () => {
+                if (imgOriginal) processarImagem();
+            });
         });
-    }
-</script>
 
+        upload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imgOriginal = new Image();
+                imgOriginal.onload = () => {
+                    emptyState.classList.add('hidden');
+                    processarImagem();
+                };
+                imgOriginal.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function processarImagem() {
+            const cols = parseInt(colsInput.value) || 1;
+            const rows = parseInt(rowsInput.value) || 1;
+            
+            preview.innerHTML = '';
+            partesGeradas = [];
+            preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+            const pieceWidth = imgOriginal.width / cols;
+            const pieceHeight = imgOriginal.height / rows;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = pieceWidth;
+                    canvas.height = pieceHeight;
+
+                    ctx.drawImage(imgOriginal, c * pieceWidth, r * pieceHeight, pieceWidth, pieceHeight, 0, 0, pieceWidth, pieceHeight);
+                    
+                    preview.appendChild(canvas);
+                    partesGeradas.push({
+                        data: canvas.toDataURL('image/png', 1.0),
+                        name: `poster_parte_R${r+1}_C${c+1}.png`
+                    });
+                }
+            }
+            downloadBtn.disabled = false;
+        }
+
+        downloadBtn.onclick = () => {
+            partesGeradas.forEach((imgObj, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = imgObj.data;
+                    link.download = imgObj.name;
+                    link.click();
+                }, index * 250);
+            });
+        };
+    </script>
 </body>
 </html>
