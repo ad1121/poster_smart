@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ENEM BÍBLICO - SETOR 25</title>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --blue: #005aa1;
@@ -19,332 +20,79 @@
             --gray-800: #1e293b;
             --sidebar-w: 220px;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Barlow', sans-serif; background: var(--gray-100); min-height: 100vh; display: flex; flex-direction: column; }
 
-        body {
-            font-family: 'Barlow', sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        header { background: var(--blue); padding: 16px 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,90,161,0.3); position: relative; z-index: 50; }
+        header h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(22px, 5vw, 36px); color: white; letter-spacing: -0.5px; text-transform: uppercase; font-style: italic; }
+        header p { color: rgba(255,255,255,0.7); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-top: 2px; font-weight: 600; }
 
-        header {
-            background: var(--blue);
-            padding: 16px 24px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,90,161,0.3);
-            position: relative;
-            z-index: 50;
-        }
-        header h1 {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: clamp(22px, 5vw, 36px);
-            color: white;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-            font-style: italic;
-        }
-        header p {
-            color: rgba(255,255,255,0.7);
-            font-size: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 2px;
-            font-weight: 600;
-        }
-
-        .hamburger {
-            display: flex;
-            position: fixed;
-            top: 14px;
-            left: 16px;
-            z-index: 200;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            border-radius: 10px;
-            padding: 8px 10px;
-            cursor: pointer;
-            flex-direction: column;
-            gap: 5px;
-            backdrop-filter: blur(4px);
-        }
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: white;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
+        .hamburger { display: flex; position: fixed; top: 14px; left: 16px; z-index: 200; background: rgba(255,255,255,0.15); border: none; border-radius: 10px; padding: 8px 10px; cursor: pointer; flex-direction: column; gap: 5px; backdrop-filter: blur(4px); }
+        .hamburger span { display: block; width: 22px; height: 2px; background: white; border-radius: 2px; transition: all 0.3s; }
         .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 149;
-        }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 149; }
         .sidebar-overlay.open { display: block; }
 
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: var(--sidebar-w);
-            background: white;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.15);
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            transform: translateX(-100%);
-            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
+        .sidebar { position: fixed; top: 0; left: 0; height: 100%; width: var(--sidebar-w); background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.15); z-index: 150; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
         .sidebar.open { transform: translateX(0); }
-
-        .sidebar-brand {
-            background: var(--blue);
-            padding: 24px 20px 16px;
-            color: white;
-        }
-        .sidebar-brand h2 {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 20px;
-            font-style: italic;
-            text-transform: uppercase;
-        }
-        .sidebar-brand p {
-            font-size: 10px;
-            letter-spacing: 2px;
-            opacity: 0.75;
-            margin-top: 2px;
-            text-transform: uppercase;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .menu-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 13px 16px;
-            border-radius: 12px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-            transition: all 0.18s;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .sidebar-brand { background: var(--blue); padding: 24px 20px 16px; color: white; }
+        .sidebar-brand h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; font-style: italic; text-transform: uppercase; }
+        .sidebar-brand p { font-size: 10px; letter-spacing: 2px; opacity: 0.75; margin-top: 2px; text-transform: uppercase; }
+        .sidebar-nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 4px; }
+        .menu-btn { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-radius: 12px; border: none; background: transparent; cursor: pointer; text-align: left; width: 100%; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
         .menu-btn:hover { background: var(--blue-light); }
         .menu-btn.active { background: var(--blue); }
         .menu-btn .icon { font-size: 20px; flex-shrink: 0; }
-        .menu-btn .label {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray-800);
-        }
+        .menu-btn .label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-800); }
         .menu-btn.active .label { color: white; }
         .menu-btn.active:hover { background: var(--blue-dark); }
 
         .app-layout { display: flex; flex: 1; }
-
-        .main-content {
-            flex: 1;
-            padding: 16px;
-            width: 100%;
-        }
-
-        .content-card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-            border: 1px solid var(--gray-200);
-        }
-
+        .main-content { flex: 1; padding: 16px; width: 100%; }
+        .content-card { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); border: 1px solid var(--gray-200); }
         .screen { display: none; }
         .screen.active { display: block; }
 
-        .welcome-card {
-            background: var(--blue-light);
-            border: 1px solid #c7dff0;
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-        .welcome-card img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid var(--blue);
-            flex-shrink: 0;
-        }
+        .welcome-card { background: var(--blue-light); border: 1px solid #c7dff0; border-radius: 16px; padding: 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+        .welcome-card img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--blue); flex-shrink: 0; }
         .welcome-card h3 { font-weight: 700; color: var(--gray-800); font-size: 16px; }
         .welcome-card p { color: var(--gray-600); font-size: 13px; margin-top: 2px; }
 
-        .info-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .info-card {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 14px;
-            text-align: center;
-        }
+        .info-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .info-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 12px; padding: 14px; text-align: center; }
         .info-card .info-emoji { font-size: 24px; margin-bottom: 6px; }
         .info-card .info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 600; }
         .info-card .info-value { font-size: 13px; font-weight: 700; color: var(--gray-800); margin-top: 2px; }
 
-        .btn-primary {
-            width: 100%;
-            background: var(--blue);
-            color: white;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .btn-primary { width: 100%; background: var(--blue); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; padding: 16px; border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
         .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .btn-success {
-            width: 100%;
-            background: var(--green);
-            color: white;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .btn-success { width: 100%; background: var(--green); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; padding: 16px; border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; }
         .btn-success:active { transform: scale(0.98); }
         .btn-success:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-dark { width: 100%; background: var(--gray-800); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; letter-spacing: 1px; text-transform: uppercase; padding: 14px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-sm { background: var(--blue); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
 
-        .btn-dark {
-            width: 100%;
-            background: var(--gray-800);
-            color: white;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-sm {
-            background: var(--blue);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-
-        .screen-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 22px;
-            text-transform: uppercase;
-            color: var(--blue);
-            border-bottom: 4px solid var(--blue);
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .form-input {
-            border: 2px solid var(--gray-200);
-            padding: 12px 14px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'Barlow', sans-serif;
-            outline: none;
-            transition: border-color 0.2s;
-            width: 100%;
-            color: var(--gray-800);
-            background: white;
-        }
+        .screen-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; text-transform: uppercase; color: var(--blue); border-bottom: 4px solid var(--blue); display: inline-block; margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .form-input { border: 2px solid var(--gray-200); padding: 12px 14px; border-radius: 12px; font-size: 15px; font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; color: var(--gray-800); background: white; }
         .form-input:focus { border-color: var(--blue); }
         .form-input::placeholder { color: var(--gray-400); }
         textarea.form-input { height: 90px; resize: none; }
 
-        .consulta-wrapper {
-            max-width: 360px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .consulta-wrapper .form-input {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 14px;
-        }
+        .consulta-wrapper { max-width: 360px; margin: 0 auto; text-align: center; }
+        .consulta-wrapper .form-input { text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 1px; margin-bottom: 14px; }
 
         .login-wrapper { max-width: 320px; margin: 0 auto; }
         .login-wrapper .form-input { margin-bottom: 12px; }
 
-        .coord-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .coord-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .coord-count { font-size: 13px; color: var(--gray-600); font-weight: 600; }
-
         .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--gray-200); }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 400px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 340px; }
         thead { background: var(--gray-50); }
         th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); font-weight: 700; border-bottom: 1px solid var(--gray-200); }
         td { padding: 12px 16px; border-bottom: 1px solid var(--gray-200); color: var(--gray-800); }
@@ -353,122 +101,74 @@
         .td-tel { color: var(--blue); font-weight: 700; font-family: monospace; }
         .td-num { color: var(--gray-400); font-weight: 700; font-size: 12px; }
 
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.65);
-            backdrop-filter: blur(4px);
-            z-index: 300;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.open { display: flex; }
-        .modal-box {
-            background: white;
-            border-radius: 24px;
-            max-width: 480px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 28px 24px;
-            text-align: center;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.25);
-        }
-        .modal-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 26px;
-            color: var(--blue);
-            text-transform: uppercase;
-            font-style: italic;
-            margin-bottom: 4px;
-        }
+        .modal-box { background: white; border-radius: 24px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 28px 24px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
+        .modal-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 26px; color: var(--blue); text-transform: uppercase; font-style: italic; margin-bottom: 4px; }
         .modal-subtitle { font-size: 13px; color: var(--gray-600); margin-bottom: 16px; }
-
-        .regras-list {
-            background: var(--blue-light);
-            border: 1px solid #c7dff0;
-            border-radius: 14px;
-            padding: 16px 20px;
-            text-align: left;
-            margin-bottom: 16px;
-        }
-        .regra-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0,90,161,0.1);
-            font-size: 14px;
-            color: var(--gray-800);
-            line-height: 1.4;
-        }
+        .regras-list { background: var(--blue-light); border: 1px solid #c7dff0; border-radius: 14px; padding: 16px 20px; text-align: left; margin-bottom: 16px; }
+        .regra-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(0,90,161,0.1); font-size: 14px; color: var(--gray-800); line-height: 1.4; }
         .regra-item:last-child { border-bottom: none; }
         .regra-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-        .termo-check {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            background: #fff7ed;
-            border: 1px solid #fed7aa;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 16px;
-            text-align: left;
-        }
-        .termo-check input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            margin-top: 1px;
-            accent-color: var(--blue);
-            cursor: pointer;
-        }
+        .termo-check { display: flex; align-items: flex-start; gap: 10px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; text-align: left; }
+        .termo-check input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; accent-color: var(--blue); cursor: pointer; }
         .termo-check label { font-size: 13px; color: var(--gray-700); cursor: pointer; line-height: 1.5; }
 
-        #comprovante {
-            display: none;
-            padding: 40px;
-            text-align: center;
-            background: white;
-            min-height: 100vh;
-        }
-        #comprovante.visible { display: block; }
-        .comp-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 36px; color: var(--blue); text-transform: uppercase; font-style: italic; }
-        .comp-sub { border-bottom: 3px solid var(--blue); padding-bottom: 16px; margin-bottom: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 13px; color: var(--gray-600); margin-top: 4px; }
-        .comp-name { font-size: 24px; font-weight: 700; color: var(--gray-800); text-transform: uppercase; margin: 16px 0; }
-        .comp-details { font-size: 14px; color: var(--gray-600); line-height: 2; }
-
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--gray-800);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 600;
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 400;
-            pointer-events: none;
-            max-width: 90vw;
-            text-align: center;
-            white-space: normal;
-        }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--gray-800); color: white; padding: 12px 24px; border-radius: 100px; font-size: 14px; font-weight: 600; opacity: 0; transition: all 0.3s; z-index: 400; pointer-events: none; max-width: 90vw; text-align: center; white-space: normal; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .toast.error { background: #dc2626; }
         .toast.success { background: var(--green); }
 
-        @media print {
-            .no-print { display: none !important; }
-            #comprovante { display: block !important; }
-        }
+        /* ===== NANDA CHATBOT ===== */
+        .nanda-bubble { position: fixed; bottom: 20px; right: 16px; z-index: 500; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+        .nanda-hint { background: white; border-radius: 14px 14px 4px 14px; padding: 8px 13px; font-size: 13px; font-weight: 600; color: var(--blue); box-shadow: 0 4px 20px rgba(0,0,0,0.12); white-space: nowrap; border: 1px solid var(--blue-light); animation: fadeInHint 0.4s ease; }
+        @keyframes fadeInHint { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .nanda-toggle { width: 60px; height: 60px; border-radius: 50%; border: 3px solid white; background: var(--blue); cursor: pointer; box-shadow: 0 6px 24px rgba(0,90,161,0.45); overflow: hidden; position: relative; transition: transform 0.2s; padding: 0; -webkit-tap-highlight-color: transparent; }
+        .nanda-toggle:active { transform: scale(0.93); }
+        .nanda-toggle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .nanda-badge { position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: #ef4444; border-radius: 50%; border: 2px solid white; display: none; }
+        .nanda-badge.show { display: block; }
+
+        .nanda-chat { position: fixed; bottom: 92px; right: 16px; width: calc(100vw - 32px); max-width: 350px; background: white; border-radius: 20px; box-shadow: 0 16px 48px rgba(0,0,0,0.18); border: 1px solid var(--gray-200); display: flex; flex-direction: column; z-index: 499; overflow: hidden; transform: scale(0.9) translateY(16px); opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1); transform-origin: bottom right; max-height: 72vh; }
+        .nanda-chat.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+        .nanda-chat-header { background: var(--blue); padding: 12px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .nanda-chat-header img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.4); }
+        .nanda-chat-header-info h4 { font-size: 14px; font-weight: 700; color: white; }
+        .nanda-chat-header-info p { font-size: 10px; color: rgba(255,255,255,0.7); }
+        .nanda-close { margin-left: auto; background: none; border: none; color: white; font-size: 18px; cursor: pointer; padding: 4px; opacity: 0.8; line-height: 1; }
+
+        .nanda-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-height: 180px; }
+        .msg { max-width: 85%; }
+        .msg.bot { align-self: flex-start; }
+        .msg.user { align-self: flex-end; }
+        .msg-bubble { padding: 9px 13px; border-radius: 16px; font-size: 13.5px; line-height: 1.45; }
+        .msg.bot .msg-bubble { background: var(--blue-light); color: var(--gray-800); border-radius: 4px 16px 16px 16px; }
+        .msg.user .msg-bubble { background: var(--blue); color: white; border-radius: 16px 16px 4px 16px; }
+        .msg-time { font-size: 10px; color: var(--gray-400); margin-top: 2px; padding: 0 4px; }
+        .msg.user .msg-time { text-align: right; }
+
+        .quick-replies { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 12px 10px; flex-shrink: 0; }
+        .qr-btn { background: white; border: 1.5px solid var(--blue); color: var(--blue); padding: 7px 13px; border-radius: 100px; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; font-family: 'Barlow', sans-serif; }
+        .qr-btn:active { background: var(--blue); color: white; transform: scale(0.96); }
+
+        .nanda-input-area { border-top: 1px solid var(--gray-200); padding: 9px 11px; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+        .nanda-input { flex: 1; border: 1.5px solid var(--gray-200); border-radius: 100px; padding: 8px 13px; font-size: 13.5px; font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s; }
+        .nanda-input:focus { border-color: var(--blue); }
+        .nanda-send { width: 36px; height: 36px; border-radius: 50%; background: var(--blue); border: none; color: white; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .nanda-send:active { background: var(--blue-dark); }
+
+        .typing-dot { display: inline-flex; gap: 4px; padding: 11px 13px; background: var(--blue-light); border-radius: 4px 16px 16px 16px; }
+        .typing-dot span { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: typingBounce 1.2s infinite; }
+        .typing-dot span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+        .map-link { display: inline-flex; align-items: center; gap: 6px; background: var(--blue); color: white; padding: 7px 13px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 6px; }
+
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body>
@@ -486,7 +186,6 @@
     <div class="sidebar-overlay no-print" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
     <div class="app-layout">
-
         <nav class="sidebar no-print" id="sidebar">
             <div class="sidebar-brand">
                 <h2>ENEM Bíblico</h2>
@@ -494,20 +193,16 @@
             </div>
             <div class="sidebar-nav">
                 <button class="menu-btn active" id="btn-home" onclick="show('home')">
-                    <span class="icon">🏠</span>
-                    <span class="label">Início</span>
+                    <span class="icon">🏠</span><span class="label">Início</span>
                 </button>
                 <button class="menu-btn" id="btn-inscricao" onclick="show('inscricao')">
-                    <span class="icon">📝</span>
-                    <span class="label">Inscrição</span>
+                    <span class="icon">📝</span><span class="label">Inscrição</span>
                 </button>
                 <button class="menu-btn" id="btn-conferir" onclick="show('conferir')">
-                    <span class="icon">🔍</span>
-                    <span class="label">Consultar</span>
+                    <span class="icon">🔍</span><span class="label">Consultar</span>
                 </button>
                 <button class="menu-btn" id="btn-login" onclick="show('login')">
-                    <span class="icon">🔐</span>
-                    <span class="label">Painel</span>
+                    <span class="icon">🔐</span><span class="label">Painel</span>
                 </button>
             </div>
         </nav>
@@ -517,7 +212,7 @@
 
                 <div id="screen-home" class="screen active">
                     <div class="welcome-card">
-                        <img src="https://api.dicebear.com/9.x/big-smile/svg?seed=Aneka">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" alt="Nanda">
                         <div>
                             <h3>Olá! Sou a Nanda. 👋</h3>
                             <p>Bem-vindo ao ENEM Bíblico do Setor 25!</p>
@@ -548,16 +243,16 @@
                     <button class="btn-primary" onclick="show('inscricao')">📝 Fazer Inscrição</button>
                 </div>
 
+                <!-- INSCRIÇÃO — sem campo Setor -->
                 <div id="screen-inscricao" class="screen">
                     <div class="screen-title">Inscrição</div>
                     <form id="formInscricao" onsubmit="preSalvar(event)">
                         <div class="form-grid">
-                            <input id="nome" class="form-input" type="text" placeholder="Nome Completo" required>
-                            <input id="email" class="form-input" type="email" placeholder="E-mail" required>
-                            <input id="idade" class="form-input" type="number" placeholder="Idade" required min="5" max="120">
-                            <input id="igreja" class="form-input" type="text" placeholder="Igreja" required>
-                            <input id="setor" class="form-input" type="text" placeholder="Setor" required>
-                            <input id="tel" class="form-input" type="tel" placeholder="WhatsApp (com DDD)" required>
+                            <input id="nome"   class="form-input" type="text"   placeholder="Nome Completo" required>
+                            <input id="email"  class="form-input" type="email"  placeholder="E-mail" required>
+                            <input id="idade"  class="form-input" type="number" placeholder="Idade" required min="5" max="120">
+                            <input id="igreja" class="form-input" type="text"   placeholder="Igreja" required>
+                            <input id="tel"    class="form-input" type="tel"    placeholder="WhatsApp (com DDD)" required>
                             <textarea id="exp" class="form-input" placeholder="Sua expectativa para o ENEM Bíblico..."></textarea>
                             <button type="submit" class="btn-success" id="btnSalvar">✅ Avançar para Confirmação</button>
                         </div>
@@ -577,7 +272,7 @@
                     <div class="screen-title">Acesso Restrito</div>
                     <div class="login-wrapper">
                         <p style="color:var(--gray-600);font-size:14px;margin-bottom:16px;">Área exclusiva para coordenadores.</p>
-                        <input id="user" class="form-input" type="text" placeholder="Usuário">
+                        <input id="user" class="form-input" type="text"     placeholder="Usuário">
                         <input id="pass" class="form-input" type="password" placeholder="Senha">
                         <button onclick="login()" class="btn-dark">🔐 Entrar</button>
                     </div>
@@ -594,16 +289,10 @@
                     <div class="table-wrap">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nome</th>
-                                    <th>Igreja</th>
-                                    <th>Setor</th>
-                                    <th>WhatsApp</th>
-                                </tr>
+                                <tr><th>#</th><th>Nome</th><th>Igreja</th><th>WhatsApp</th></tr>
                             </thead>
                             <tbody id="tabelaInscritos">
-                                <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--gray-400);">Clique em Sincronizar para carregar.</td></tr>
+                                <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--gray-400);">Clique em Sincronizar para carregar.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -612,8 +301,37 @@
             </div>
         </main>
     </div>
+
+    <!-- NANDA CHATBOT -->
+    <div class="nanda-bubble no-print">
+        <div class="nanda-chat" id="nandaChat">
+            <div class="nanda-chat-header">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" alt="Nanda">
+                <div class="nanda-chat-header-info">
+                    <h4>Nanda ✨</h4>
+                    <p>Assistente do ENEM Bíblico</p>
+                </div>
+                <button class="nanda-close" onclick="toggleChat()">✕</button>
+            </div>
+            <div class="nanda-messages" id="nandaMessages"></div>
+            <div class="quick-replies" id="quickReplies"></div>
+            <div class="nanda-input-area">
+                <input class="nanda-input" id="nandaInput" placeholder="Digite sua mensagem..." maxlength="200">
+                <button class="nanda-send" onclick="sendUserMsg()">➤</button>
+            </div>
+        </div>
+
+        <div class="nanda-hint" id="nandaHint">Posso te ajudar! 😊</div>
+
+        <button class="nanda-toggle" onclick="toggleChat()" id="nandaToggle">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" alt="Nanda">
+            <div class="nanda-badge" id="nandaBadge"></div>
+        </button>
+    </div>
+
 </div>
 
+<!-- MODAL REGULAMENTO -->
 <div id="modalTermos" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-title">📋 Regulamento</div>
@@ -637,189 +355,450 @@
     </div>
 </div>
 
-<div id="comprovante">
-    <div class="comp-logo">ENEM Bíblico</div>
-    <div class="comp-sub">Confirmação de Inscrição — Setor 25</div>
-    <div class="comp-name" id="c-nome"></div>
-    <div class="comp-details">
-        <p>📅 1ª Prova: <strong>31 de Maio</strong></p>
-        <p>📅 2ª Prova: <strong>12 de Julho</strong></p>
-        <p>🕐 Abertura: <strong>13h20</strong> | Prova: <strong>14h00–16h00</strong></p>
-        <p>📍 Local: <strong>ADEB Sede São Sebastião</strong></p>
-        <p>🖊️ Lembre-se: <strong>caneta preta/azul obrigatória!</strong></p>
-    </div>
-    <p style="margin-top:32px;font-size:12px;color:#999;">Coordenação: William e Nathália — Setor 25 DF</p>
-</div>
-
 <div id="toast" class="toast"></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLDQiY2YVT6z5uYZcAoGWfWDdOTImn26EHSJkWxWQvqRxVlWVeJeoj3OL1rg5u9Hep/exec";
-    let tempDados = null;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLDQiY2YVT6z5uYZcAoGWfWDdOTImn26EHSJkWxWQvqRxVlWVeJeoj3OL1rg5u9Hep/exec";
+const MAPS_URL   = "https://maps.app.goo.gl/mquzd4V9sU8qSHWB8";
+let tempDados = null;
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-        document.getElementById('sidebarOverlay').classList.toggle('open');
-        document.getElementById('hamburger').classList.toggle('open');
+// ===== SIDEBAR =====
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+}
+function closeSidebar() {
+    ['sidebar','sidebarOverlay','hamburger'].forEach(id => document.getElementById(id).classList.remove('open'));
+}
+function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    const s = document.getElementById('screen-' + id);
+    const b = document.getElementById('btn-' + id);
+    if (s) s.classList.add('active');
+    if (b) b.classList.add('active');
+    closeSidebar();
+}
+
+// ===== TOAST =====
+function toast(msg, tipo = '') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show ' + tipo;
+    setTimeout(() => el.className = 'toast', 3500);
+}
+
+// ===== FORM =====
+document.getElementById('checkTermo').addEventListener('change', function() {
+    document.getElementById('btnConfirmar').disabled = !this.checked;
+});
+
+function preSalvar(e) {
+    e.preventDefault();
+    tempDados = {
+        nome:        document.getElementById('nome').value.trim(),
+        email:       document.getElementById('email').value.trim(),
+        idade:       document.getElementById('idade').value,
+        igreja:      document.getElementById('igreja').value.trim(),
+        telefone:    document.getElementById('tel').value.replace(/\D/g, ''),
+        expectativa: document.getElementById('exp').value.trim()
+    };
+    document.getElementById('checkTermo').checked = false;
+    document.getElementById('btnConfirmar').disabled = true;
+    document.getElementById('modalTermos').classList.add('open');
+}
+function fecharModal() { document.getElementById('modalTermos').classList.remove('open'); }
+
+async function finalizarInscricao() {
+    const btn = document.getElementById('btnConfirmar');
+    btn.textContent = "⏳ Salvando...";
+    btn.disabled = true;
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors', cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(tempDados)
+        });
+        fecharModal();
+        gerarComprovantePDF(tempDados);
+    } catch (err) {
+        toast('❌ Erro de conexão. Verifique sua internet.', 'error');
+        btn.textContent = "✅ Confirmar e Finalizar";
+        btn.disabled = false;
     }
+}
 
-    function closeSidebar() {
-        document.getElementById('sidebar').classList.remove('open');
-        document.getElementById('sidebarOverlay').classList.remove('open');
-        document.getElementById('hamburger').classList.remove('open');
-    }
+// ===== PDF — UMA ÚNICA PÁGINA A5 =====
+function gerarComprovantePDF(dados) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
+    const W = 148, H = 210;
 
-    function show(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        const screen = document.getElementById('screen-' + id);
-        const btn = document.getElementById('btn-' + id);
-        if (screen) screen.classList.add('active');
-        if (btn) btn.classList.add('active');
-        closeSidebar();
-    }
+    // Paleta
+    const azul      = [0, 90, 161];
+    const verde      = [22, 163, 74];
+    const cinza      = [71, 85, 105];
+    const cinzaClaro = [241, 245, 249];
+    const azulClaro  = [232, 242, 252];
+    const branco     = [255, 255, 255];
+    const laranja    = [180, 83, 9];
 
-    function toast(msg, tipo = '') {
-        const el = document.getElementById('toast');
-        el.textContent = msg;
-        el.className = 'toast show ' + tipo;
-        setTimeout(() => el.className = 'toast', 3500);
-    }
+    // Header azul
+    doc.setFillColor(...azul);
+    doc.rect(0, 0, W, 34, 'F');
+    doc.setTextColor(...branco);
+    doc.setFont('helvetica', 'bolditalic');
+    doc.setFontSize(21);
+    doc.text('ENEM BIBLICO', W / 2, 15, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.text('SETOR 25  -  DISTRITO FEDERAL', W / 2, 22, { align: 'center' });
 
-    document.getElementById('checkTermo').addEventListener('change', function() {
-        document.getElementById('btnConfirmar').disabled = !this.checked;
+    // Badge confirmada
+    doc.setFillColor(...verde);
+    doc.roundedRect(W/2 - 36, 26, 72, 12, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('INSCRICAO CONFIRMADA', W / 2, 34, { align: 'center' });
+
+    // Nome
+    doc.setTextColor(...azul);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    const nome = (dados.nome || '').toUpperCase();
+    doc.text(nome, W / 2, 48, { align: 'center', maxWidth: W - 20 });
+
+    // Linha
+    doc.setDrawColor(...azul);
+    doc.setLineWidth(0.4);
+    doc.line(14, 52, W - 14, 52);
+
+    // Grid datas 2x2
+    const bW = 55, bH = 20, gap = 4, sX = 14, sY = 57;
+    const boxes = [
+        ['1a PROVA', '31 de Maio'],
+        ['2a PROVA', '12 de Julho'],
+        ['ABERTURA', '13h20'],
+        ['HORARIO', '14h00 - 16h00'],
+    ];
+    boxes.forEach(([lbl, val], i) => {
+        const x = sX + (i % 2) * (bW + gap);
+        const y = sY + Math.floor(i / 2) * (bH + gap);
+        doc.setFillColor(...cinzaClaro);
+        doc.roundedRect(x, y, bW, bH, 2, 2, 'F');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(...cinza);
+        doc.text(lbl, x + bW / 2, y + 7.5, { align: 'center' });
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...azul);
+        doc.text(val, x + bW / 2, y + 15, { align: 'center' });
     });
 
-    function preSalvar(e) {
-        e.preventDefault();
-        tempDados = {
-            nome:        document.getElementById('nome').value.trim(),
-            email:       document.getElementById('email').value.trim(),
-            idade:       document.getElementById('idade').value,
-            igreja:      document.getElementById('igreja').value.trim(),
-            setor:       document.getElementById('setor').value.trim(),
-            telefone:    document.getElementById('tel').value.replace(/\D/g, ''),
-            expectativa: document.getElementById('exp').value.trim()
-        };
-        document.getElementById('checkTermo').checked = false;
-        document.getElementById('btnConfirmar').disabled = true;
-        document.getElementById('modalTermos').classList.add('open');
-    }
+    // Local
+    const lY = sY + 2 * (bH + gap) + 3;
+    doc.setFillColor(...azul);
+    doc.roundedRect(14, lY, W - 28, 17, 3, 3, 'F');
+    doc.setTextColor(...branco);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.text('LOCAL', W / 2, lY + 6, { align: 'center' });
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text('ADEB Sede - Sao Sebastiao / DF', W / 2, lY + 13, { align: 'center' });
 
-    function fecharModal() {
-        document.getElementById('modalTermos').classList.remove('open');
-    }
+    // Dados inscrito
+    const dY = lY + 22;
+    doc.setFillColor(...azulClaro);
+    doc.roundedRect(14, dY, W - 28, 42, 3, 3, 'F');
+    const linhas = [
+        ['Igreja',    dados.igreja   || '-'],
+        ['E-mail',    dados.email    || '-'],
+        ['WhatsApp',  dados.telefone || '-'],
+        ['Idade',     dados.idade ? dados.idade + ' anos' : '-'],
+    ];
+    linhas.forEach(([lbl, val], i) => {
+        const ly = dY + 8 + i * 9;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...cinza);
+        doc.text(lbl + ':', 19, ly);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(30, 41, 59);
+        doc.text(String(val).substring(0, 45), 48, ly);
+    });
 
-    async function finalizarInscricao() {
-        const btn = document.getElementById('btnConfirmar');
-        btn.textContent = "⏳ Salvando...";
-        btn.disabled = true;
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(tempDados)
-            });
-            fecharModal();
-            mostrarComprovante(tempDados.nome);
-        } catch (err) {
-            toast('❌ Erro de conexão. Verifique sua internet.', 'error');
-            btn.textContent = "✅ Confirmar e Finalizar";
-            btn.disabled = false;
-        }
-    }
+    // Aviso caneta
+    const aY = dY + 47;
+    doc.setFillColor(255, 247, 237);
+    doc.roundedRect(14, aY, W - 28, 11, 2, 2, 'F');
+    doc.setDrawColor(254, 215, 170);
+    doc.roundedRect(14, aY, W - 28, 11, 2, 2, 'S');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...laranja);
+    doc.text('Lembre-se: traga caneta preta ou azul!', W / 2, aY + 7.5, { align: 'center' });
 
-    function mostrarComprovante(nome) {
-        document.getElementById('c-nome').textContent = nome;
-        document.getElementById('interface').style.display = 'none';
-        const comp = document.getElementById('comprovante');
-        comp.classList.add('visible');
-        setTimeout(() => window.print(), 500);
-        setTimeout(() => {
-            comp.classList.remove('visible');
-            document.getElementById('interface').style.display = 'flex';
-            document.getElementById('formInscricao').reset();
-            const btn = document.getElementById('btnSalvar');
-            if (btn) { btn.textContent = "✅ Avançar para Confirmação"; btn.disabled = false; }
-            show('home');
-            toast('🎉 Inscrição realizada com sucesso!', 'success');
-        }, 3000);
-    }
+    // Footer
+    doc.setFillColor(...azul);
+    doc.rect(0, H - 13, W, 13, 'F');
+    doc.setTextColor(...branco);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+    doc.text('Coordenacao: William e Nathalia - Setor 25 DF', W / 2, H - 7.5, { align: 'center' });
+    doc.text('Documento gerado automaticamente', W / 2, H - 3, { align: 'center' });
 
-    async function buscarPorTelefone() {
-        const tel = document.getElementById('search-tel').value.replace(/\D/g, '');
-        if (!tel || tel.length < 8) { toast('⚠️ Digite um número válido com DDD.', 'error'); return; }
-        const btn = document.getElementById('btnBuscar');
-        btn.textContent = "⏳ Buscando...";
-        btn.disabled = true;
-        try {
-            const response = await fetch(SCRIPT_URL + '?t=' + Date.now(), { method: 'GET', cache: 'no-store' });
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            const data = await response.json();
-            const user = data.find(i => {
-                const dbTel = String(i.telefone || '').replace(/\D/g, '');
-                return dbTel === tel || dbTel.endsWith(tel) || tel.endsWith(dbTel);
-            });
-            if (user) {
-                mostrarComprovante(user.nome);
-            } else {
-                toast('❌ Inscrição não encontrada. Verifique o número.', 'error');
-                btn.textContent = "🔍 Verificar Inscrição";
-                btn.disabled = false;
-            }
-        } catch (e) {
-            toast('⚠️ Erro ao buscar. Tente novamente em 1 min.', 'error');
-            btn.textContent = "🔍 Verificar Inscrição";
-            btn.disabled = false;
-        }
-    }
+    doc.save('Comprovante_ENEM_Biblico_' + (dados.nome || 'inscrito').replace(/\s+/g,'_') + '.pdf');
 
-    function login() {
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        if (u === "willian" && p === "523916") {
-            show('coordenador');
-            atualizarLista();
+    document.getElementById('formInscricao').reset();
+    const btnS = document.getElementById('btnSalvar');
+    if (btnS) { btnS.textContent = "✅ Avançar para Confirmação"; btnS.disabled = false; }
+    show('home');
+    toast('🎉 Inscrição confirmada! PDF gerado.', 'success');
+}
+
+// ===== CONSULTA =====
+async function buscarPorTelefone() {
+    const tel = document.getElementById('search-tel').value.replace(/\D/g, '');
+    if (!tel || tel.length < 8) { toast('⚠️ Digite um número válido com DDD.', 'error'); return; }
+    const btn = document.getElementById('btnBuscar');
+    btn.textContent = "⏳ Buscando..."; btn.disabled = true;
+    try {
+        const response = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        const user = data.find(i => {
+            const db = String(i.telefone || '').replace(/\D/g, '');
+            return db === tel || db.endsWith(tel) || tel.endsWith(db);
+        });
+        if (user) {
+            gerarComprovantePDF(user);
+            toast('✅ Inscrição encontrada! PDF gerado.', 'success');
         } else {
-            toast('❌ Usuário ou senha incorretos.', 'error');
+            toast('❌ Inscrição não encontrada. Verifique o número.', 'error');
         }
-    }
+    } catch { toast('⚠️ Erro ao buscar. Tente novamente.', 'error'); }
+    finally { btn.textContent = "🔍 Verificar Inscrição"; btn.disabled = false; }
+}
 
-    async function atualizarLista() {
-        const body = document.getElementById('tabelaInscritos');
-        const count = document.getElementById('coord-count');
-        body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--blue);font-weight:600;">⏳ Buscando dados...</td></tr>`;
-        count.textContent = 'Carregando...';
-        try {
-            const r = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            const d = await r.json();
-            if (!Array.isArray(d) || d.length === 0) {
-                body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--gray-400);">Nenhum inscrito ainda.</td></tr>`;
-                count.textContent = '0 inscritos';
-                return;
-            }
-            count.textContent = d.length + ' inscrito(s)';
-            body.innerHTML = d.map((i, idx) => `
-                <tr>
-                    <td class="td-num">${idx + 1}</td>
-                    <td style="font-weight:700;text-transform:uppercase;">${i.nome || '—'}</td>
-                    <td style="color:var(--gray-600);">${i.igreja || '—'}</td>
-                    <td style="color:var(--gray-600);">${i.setor || '—'}</td>
-                    <td class="td-tel">${i.telefone || '—'}</td>
-                </tr>
-            `).join('');
-        } catch (e) {
-            body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:32px;color:#dc2626;font-weight:600;">⚠️ Erro ao carregar. Clique em Sincronizar.</td></tr>`;
-            count.textContent = 'Erro';
+// ===== LOGIN =====
+function login() {
+    if (document.getElementById('user').value === "willian" && document.getElementById('pass').value === "523916") {
+        show('coordenador'); atualizarLista();
+    } else { toast('❌ Usuário ou senha incorretos.', 'error'); }
+}
+
+async function atualizarLista() {
+    const body = document.getElementById('tabelaInscritos');
+    const count = document.getElementById('coord-count');
+    body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--blue);font-weight:600;">⏳ Buscando dados...</td></tr>`;
+    count.textContent = 'Carregando...';
+    try {
+        const r = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        if (!Array.isArray(d) || d.length === 0) {
+            body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--gray-400);">Nenhum inscrito ainda.</td></tr>`;
+            count.textContent = '0 inscritos'; return;
         }
+        count.textContent = d.length + ' inscrito(s)';
+        body.innerHTML = d.map((i, idx) => `
+            <tr>
+                <td class="td-num">${idx+1}</td>
+                <td style="font-weight:700;text-transform:uppercase;">${i.nome||'—'}</td>
+                <td style="color:var(--gray-600);">${i.igreja||'—'}</td>
+                <td class="td-tel">${i.telefone||'—'}</td>
+            </tr>`).join('');
+    } catch {
+        body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:#dc2626;font-weight:600;">⚠️ Erro ao carregar. Clique em Sincronizar.</td></tr>`;
+        count.textContent = 'Erro';
     }
+}
 
-    document.getElementById('search-tel').addEventListener('keydown', e => { if (e.key === 'Enter') buscarPorTelefone(); });
-    document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+// ===== NANDA CHATBOT =====
+let chatOpen = false;
+let nandaState = 'menu';
+let hintTimer;
+
+const MENU = [
+    { label: '📍 Local da prova',      action: 'local'          },
+    { label: '📅 Datas e horários',    action: 'datas'          },
+    { label: '📋 Regulamento',         action: 'regras'         },
+    { label: '🔍 Verificar inscrição', action: 'consulta_inicio'},
+    { label: '📝 Fazer inscrição',     action: 'inscrever'      },
+];
+
+function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('nandaChat').classList.toggle('open', chatOpen);
+    document.getElementById('nandaHint').style.display = chatOpen ? 'none' : 'none';
+    document.getElementById('nandaBadge').classList.remove('show');
+    clearTimeout(hintTimer);
+    if (chatOpen && document.getElementById('nandaMessages').children.length === 0) {
+        nandaBotMsg("Olá! 👋 Eu sou a <strong>Nanda</strong>, sua assistente do ENEM Bíblico Setor 25.\n\nComo posso te ajudar?");
+        setTimeout(() => setQR(MENU), 900);
+    }
+}
+
+function nandaBotMsg(text, extraHTML = '') {
+    const msgs = document.getElementById('nandaMessages');
+    const typing = document.createElement('div');
+    typing.className = 'msg bot';
+    typing.innerHTML = `<div class="typing-dot"><span></span><span></span><span></span></div>`;
+    msgs.appendChild(typing);
+    msgs.scrollTop = msgs.scrollHeight;
+    setTimeout(() => {
+        msgs.removeChild(typing);
+        const div = document.createElement('div');
+        div.className = 'msg bot';
+        const time = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+        div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br>')}${extraHTML ? '<br>' + extraHTML : ''}</div><div class="msg-time">${time}</div>`;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }, 850);
+}
+
+function nandaUserMsg(text) {
+    const msgs = document.getElementById('nandaMessages');
+    const div = document.createElement('div');
+    div.className = 'msg user';
+    const time = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${time}</div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function setQR(items) {
+    const qr = document.getElementById('quickReplies');
+    qr.innerHTML = '';
+    items.forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'qr-btn';
+        btn.textContent = item.label;
+        btn.onclick = () => handleAction(item.action, item.label);
+        qr.appendChild(btn);
+    });
+}
+function clearQR() { document.getElementById('quickReplies').innerHTML = ''; }
+
+function voltarMenu() {
+    nandaState = 'menu';
+    setTimeout(() => {
+        nandaBotMsg("Posso te ajudar com mais alguma coisa? 😊");
+        setTimeout(() => setQR(MENU), 900);
+    }, 300);
+}
+
+function handleAction(action, label) {
+    clearQR();
+    if (label) nandaUserMsg(label);
+    switch(action) {
+        case 'local':
+            nandaBotMsg(
+                "📍 O ENEM Bíblico acontece na:\n\n<strong>ADEB Sede — São Sebastião / DF</strong>\n\nToque no botão para abrir o mapa:",
+                `<a class="map-link" href="${MAPS_URL}" target="_blank">🗺️ Ver no Google Maps</a>`
+            );
+            setTimeout(() => setQR([{ label:'⬅ Voltar ao menu', action:'voltar' }]), 950);
+            break;
+        case 'datas':
+            nandaBotMsg("📅 <strong>Datas das provas:</strong>\n\n• 1ª Prova: <strong>31 de Maio</strong>\n• 2ª Prova: <strong>12 de Julho</strong>\n\n🕐 <strong>Horários:</strong>\n• Abertura: <strong>13h20</strong>\n• Fechamento: <strong>13h50</strong>\n• Prova: <strong>14h00 às 16h00</strong>");
+            setTimeout(() => setQR([{ label:'⬅ Voltar ao menu', action:'voltar' }]), 950);
+            break;
+        case 'regras':
+            nandaBotMsg("📋 <strong>Regulamento:</strong>\n\n🖊️ Caneta preta ou azul — obrigatória\n📵 Celular entregue no início da prova\n📖 Prova sem consulta\n⏱️ Duração: 2 horas\n🔒 Portões fecham às 13h50 — não se atrase!");
+            setTimeout(() => setQR([{ label:'⬅ Voltar ao menu', action:'voltar' }]), 950);
+            break;
+        case 'consulta_inicio':
+            nandaState = 'aguardando_telefone';
+            nandaBotMsg("Claro! 😊 Me informe seu número de <strong>WhatsApp com DDD</strong>:");
+            break;
+        case 'inscrever':
+            nandaBotMsg("Perfeito! 🎉 Te levo para a tela de inscrição agora!");
+            setTimeout(() => { toggleChat(); show('inscricao'); }, 1200);
+            break;
+        case 'voltar':
+            voltarMenu();
+            break;
+    }
+}
+
+async function consultarInscricaoNanda(tel) {
+    nandaBotMsg("⏳ Buscando sua inscrição...");
+    clearQR();
+    try {
+        const r = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        const user = data.find(i => {
+            const db = String(i.telefone || '').replace(/\D/g,'');
+            return db === tel || db.endsWith(tel) || tel.endsWith(db);
+        });
+        nandaState = 'menu';
+        if (user) {
+            setTimeout(() => {
+                nandaBotMsg(`✅ <strong>Inscrição encontrada!</strong>\n\n👤 <strong>${user.nome}</strong>\n⛪ ${user.igreja||'—'}\n\nGerando seu comprovante em PDF... 📄`);
+                setTimeout(() => {
+                    gerarComprovantePDF(user);
+                    setTimeout(() => {
+                        nandaBotMsg("PDF gerado! 🎉 Posso ajudar com mais alguma coisa?");
+                        setTimeout(() => setQR(MENU), 900);
+                    }, 800);
+                }, 1200);
+            }, 900);
+        } else {
+            setTimeout(() => {
+                nandaBotMsg("❌ Não encontrei inscrição com esse número.\n\nVerifique se digitou corretamente ou faça sua inscrição!");
+                setTimeout(() => setQR([
+                    { label:'🔄 Tentar outro número', action:'consulta_inicio' },
+                    { label:'📝 Fazer inscrição',     action:'inscrever'       },
+                    { label:'⬅ Voltar ao menu',       action:'voltar'          },
+                ]), 950);
+            }, 900);
+        }
+    } catch {
+        nandaState = 'menu';
+        setTimeout(() => {
+            nandaBotMsg("⚠️ Tive um problema ao buscar. Tente novamente.");
+            setTimeout(() => setQR([
+                { label:'🔄 Tentar novamente', action:'consulta_inicio' },
+                { label:'⬅ Voltar ao menu',   action:'voltar'          },
+            ]), 950);
+        }, 900);
+    }
+}
+
+function sendUserMsg() {
+    const input = document.getElementById('nandaInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    nandaUserMsg(text);
+    if (nandaState === 'aguardando_telefone') {
+        const tel = text.replace(/\D/g,'');
+        if (tel.length < 8) {
+            setTimeout(() => nandaBotMsg("⚠️ Digite um número válido com DDD. Ex: 61999998888"), 400);
+        } else { consultarInscricaoNanda(tel); }
+        return;
+    }
+    const low = text.toLowerCase();
+    clearQR();
+    if (low.match(/local|onde|endereço|mapa|lugar/))            handleAction('local');
+    else if (low.match(/data|quando|dia|prova|horário|hora/))   handleAction('datas');
+    else if (low.match(/regra|regulamento|celular|caneta/))     handleAction('regras');
+    else if (low.match(/inscri|consultar|verificar|já fiz/))    handleAction('consulta_inicio');
+    else {
+        setTimeout(() => {
+            nandaBotMsg("Hmm, não entendi muito bem 😅 Mas posso te ajudar com:");
+            setTimeout(() => setQR(MENU), 900);
+        }, 600);
+    }
+}
+
+document.getElementById('nandaInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendUserMsg(); });
+document.getElementById('search-tel').addEventListener('keydown', e => { if (e.key === 'Enter') buscarPorTelefone(); });
+document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+// Auto-esconde hint
+hintTimer = setTimeout(() => {
+    const h = document.getElementById('nandaHint');
+    if (h) h.style.display = 'none';
+}, 4000);
 </script>
-
 </body>
 </html>
