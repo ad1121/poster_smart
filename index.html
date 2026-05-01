@@ -167,9 +167,13 @@
         .menu-btn.active:hover { background: var(--blue-dark); }
 
         /* Desktop: sidebar always visible */
-     @media (min-width: 768px) {
+    @media (min-width: 768px) {
     .hamburger { display: flex !important; }
-    .sidebar-overlay { display: block !important; }
+
+    .sidebar-overlay {
+        display: none !important; /* 🔥 DESATIVA overlay no desktop */
+    }
+
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
@@ -178,11 +182,11 @@
         flex-shrink: 0;
         box-shadow: 2px 0 16px rgba(0,0,0,0.08);
     }
+
     .sidebar.open {
         transform: translateX(0);
     }
 }
-
         /* ===== MAIN LAYOUT ===== */
         .app-layout {
             display: flex;
