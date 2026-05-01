@@ -393,16 +393,43 @@ document.getElementById('checkTermo').addEventListener('change', function() {
     document.getElementById('btnConfirmar').disabled = !this.checked;
 });
 
-function preSalvar(e) {
+async function preSalvar(e) {
     e.preventDefault();
+    const btn = document.getElementById('btnSalvar');
+    const telRaw = document.getElementById('tel').value.replace(/\D/g, '');
+
+    // Check for duplicate phone
+    btn.textContent = "⏳ Verificando...";
+    btn.disabled = true;
+    try {
+        const response = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (response.ok) {
+            const data = await response.json();
+            const duplicado = Array.isArray(data) && data.find(i => {
+                const db = String(i.telefone || '').replace(/\D/g, '');
+                return db === telRaw || db.endsWith(telRaw) || telRaw.endsWith(db);
+            });
+            if (duplicado) {
+                toast('⚠️ Este WhatsApp já possui inscrição! Use "Consultar" para ver seus dados.', 'error');
+                btn.textContent = "✅ Avançar para Confirmação";
+                btn.disabled = false;
+                return;
+            }
+        }
+    } catch {
+        // If check fails, allow to proceed (don't block due to network error)
+    }
+
     tempDados = {
         nome:        document.getElementById('nome').value.trim(),
         email:       document.getElementById('email').value.trim(),
         idade:       document.getElementById('idade').value,
         igreja:      document.getElementById('igreja').value.trim(),
-        telefone:    document.getElementById('tel').value.replace(/\D/g, ''),
+        telefone:    telRaw,
         expectativa: document.getElementById('exp').value.trim()
     };
+    btn.textContent = "✅ Avançar para Confirmação";
+    btn.disabled = false;
     document.getElementById('checkTermo').checked = false;
     document.getElementById('btnConfirmar').disabled = true;
     document.getElementById('modalTermos').classList.add('open');
