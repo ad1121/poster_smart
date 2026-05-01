@@ -8,14 +8,22 @@
     <style>
         .bg-enem { background-color: #005aa1; }
         .text-enem { color: #005aa1; }
+        
+        /* CORREÇÃO DO MENU: Forçando a cor do texto para aparecer sempre */
+        .menu-link { 
+            color: #005aa1 !important; 
+            font-weight: 900 !important; 
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .menu-link { color: #ffffff !important; }
+        }
+
         @media print { .no-print { display: none !important; } .print-only { display: block !important; } }
         .print-only { display: none; }
-        
-        /* GARANTIA DE VISIBILIDADE DAS LETRAS */
-        .btn-texto { color: #005aa1 !important; font-weight: 800 !important; opacity: 1 !important; }
-        @media (min-width: 768px) {
-            .btn-texto-adm { color: white !important; font-weight: 700 !important; }
-        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
@@ -28,23 +36,23 @@
 
         <div class="container mx-auto flex flex-col md:flex-row gap-4 p-4 flex-grow">
             
-            <!-- MENU LATERAL REVISADO -->
+            <!-- MENU LATERAL REESTRUTURADO -->
             <aside class="w-full md:w-64 flex md:flex-col gap-2 no-print">
-                <button onclick="show('home')" class="flex-1 md:flex-none bg-white md:bg-enem flex items-center justify-center gap-2 py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none">
-                    <span class="text-xl">🏠</span> 
-                    <span class="btn-texto btn-texto-adm">Início</span>
+                <button onclick="show('home')" class="flex-1 md:flex-none bg-white md:bg-enem py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none flex items-center justify-center gap-2">
+                    <span class="text-xl">🏠</span>
+                    <span class="menu-link">Início</span>
                 </button>
-                <button onclick="show('conferir')" class="flex-1 md:flex-none bg-white md:bg-enem flex items-center justify-center gap-2 py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none">
-                    <span class="text-xl">🔍</span> 
-                    <span class="btn-texto btn-texto-adm">Consultar</span>
+                <button onclick="show('conferir')" class="flex-1 md:flex-none bg-white md:bg-enem py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none flex items-center justify-center gap-2">
+                    <span class="text-xl">🔍</span>
+                    <span class="menu-link">Consultar</span>
                 </button>
-                <button onclick="show('login')" class="flex-1 md:flex-none bg-white md:bg-enem flex items-center justify-center gap-2 py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none">
-                    <span class="text-xl">🔐</span> 
-                    <span class="btn-texto btn-texto-adm">Painel</span>
+                <button onclick="show('login')" class="flex-1 md:flex-none bg-white md:bg-enem py-4 px-4 rounded-xl shadow-md border border-gray-200 md:border-none flex items-center justify-center gap-2">
+                    <span class="text-xl">🔐</span>
+                    <span class="menu-link">Painel</span>
                 </button>
             </aside>
 
-            <!-- ÁREA DE CONTEÚDO SEM DISTANCIAMENTO -->
+            <!-- ÁREA DE CONTEÚDO -->
             <main class="flex-1 bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-gray-100">
                 
                 <div id="screen-home" class="screen space-y-6">
@@ -72,37 +80,32 @@
                     </form>
                 </div>
 
-                <!-- BUSCA CORRIGIDA -->
                 <div id="screen-conferir" class="screen hidden text-center">
                     <h2 class="text-xl font-black mb-4 uppercase text-enem">Buscar Inscrição</h2>
-                    <p class="text-sm text-gray-400 mb-6 italic">Digite o WhatsApp cadastrado</p>
-                    <input id="search-tel" type="tel" placeholder="(00) 00000-0000" class="border-2 p-4 rounded-xl w-full max-w-xs mb-4 text-center font-bold text-lg shadow-inner outline-none focus:border-blue-500">
+                    <input id="search-tel" type="tel" placeholder="(00) 00000-0000" class="border-2 p-4 rounded-xl w-full max-w-xs mb-4 text-center font-bold text-lg outline-none focus:border-blue-500">
                     <button onclick="buscarPorTelefone()" id="btnBuscar" class="block mx-auto bg-enem text-white px-10 py-3 rounded-xl font-bold uppercase shadow-lg">Verificar Agora</button>
                 </div>
 
                 <div id="screen-login" class="screen hidden text-center">
-                    <h2 class="text-xl font-black mb-6 uppercase text-enem">Painel William</h2>
+                    <h2 class="text-xl font-black mb-6 uppercase text-enem">Acesso Restrito</h2>
                     <div class="max-w-xs mx-auto space-y-4">
                         <input id="user" type="text" placeholder="Usuário" class="w-full border-2 p-3 rounded-xl">
                         <input id="pass" type="password" placeholder="Senha" class="w-full border-2 p-3 rounded-xl">
-                        <button onclick="login()" class="w-full bg-black text-white py-3 rounded-xl font-bold uppercase">Acessar</button>
+                        <button onclick="login()" class="w-full bg-black text-white py-3 rounded-xl font-bold uppercase">Entrar</button>
                     </div>
                 </div>
 
-                <!-- TELA DO COORDENADOR CORRIGIDA -->
                 <div id="screen-coordenador" class="screen hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="font-black uppercase text-enem">Lista de Inscritos</h2>
-                        <button onclick="atualizarLista()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase shadow-sm">Sincronizar</button>
+                        <button onclick="atualizarLista()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase">Sincronizar</button>
                     </div>
                     <div class="overflow-x-auto rounded-xl border border-gray-200">
                         <table class="w-full text-left text-sm">
                             <thead class="bg-gray-50 border-b">
                                 <tr><th class="p-4">Candidato</th><th class="p-4">Igreja</th><th class="p-4">WhatsApp</th></tr>
                             </thead>
-                            <tbody id="tabelaInscritos" class="divide-y">
-                                <tr><td colspan="3" class="p-8 text-center text-gray-400 italic">Nenhum dado carregado...</td></tr>
-                            </tbody>
+                            <tbody id="tabelaInscritos" class="divide-y"></tbody>
                         </table>
                     </div>
                 </div>
@@ -110,32 +113,22 @@
         </div>
     </div>
 
-    <!-- MODAL DE TERMOS REATIVADO -->
+    <!-- MODAL DE TERMOS -->
     <div id="modalTermos" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl">
-            <h3 class="text-2xl font-black text-enem mb-4 uppercase italic">Atenção candidato!</h3>
-            <div class="text-gray-600 text-sm mb-8 space-y-2">
-                <p>● Local: ADEB Sede São Sebastião.</p>
-                <p>● Horário: Chegar às 13:20.</p>
-                <p>● Datas: 31/05 e 12/07.</p>
-                <p>● Um e-mail de confirmação será enviado após o clique.</p>
-            </div>
-            <button onclick="finalizarInscricao()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl uppercase shadow-md hover:bg-green-700">Confirmar e Finalizar</button>
-            <button onclick="document.getElementById('modalTermos').classList.add('hidden')" class="w-full mt-2 text-gray-400 text-[10px] font-bold uppercase">Revisar Informações</button>
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl text-center">
+            <h3 class="text-2xl font-black text-enem mb-4 uppercase italic">Regulamento</h3>
+            <p class="text-gray-600 text-sm mb-8">
+                Local: ADEB Sede São Sebastião | Horário: 13:20 | Datas: 31/05 e 12/07.
+            </p>
+            <button onclick="finalizarInscricao()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl uppercase shadow-md">Confirmar e Finalizar</button>
         </div>
     </div>
 
-    <!-- CARTÃO DE CONFIRMAÇÃO (PRINT) -->
-    <div id="comprovante" class="print-only p-10">
-        <div class="border-4 border-double border-blue-900 p-8 text-center max-w-xl mx-auto">
-            <h1 class="text-3xl font-black text-blue-900 mb-2 italic uppercase">ENEM BÍBLICO</h1>
-            <p class="font-bold border-b-2 border-blue-900 pb-4 mb-6 uppercase">Cartão de Confirmação</p>
-            <div class="text-left space-y-4 text-lg">
-                <p><b>CANDIDATO:</b> <span id="c-nome" class="uppercase"></span></p>
-                <p><b>LOCAL:</b> ADEB Sede São Sebastião</p>
-                <p><b>DATAS:</b> 31/05 e 12/07 às 13:20</p>
-            </div>
-        </div>
+    <!-- COMPROVANTE -->
+    <div id="comprovante" class="print-only p-10 text-center">
+        <h1 class="text-3xl font-black text-blue-900 mb-2 uppercase">ENEM BÍBLICO</h1>
+        <p class="font-bold border-b-2 border-blue-900 pb-4 mb-6 uppercase">Confirmação de Inscrição</p>
+        <p class="text-xl"><b>CANDIDATO:</b> <span id="c-nome" class="uppercase"></span></p>
     </div>
 
     <script>
@@ -145,7 +138,6 @@
         function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('screen-' + id).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function preSalvar(e) {
@@ -165,13 +157,15 @@
         async function finalizarInscricao() {
             document.getElementById('modalTermos').classList.add('hidden');
             const btn = document.querySelector("#formInscricao button");
-            btn.innerText = "PROCESSANDO...";
+            btn.innerText = "SALVANDO...";
             btn.disabled = true;
 
             try {
+                // Modo no-cors para evitar erro de bloqueio do navegador ao enviar
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
+                    cache: 'no-cache',
                     body: JSON.stringify(tempDados)
                 });
                 
@@ -181,27 +175,26 @@
                 window.print();
                 
                 alert("Inscrição efetuada com sucesso!");
-                setTimeout(() => window.location.reload(), 1000);
+                window.location.reload();
             } catch (err) {
-                alert("Falha na comunicação. Tente novamente.");
+                alert("Erro ao salvar. Verifique sua conexão.");
                 btn.disabled = false;
-                btn.innerText = "Finalizar";
+                btn.innerText = "Tentar Novamente";
             }
         }
 
         async function buscarPorTelefone() {
-            const tel = document.getElementById('search-tel').value;
-            const btn = document.getElementById('btnBuscar');
+            const tel = document.getElementById('search-tel').value.replace(/\D/g,'');
             if(!tel) return alert("Digite o telefone.");
             
+            const btn = document.getElementById('btnBuscar');
             btn.innerText = "BUSCANDO...";
             btn.disabled = true;
 
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
-                // Tenta encontrar o telefone limpando espaços e caracteres especiais
-                const user = data.find(i => String(i.telefone).replace(/\D/g,'').includes(tel.replace(/\D/g,'')));
+                const user = data.find(i => String(i.telefone).replace(/\D/g,'') === tel);
                 
                 if(user) {
                     document.getElementById('c-nome').innerText = user.nome;
@@ -210,12 +203,12 @@
                     window.print();
                     window.location.reload();
                 } else {
-                    alert("Inscrição não encontrada para este número.");
+                    alert("Inscrição não localizada.");
                     btn.disabled = false;
                     btn.innerText = "Verificar Agora";
                 }
             } catch (e) {
-                alert("Erro ao consultar base de dados.");
+                alert("Atenção: O Google ainda está processando os dados. Tente novamente em 1 minuto.");
                 btn.disabled = false;
                 btn.innerText = "Verificar Agora";
             }
@@ -225,27 +218,30 @@
             if(document.getElementById('user').value === "willian" && document.getElementById('pass').value === "523916") {
                 show('coordenador');
                 atualizarLista();
-            } else { alert("Senha ou usuário incorreto."); }
+            } else { alert("Acesso negado."); }
         }
 
         async function atualizarLista() {
             const body = document.getElementById('tabelaInscritos');
-            body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-blue-500 font-bold'>Carregando dados da planilha...</td></tr>";
+            body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-blue-500 font-bold italic'>Buscando dados da planilha...</td></tr>";
+            
             try {
                 const r = await fetch(SCRIPT_URL);
                 const d = await r.json();
+                
                 if(d.length === 0) {
-                    body.innerHTML = "<tr><td colspan='3' class='p-8 text-center'>Nenhum inscrito até o momento.</td></tr>";
+                    body.innerHTML = "<tr><td colspan='3' class='p-8 text-center'>Nenhum inscrito.</td></tr>";
                     return;
                 }
+                
                 body.innerHTML = d.map(i => `
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="p-4 font-bold uppercase">${i.nome || 'N/A'}</td>
-                        <td class="p-4 text-gray-600">${i.igreja || 'N/A'}</td>
-                        <td class="p-4 text-blue-600 font-mono">${i.telefone || 'N/A'}</td>
+                    <tr>
+                        <td class="p-4 font-bold uppercase text-gray-700">${i.nome || '-'}</td>
+                        <td class="p-4 text-gray-600">${i.igreja || '-'}</td>
+                        <td class="p-4 text-blue-600 font-mono font-bold">${i.telefone || '-'}</td>
                     </tr>`).join('');
             } catch (e) {
-                body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-red-500 font-bold'>Erro ao processar dados da planilha. Verifique se o Script Google está retornando JSON.</td></tr>";
+                body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-red-500 font-bold'>Aguardando sincronização do Google. Tente clicar em Sincronizar novamente.</td></tr>";
             }
         }
     </script>
