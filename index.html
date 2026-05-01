@@ -11,129 +11,138 @@
         @media print { .no-print { display: none !important; } .print-only { display: block !important; } }
         .print-only { display: none; }
         
-        /* Ajuste de visibilidade do menu e espaçamento mobile */
-        @media (max-width: 768px) {
-            .container-main { padding: 10px; gap: 10px; }
-            .screen { padding: 20px 15px; min-height: auto !important; }
-            .menu-btn { color: #005aa1 !important; border: 1px solid #005aa1; }
-        }
+        /* Ajuste fino para evitar que a tela estique no mobile */
+        html, body { overflow-x: hidden; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
-    <div id="interface" class="no-print flex-grow flex flex-col">
+    <div id="interface" class="no-print flex flex-col min-h-screen">
+        <!-- Header -->
         <header class="bg-enem p-6 shadow-lg text-center">
             <h1 class="text-white text-2xl md:text-4xl font-black italic uppercase tracking-tighter">ENEM BÍBLICO</h1>
             <p class="text-blue-200 text-[10px] font-bold mt-1 tracking-widest uppercase">Setor 25 - DF</p>
         </header>
 
-        <div class="container mx-auto flex-grow flex flex-col md:flex-row gap-4 p-2 md:p-4 container-main">
-            <!-- Menu Lateral Corrigido -->
-            <aside class="w-full md:w-64 bg-white md:bg-enem rounded-2xl p-4 shadow-md flex md:flex-col justify-between md:justify-start gap-3">
-                <button onclick="show('home')" class="menu-btn flex-1 md:text-white font-bold text-sm py-2 px-4 rounded-xl hover:bg-blue-50 md:hover:bg-blue-700 transition">🏠 Início</button>
-                <button onclick="show('conferir')" class="menu-btn flex-1 md:text-white font-bold text-sm py-2 px-4 rounded-xl hover:bg-blue-50 md:hover:bg-blue-700 transition">🔍 Consultar</button>
-                <button onclick="show('login')" class="menu-btn flex-1 md:text-white font-bold text-sm py-2 px-4 rounded-xl hover:bg-blue-50 md:hover:bg-blue-700 transition">🔐 Painel</button>
+        <div class="container mx-auto flex flex-col md:flex-row gap-4 p-4">
+            
+            <!-- MENU LATERAL REVISADO -->
+            <aside class="w-full md:w-64 flex md:flex-col gap-2 no-print">
+                <button onclick="show('home')" class="flex-1 md:flex-none bg-white text-enem md:bg-enem md:text-white flex items-center justify-center gap-2 font-bold py-3 px-4 rounded-xl shadow-md hover:opacity-90 transition">
+                    <span>🏠</span> <span class="text-xs md:text-sm">Início</span>
+                </button>
+                <button onclick="show('conferir')" class="flex-1 md:flex-none bg-white text-enem md:bg-enem md:text-white flex items-center justify-center gap-2 font-bold py-3 px-4 rounded-xl shadow-md hover:opacity-90 transition">
+                    <span>🔍</span> <span class="text-xs md:text-sm">Consultar</span>
+                </button>
+                <button onclick="show('login')" class="flex-1 md:flex-none bg-white text-enem md:bg-enem md:text-white flex items-center justify-center gap-2 font-bold py-3 px-4 rounded-xl shadow-md hover:opacity-90 transition">
+                    <span>🔐</span> <span class="text-xs md:text-sm">Painel</span>
+                </button>
             </aside>
 
-            <!-- Área de Conteúdo Corrigida -->
-            <main class="flex-1 bg-white rounded-3xl shadow-xl p-4 md:p-10 border border-gray-100 h-fit">
+            <!-- ÁREA DE CONTEÚDO -->
+            <main class="flex-1 bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-gray-100">
                 
                 <!-- TELA: HOME -->
                 <div id="screen-home" class="screen space-y-6">
-                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 flex items-center gap-4">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" class="w-12 h-12 rounded-full bg-white border-2 border-blue-500">
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 flex items-center gap-4">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" class="w-16 h-16 rounded-full bg-white border-2 border-blue-500 shadow-sm">
                         <div>
-                            <p class="text-gray-800 font-bold text-sm">Olá! Sou a Nanda.</p>
-                            <p class="text-gray-500 text-xs">Pronto para sua inscrição?</p>
+                            <p class="text-gray-800 font-bold">Olá! Sou a Nanda.</p>
+                            <p class="text-gray-500 text-sm">Tudo pronto para sua inscrição?</p>
                         </div>
                     </div>
-                    <button onclick="show('inscricao')" class="w-full bg-enem text-white font-black py-4 rounded-2xl uppercase shadow-lg active:scale-95 transition-transform">Iniciar Inscrição</button>
+                    <button onclick="show('inscricao')" class="w-full bg-enem text-white font-black py-5 rounded-2xl uppercase shadow-lg hover:scale-[1.02] transition-transform">Iniciar Inscrição</button>
                 </div>
 
                 <!-- TELA: FORMULÁRIO -->
                 <div id="screen-inscricao" class="screen hidden">
-                    <h2 class="text-lg font-black text-enem mb-4 uppercase border-b-2 border-enem inline-block">Inscrição</h2>
-                    <form id="formInscricao" onsubmit="preSalvar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input id="nome" type="text" placeholder="Nome Completo" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input id="email" type="email" placeholder="E-mail" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input id="idade" type="number" placeholder="Idade" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input id="igreja" type="text" placeholder="Igreja" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input id="setor" type="text" placeholder="Setor" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <input id="tel" type="tel" placeholder="WhatsApp" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
-                        <textarea id="exp" placeholder="Expectativa..." class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 md:col-span-2 h-20 text-sm"></textarea>
-                        <button type="submit" class="md:col-span-2 bg-green-600 text-white font-black py-4 rounded-xl uppercase hover:bg-green-700">Próximo</button>
+                    <h2 class="text-xl font-black text-enem mb-6 uppercase border-b-4 border-enem inline-block">Inscrição</h2>
+                    <form id="formInscricao" onsubmit="preSalvar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input id="nome" type="text" placeholder="Nome Completo" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <input id="email" type="email" placeholder="E-mail" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <input id="idade" type="number" placeholder="Idade" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <input id="igreja" type="text" placeholder="Igreja" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <input id="setor" type="text" placeholder="Setor" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <input id="tel" type="tel" placeholder="WhatsApp" required class="border-2 p-3 rounded-xl outline-none focus:border-blue-500">
+                        <textarea id="exp" placeholder="Qual sua expectativa?" class="border-2 p-3 rounded-xl outline-none focus:border-blue-500 md:col-span-2 h-24"></textarea>
+                        <button type="submit" class="md:col-span-2 bg-green-600 text-white font-black py-4 rounded-xl uppercase hover:bg-green-700 shadow-lg transition-colors">Próximo Passo</button>
                     </form>
                 </div>
 
                 <!-- TELA: CONFERIR -->
                 <div id="screen-conferir" class="screen hidden text-center">
-                    <h2 class="text-lg font-black mb-4 uppercase text-enem">Buscar Inscrição</h2>
-                    <input id="search-tel" type="tel" placeholder="Digite seu Telefone" class="border-2 p-3 rounded-xl w-full max-w-xs mb-4 text-center font-bold outline-none">
-                    <button onclick="buscarPorTelefone()" class="block mx-auto bg-enem text-white px-8 py-3 rounded-xl font-bold uppercase shadow-md">Verificar</button>
+                    <h2 class="text-xl font-black mb-4 uppercase text-enem">Buscar Inscrição</h2>
+                    <p class="text-sm text-gray-500 mb-6 italic">Digite o telefone usado no cadastro</p>
+                    <input id="search-tel" type="tel" placeholder="(00) 0 0000-0000" class="border-2 p-4 rounded-xl w-full max-w-xs mb-4 text-center font-bold text-lg shadow-inner outline-none focus:border-blue-500">
+                    <button onclick="buscarPorTelefone()" class="block mx-auto bg-enem text-white px-10 py-3 rounded-xl font-bold uppercase shadow-lg active:scale-95 transition-transform">Verificar</button>
                 </div>
 
-                <!-- LOGIN PAINEL -->
+                <!-- TELA: LOGIN PAINEL -->
                 <div id="screen-login" class="screen hidden text-center">
-                    <h2 class="text-lg font-black mb-4 uppercase text-enem">Acesso Restrito</h2>
-                    <div class="max-w-xs mx-auto space-y-3">
-                        <input id="user" type="text" placeholder="Usuário" class="w-full border-2 p-3 rounded-xl outline-none text-sm">
-                        <input id="pass" type="password" placeholder="Senha" class="w-full border-2 p-3 rounded-xl outline-none text-sm">
-                        <button onclick="login()" class="w-full bg-black text-white py-3 rounded-xl font-bold uppercase">Entrar</button>
+                    <h2 class="text-xl font-black mb-6 uppercase text-enem">Área do Coordenador</h2>
+                    <div class="max-w-xs mx-auto space-y-4">
+                        <input id="user" type="text" placeholder="Usuário" class="w-full border-2 p-3 rounded-xl outline-none">
+                        <input id="pass" type="password" placeholder="Senha" class="w-full border-2 p-3 rounded-xl outline-none">
+                        <button onclick="login()" class="w-full bg-black text-white py-3 rounded-xl font-bold uppercase shadow-lg">Entrar</button>
                     </div>
                 </div>
 
-                <!-- TABELA COORDENADOR -->
+                <!-- TELA: PAINEL WILLIAM -->
                 <div id="screen-coordenador" class="screen hidden">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="font-black uppercase text-enem text-sm">Lista de Inscritos</h2>
-                        <button onclick="atualizarLista()" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg font-bold text-[10px]">Sincronizar</button>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="font-black uppercase text-enem">Inscritos</h2>
+                        <button onclick="atualizarLista()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold text-xs uppercase">Sincronizar</button>
                     </div>
-                    <div class="overflow-x-auto rounded-xl border border-gray-200">
-                        <table class="w-full text-left text-xs">
+                    <div class="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
+                        <table class="w-full text-left text-sm">
                             <thead class="bg-gray-50 border-b">
-                                <tr><th class="p-3">Nome</th><th class="p-3">Igreja</th><th class="p-3">Tel</th></tr>
+                                <tr><th class="p-4">Nome</th><th class="p-4">Igreja</th><th class="p-4">Telefone</th></tr>
                             </thead>
-                            <tbody id="tabelaInscritos" class="divide-y"></tbody>
+                            <tbody id="tabelaInscritos" class="divide-y">
+                                <tr><td colspan="3" class="p-8 text-center text-gray-400 italic">Carregue a lista...</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
-
             </main>
         </div>
     </div>
 
     <!-- MODAL REGULAMENTO -->
     <div id="modalTermos" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl">
-            <h3 class="text-xl font-black text-enem mb-4 uppercase">Regulamento</h3>
-            <p class="text-gray-600 text-sm mb-6 leading-relaxed">Sua inscrição será salva na planilha do Setor 25 e uma confirmação será enviada ao seu e-mail com o link da localização.</p>
-            <button onclick="finalizarInscricao()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl uppercase mb-3 shadow-lg">Confirmar Inscrição</button>
-            <button onclick="document.getElementById('modalTermos').classList.add('hidden')" class="w-full text-gray-400 text-[10px] font-bold uppercase">Voltar</button>
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl text-center">
+            <h3 class="text-2xl font-black text-enem mb-4 uppercase italic">Atenção!</h3>
+            <p class="text-gray-600 mb-8">Ao confirmar, sua inscrição será enviada para o setor 25. Você receberá um e-mail com o local exato da prova.</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="finalizarInscricao()" class="bg-green-600 text-white font-bold py-4 rounded-xl uppercase shadow-md hover:bg-green-700 transition">Confirmar e Finalizar</button>
+                <button onclick="document.getElementById('modalTermos').classList.add('hidden')" class="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Revisar Dados</button>
+            </div>
         </div>
     </div>
 
-    <!-- COMPROVANTE -->
+    <!-- COMPROVANTE (PRINT) -->
     <div id="comprovante" class="print-only p-10">
         <div class="border-4 border-double border-blue-900 p-8 text-center max-w-xl mx-auto">
-            <h1 class="text-3xl font-black text-blue-900 mb-2 italic">ENEM BÍBLICO</h1>
+            <h1 class="text-3xl font-black text-blue-900 mb-2 italic uppercase">ENEM BÍBLICO</h1>
             <p class="font-bold border-b-2 border-blue-900 pb-4 mb-6 uppercase">Cartão de Confirmação</p>
             <div class="text-left space-y-4 text-lg">
-                <p><b>CANDIDATO:</b> <span id="c-nome"></span></p>
+                <p><b>CANDIDATO:</b> <span id="c-nome" class="uppercase"></span></p>
                 <p><b>LOCAL:</b> ADEB Sede São Sebastião</p>
                 <p><b>DATAS:</b> 31/05 e 12/07 às 13:20</p>
             </div>
-            <p class="mt-10 text-[10px] text-gray-400 font-bold italic uppercase">Setor 25</p>
+            <p class="mt-12 text-[10px] text-gray-400 font-bold italic uppercase border-t pt-4">Coordenação: William e Nathália - Setor 25</p>
         </div>
     </div>
 
     <script>
         // SUBSTITUA PELA SUA URL DO GOOGLE APPS SCRIPT
-        const SCRIPT_URL = "SUA_URL_AQUI"; 
+        const SCRIPT_URL = "COLE_SUA_URL_AQUI"; 
         let tempDados = null;
 
         function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('screen-' + id).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function preSalvar(e) {
@@ -153,6 +162,7 @@
         async function finalizarInscricao() {
             document.getElementById('modalTermos').classList.add('hidden');
             const btn = document.querySelector("#formInscricao button");
+            const originalText = btn.innerText;
             btn.innerText = "PROCESSANDO...";
             btn.disabled = true;
 
@@ -168,18 +178,18 @@
                 document.getElementById('comprovante').classList.remove('print-only');
                 window.print();
                 
-                alert("Inscrição Realizada! Verifique seu e-mail.");
+                alert("Inscrição Realizada com Sucesso! Verifique seu e-mail.");
                 setTimeout(() => window.location.reload(), 1000);
             } catch (err) {
-                alert("Erro ao conectar.");
+                alert("Ocorreu um erro ao conectar ao servidor.");
                 btn.disabled = false;
-                btn.innerText = "Tentar Novamente";
+                btn.innerText = originalText;
             }
         }
 
         async function buscarPorTelefone() {
             const tel = document.getElementById('search-tel').value;
-            if(!tel) return alert("Digite o telefone.");
+            if(!tel) return alert("Por favor, digite o telefone.");
             try {
                 const r = await fetch(SCRIPT_URL);
                 const data = await r.json();
@@ -189,25 +199,30 @@
                     document.getElementById('interface').classList.add('hidden');
                     document.getElementById('comprovante').classList.remove('print-only');
                     window.print();
-                } else { alert("Inscrição não encontrada."); }
-            } catch (e) { alert("Erro na busca."); }
+                } else { alert("Nenhuma inscrição encontrada para este número."); }
+            } catch (e) { alert("Erro ao buscar dados na planilha."); }
         }
 
         function login() {
             if(document.getElementById('user').value === "willian" && document.getElementById('pass').value === "523916") {
                 show('coordenador');
                 atualizarLista();
-            } else { alert("Acesso negado."); }
+            } else { alert("Acesso negado: Usuário ou senha incorretos."); }
         }
 
         async function atualizarLista() {
             const body = document.getElementById('tabelaInscritos');
-            body.innerHTML = "<tr><td colspan='3' class='p-4 text-center'>Sincronizando...</td></tr>";
+            body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-blue-500 font-bold'>Sincronizando dados...</td></tr>";
             try {
                 const r = await fetch(SCRIPT_URL);
                 const d = await r.json();
-                body.innerHTML = d.map(i => `<tr><td class="p-3 font-bold">${i.nome}</td><td class="p-3">${i.igreja}</td><td class="p-3 text-blue-600">${i.telefone}</td></tr>`).join('');
-            } catch (e) { body.innerHTML = "<tr><td colspan='3' class='p-4 text-center text-red-500'>Erro.</td></tr>"; }
+                body.innerHTML = d.map(i => `
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="p-4 font-bold uppercase">${i.nome}</td>
+                        <td class="p-4 text-gray-600">${i.igreja}</td>
+                        <td class="p-4 text-blue-600 font-mono">${i.telefone}</td>
+                    </tr>`).join('');
+            } catch (e) { body.innerHTML = "<tr><td colspan='3' class='p-8 text-center text-red-500 font-bold'>Erro ao carregar lista.</td></tr>"; }
         }
     </script>
 </body>
