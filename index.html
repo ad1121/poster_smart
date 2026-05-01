@@ -272,8 +272,8 @@ tr:hover td{background:var(--gray-50)}
 </div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>#</th><th>Nome</th><th>Igreja</th><th>WhatsApp</th><th>Idade</th><th>Expectativa</th></tr></thead>
-<tbody id="tabelaInscritos"><tr><td colspan="6" style="text-align:center;padding:32px;color:var(--gray-400);">Clique em Sincronizar para carregar.</td></tr></tbody>
+<thead><tr><th>#</th><th>Nome</th><th>Igreja</th><th>WhatsApp</th><th>Idade</th><th>Expectativa</th><th></th></tr></thead>
+<tbody id="tabelaInscritos"><tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray-400);">Clique em Sincronizar para carregar.</td></tr></tbody>
 </table>
 </div>
 </div>
@@ -346,6 +346,16 @@ tr:hover td{background:var(--gray-50)}
 </div>
 <button onclick="finalizarInscricao()" id="btnConfirmar" class="btn-success" disabled>✅ Confirmar e Finalizar</button>
 <button onclick="fecharModal()" style="background:none;border:none;color:var(--gray-400);font-size:13px;margin-top:12px;cursor:pointer;display:block;width:100%;">Cancelar e voltar</button>
+</div>
+</div>
+
+<div id="modalInscrito" class="modal-overlay">
+<div class="modal-box" style="text-align:left;max-width:400px;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+<div class="modal-title" style="margin-bottom:0;">👤 Inscrito</div>
+<button onclick="document.getElementById('modalInscrito').classList.remove('open')" style="background:var(--gray-100);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-600);">✕</button>
+</div>
+<div id="modalInscritoBody"></div>
 </div>
 </div>
 
@@ -530,17 +540,17 @@ show('coordenador');atualizarLista();
 async function atualizarLista(){
 const body=document.getElementById('tabelaInscritos');
 const count=document.getElementById('coord-count');
-body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--blue);font-weight:600;">⏳ Buscando dados...</td></tr>`;
+body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--blue);font-weight:600;">⏳ Buscando dados...</td></tr>`;
 count.textContent='Carregando...';
 try{
 const r=await fetch(SCRIPT_URL+'?action=get&t='+Date.now(),{cache:'no-store'});
 if(!r.ok)throw new Error();
 const d=await r.json();
-if(!Array.isArray(d)||d.length===0){body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--gray-400);">Nenhum inscrito ainda.</td></tr>`;count.textContent='0 inscritos';return;}
+if(!Array.isArray(d)||d.length===0){body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray-400);">Nenhum inscrito ainda.</td></tr>`;count.textContent='0 inscritos';return;}
 count.textContent=d.length+' inscrito(s)';
 _listaCache=d;
-body.innerHTML=d.map((i,idx)=>`<tr><td class="td-num">${idx+1}</td><td style="font-weight:700;text-transform:uppercase;">${i.nome||'—'}</td><td style="color:var(--gray-600);">${i.igreja||'—'}</td><td class="td-tel">${i.telefone||'—'}</td><td style="text-align:center;color:var(--gray-600);">${i.idade||'—'}</td><td style="color:var(--gray-600);font-size:12px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${(i.expectativa||'').replace(/"/g,"'")}">${i.expectativa||'—'}</td></tr>`).join('');
-}catch{body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:32px;color:#dc2626;font-weight:600;">⚠️ Erro ao carregar.</td></tr>`;count.textContent='Erro';}
+body.innerHTML=d.map((i,idx)=>`<tr><td class="td-num">${idx+1}</td><td style="font-weight:700;text-transform:uppercase;">${i.nome||'—'}</td><td style="color:var(--gray-600);">${i.igreja||'—'}</td><td class="td-tel">${i.telefone||'—'}</td><td style="text-align:center;color:var(--gray-600);">${i.idade||'—'}</td><td style="color:var(--gray-600);font-size:12px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${(i.expectativa||'').replace(/"/g,"'")}">${i.expectativa||'—'}</td><td><button onclick="verInscrito(${idx})" style="background:var(--blue);color:white;border:none;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:1;">+</button></td></tr>`).join('');
+}catch{body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:32px;color:#dc2626;font-weight:600;">⚠️ Erro ao carregar.</td></tr>`;count.textContent='Erro';}
 }
 
 async function carregarParaNotas(){
