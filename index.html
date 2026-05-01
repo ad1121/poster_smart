@@ -20,27 +20,53 @@
         </header>
 
         <div class="container mx-auto mt-6 p-4 flex flex-col md:flex-row gap-6">
+            <!-- Sidebar -->
             <aside class="w-full md:w-64 bg-enem text-white rounded-xl p-6 h-fit shadow-md">
                 <h2 class="font-bold border-b border-blue-400 pb-2 text-xs uppercase mb-4">Navegação</h2>
                 <nav class="space-y-3 text-sm">
                     <button onclick="show('home')" class="block w-full text-left hover:text-blue-200">🏠 Início</button>
-                    <button onclick="show('coordenador')" class="block w-full text-left hover:text-blue-200">🔐 Painel William</button>
+                    <button onclick="checkAuth()" class="block w-full text-left hover:text-blue-200 font-bold border-t border-blue-400 pt-2 mt-2">🔐 Painel Coordenador</button>
                 </nav>
             </aside>
 
+            <!-- Main Section -->
             <section class="flex-1 bg-white rounded-xl shadow-xl p-8 border border-gray-200">
                 
+                <!-- TELA: INÍCIO -->
                 <div id="screen-home" class="screen">
                     <div class="flex items-center gap-4 mb-10 bg-blue-50 p-5 rounded-2xl border border-blue-100">
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" class="w-16 h-16 rounded-full border-2 border-blue-600 bg-white">
-                        <p class="text-gray-700">Olá! Sou a <b>Nanda</b>. Bem-vindo à página oficial do <b>ENEM BÍBLICO</b> do Setor 25!</p>
+                        <p class="text-gray-700 text-sm">Olá! Sou a <b>Nanda</b>. Use as opções abaixo para interagir com o <b>ENEM BÍBLICO</b> do Setor 25!</p>
                     </div>
                     <div class="flex flex-col items-center gap-5">
                         <button onclick="show('inscricao')" class="bg-enem text-white font-black py-5 px-12 rounded-full w-full max-w-sm uppercase shadow-xl hover:scale-105 transition-transform">Fazer Inscrição</button>
-                        <button onclick="show('coordenador')" class="text-enem font-bold border-2 border-enem py-3 px-12 rounded-full w-full max-w-sm hover:bg-blue-50 transition">Conferir Inscritos</button>
+                        <button onclick="show('conferir')" class="text-enem font-bold border-2 border-enem py-3 px-12 rounded-full w-full max-w-sm hover:bg-blue-50 transition">Conferir Minha Inscrição</button>
                     </div>
                 </div>
 
+                <!-- TELA: LOGIN COORDENADOR -->
+                <div id="screen-login" class="screen hidden text-center">
+                    <h2 class="text-xl font-black uppercase mb-6">Acesso Administrativo</h2>
+                    <div class="max-w-xs mx-auto space-y-4">
+                        <input id="user" type="text" placeholder="Usuário" class="w-full border-2 p-3 rounded-lg outline-none focus:border-blue-500">
+                        <input id="pass" type="password" placeholder="Senha" class="w-full border-2 p-3 rounded-lg outline-none focus:border-blue-500">
+                        <button onclick="login()" class="w-full bg-black text-white py-3 rounded-lg font-bold uppercase shadow-md">Entrar</button>
+                        <button onclick="show('home')" class="w-full text-gray-400 text-xs hover:underline">Voltar</button>
+                    </div>
+                </div>
+
+                <!-- TELA: CONFERIR INSCRIÇÃO (RESTRITO) -->
+                <div id="screen-conferir" class="screen hidden text-center">
+                    <h2 class="text-xl font-black uppercase mb-4 text-enem border-b pb-2">Verificar Inscrição</h2>
+                    <p class="text-sm text-gray-500 mb-6">Insira o número de telefone cadastrado para recuperar seus dados.</p>
+                    <div class="max-w-xs mx-auto space-y-4">
+                        <input id="search-tel" type="tel" placeholder="(00) 9 0000-0000" class="w-full border-2 p-3 rounded-lg outline-none focus:border-blue-500 text-center font-bold">
+                        <button id="btnSearch" onclick="buscarPorTelefone()" class="w-full bg-enem text-white py-3 rounded-lg font-bold uppercase shadow-md">Verificar Status</button>
+                        <button onclick="show('home')" class="w-full text-gray-400 text-xs">Voltar ao Início</button>
+                    </div>
+                </div>
+
+                <!-- TELA: FORMULÁRIO DE INSCRIÇÃO -->
                 <div id="screen-inscricao" class="screen hidden">
                     <h2 class="text-2xl font-black text-enem mb-6 border-b-4 border-enem inline-block uppercase">Inscrição</h2>
                     <form id="formInscricao" onsubmit="salvar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -51,69 +77,100 @@
                         <input id="tel" type="tel" placeholder="Telefone (DDD) 9 9999-9999" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
                         <input id="exp" type="text" placeholder="Sua expectativa" class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
                         
-                        <div class="md:col-span-2 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-xs text-yellow-800 space-y-1 my-2">
-                            <p><b>REGRAS:</b> Portões 13:20 | Fechamento 13:50 | Caneta Preta/Azul | Entrega do Celular | Sem Consulta | Duração 2h.</p>
+                        <div class="md:col-span-2 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-[11px] text-yellow-800 space-y-1">
+                            <p><b>REGRAS IMPORTANTES:</b> Portões 13:20 | Fechamento 13:50 | Caneta Preta ou Azul | Entrega do Celular | Prova sem Consulta | Duração de 2 horas.</p>
                             <label class="flex items-center gap-2 mt-2 font-bold cursor-pointer">
-                                <input type="checkbox" required class="w-4 h-4"> Eu aceito todas as regras acima.
+                                <input type="checkbox" required class="w-4 h-4"> Eu li e aceito todas as regras acima.
                             </label>
                         </div>
-                        
-                        <button id="btn" type="submit" class="md:col-span-2 bg-green-600 text-white font-black py-4 rounded-xl uppercase shadow-lg hover:bg-green-700 transition">Finalizar e Gerar Comprovante</button>
+                        <button id="btnSave" type="submit" class="md:col-span-2 bg-green-600 text-white font-black py-4 rounded-xl uppercase shadow-lg hover:bg-green-700 transition">Concluir Cadastro e Gerar Comprovante</button>
                     </form>
                 </div>
 
+                <!-- TELA: PAINEL DO COORDENADOR -->
                 <div id="screen-coordenador" class="screen hidden">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-black uppercase">Lista de Inscritos</h2>
-                        <button onclick="atualizar()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold text-xs hover:bg-blue-200">🔄 Atualizar</button>
+                        <h2 class="text-xl font-black uppercase">Lista Geral - William</h2>
+                        <button onclick="atualizarLista()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold text-xs hover:bg-blue-200">🔄 Atualizar Dados</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full border-collapse">
-                            <thead><tr class="bg-gray-100 text-left text-xs uppercase"><th class="p-3 border">Nome</th><th class="p-3 border">Igreja/Setor</th></tr></thead>
-                            <tbody id="tabela" class="text-sm"><tr><td colspan="2" class="p-5 text-center text-gray-400">Clique em atualizar para carregar...</td></tr></tbody>
+                            <thead><tr class="bg-gray-100 text-left text-xs uppercase"><th class="p-3 border">Nome</th><th class="p-3 border">Igreja/Setor</th><th class="p-3 border">Telefone</th></tr></thead>
+                            <tbody id="tabelaInscritos" class="text-sm"></tbody>
                         </table>
                     </div>
+                    <button onclick="logout()" class="mt-8 text-red-500 text-xs font-bold uppercase tracking-widest border border-red-200 px-4 py-2 rounded hover:bg-red-50">Sair do Sistema</button>
                 </div>
 
             </section>
         </div>
     </div>
 
+    <!-- ÁREA DE IMPRESSÃO (COMPROVANTE) -->
     <div id="comprovante" class="print-only p-10">
-        <div class="border-4 border-double border-blue-900 p-8 bg-white max-w-2xl mx-auto">
+        <div class="border-4 border-double border-blue-900 p-8 bg-white max-w-2xl mx-auto shadow-inner">
             <div class="text-center border-b-2 border-blue-900 pb-4 mb-6">
                 <h1 class="text-3xl font-black text-blue-900 uppercase italic">ENEM BÍBLICO</h1>
-                <p class="font-bold">CARTÃO DE CONFIRMAÇÃO DE INSCRIÇÃO</p>
+                <p class="font-bold uppercase tracking-widest text-xs">Comprovante Oficial de Inscrição</p>
             </div>
             <div class="space-y-4 text-lg">
-                <p><b>PARTICIPANTE:</b> <span id="c-nome" class="uppercase">-</span></p>
-                <p><b>IGREJA/SETOR:</b> <span id="c-igreja" class="uppercase">-</span></p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p><b>ETAPA 1:</b> 31/05 | <b>ETAPA 2:</b> 12/07</p>
-                    <p><b>LOCAL:</b> Adeb sede São Sebastião</p>
-                    <p class="text-sm">Quadra 01 Conjunto 05 lotes 5/6 São Bartolomeu</p>
+                <p><b>PARTICIPANTE:</b> <span id="c-nome" class="uppercase font-bold"></span></p>
+                <p><b>IGREJA/SETOR:</b> <span id="c-igreja" class="uppercase font-bold"></span></p>
+                <div class="bg-gray-100 p-5 rounded-lg border">
+                    <p class="text-sm mb-1">📅 <b>ETAPA 1:</b> 31/05 | <b>ETAPA 2:</b> 12/07</p>
+                    <p class="text-sm mb-1">📍 <b>LOCAL:</b> Adeb sede São Sebastião</p>
+                    <p class="text-[10px] text-gray-500 italic">Quadra 01 Conjunto 05 lotes 5/6 São Bartolomeu</p>
                 </div>
             </div>
-            <div class="mt-10 grid grid-cols-2 text-[10px] uppercase font-bold text-gray-500">
-                <div>Coord: William e Nathália</div>
-                <div class="text-right">Dc Marcos e Andressa</div>
+            <div class="mt-10 grid grid-cols-2 text-[10px] uppercase font-bold text-gray-400 italic">
+                <div>Coordenação: William e Nathália</div>
+                <div class="text-right">Apoio: Dc Marcos e Andressa</div>
             </div>
         </div>
-        <button onclick="window.location.reload()" class="no-print mt-10 mx-auto block bg-black text-white px-8 py-2 rounded-full">Voltar ao Início</button>
+        <div class="no-print mt-6 text-center">
+            <button onclick="window.print()" class="bg-blue-600 text-white px-8 py-2 rounded-full font-bold mr-2">Imprimir</button>
+            <button onclick="window.location.reload()" class="bg-gray-800 text-white px-8 py-2 rounded-full font-bold">Voltar</button>
+        </div>
     </div>
 
     <script>
-        const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbwLDQiY2YVT6z5uYZcAoGWfWDdOTImn26EHSJkWxWQvqRxVlWVeJeoj3OL1rg5u9Hep/exec"; // <--- COLE SUA URL AQUI
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLDQiY2YVT6z5uYZcAoGWfWDdOTImn26EHSJkWxWQvqRxVlWVeJeoj3OL1rg5u9Hep/exec"; 
+        let isLogged = false;
 
         function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('screen-' + id).classList.remove('hidden');
         }
 
+        // --- SISTEMA DE LOGIN DO COORDENADOR ---
+        function checkAuth() {
+            isLogged ? (show('coordenador'), atualizarLista()) : show('login');
+        }
+
+        function login() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            if (u === "willian" && p === "523916") {
+                isLogged = true;
+                show('coordenador');
+                atualizarLista();
+            } else {
+                alert("Credenciais inválidas!");
+            }
+        }
+
+        function logout() {
+            isLogged = false;
+            document.getElementById('user').value = "";
+            document.getElementById('pass').value = "";
+            show('home');
+        }
+
+        // --- SISTEMA DE SALVAMENTO ---
         async function salvar(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn');
-            btn.innerText = "PROCESSANDO INSCRIÇÃO...";
+            const btn = document.getElementById('btnSave');
+            btn.innerText = "Sincronizando Dados...";
             btn.disabled = true;
 
             const dados = {
@@ -126,29 +183,61 @@
             };
 
             try {
-                await fetch(URL_PLANILHA, { method: 'POST', body: JSON.stringify(dados) });
-                document.getElementById('c-nome').innerText = dados.nome;
-                document.getElementById('c-igreja').innerText = dados.igreja + " / " + dados.setor;
-                
-                document.getElementById('interface').classList.add('hidden');
-                document.getElementById('comprovante').classList.remove('print-only');
-                window.print();
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(dados) });
+                gerarImpressao(dados.nome, `${dados.igreja} / ${dados.setor}`);
             } catch (err) {
-                alert("Erro ao salvar! Verifique sua conexão ou a URL do script.");
+                alert("Erro na conexão com a planilha.");
                 btn.disabled = false;
-                btn.innerText = "TENTAR NOVAMENTE";
+                btn.innerText = "Tentar Novamente";
             }
         }
 
-        async function atualizar() {
-            const tab = document.getElementById('tabela');
-            tab.innerHTML = "<tr><td colspan='2' class='p-5 text-center'>Carregando dados da planilha...</td></tr>";
+        // --- BUSCA RESTRITA POR TELEFONE ---
+        async function buscarPorTelefone() {
+            const telBusca = document.getElementById('search-tel').value;
+            if (!telBusca) return alert("Digite o telefone cadastrado!");
+
+            const btn = document.getElementById('btnSearch');
+            btn.innerText = "Buscando...";
+            btn.disabled = true;
+
             try {
-                const r = await fetch(URL_PLANILHA);
-                const d = await r.json();
-                tab.innerHTML = d.map(i => `<tr class="border-b"><td class="p-3">${i.nome}</td><td class="p-3">${i.igreja} / ${i.setor}</td></tr>`).join('');
+                const r = await fetch(SCRIPT_URL);
+                const data = await r.json();
+                // O script doGet da planilha deve retornar o campo telefone para que a busca funcione
+                const encontrado = data.find(i => i.telefone === telBusca || i.telefone.replace(/\D/g,'') === telBusca.replace(/\D/g,''));
+
+                if (encontrado) {
+                    gerarImpressao(encontrado.nome, `${encontrado.igreja} / ${encontrado.setor}`);
+                } else {
+                    alert("Inscrição não encontrada para este número.");
+                }
             } catch (e) {
-                tab.innerHTML = "<tr><td colspan='2' class='p-5 text-center text-red-500'>Erro ao carregar lista.</td></tr>";
+                alert("Erro ao acessar banco de dados.");
+            } finally {
+                btn.innerText = "Verificar Status";
+                btn.disabled = false;
+            }
+        }
+
+        function gerarImpressao(nome, igrejaSetor) {
+            document.getElementById('c-nome').innerText = nome;
+            document.getElementById('c-igreja').innerText = igrejaSetor;
+            document.getElementById('interface').classList.add('hidden');
+            document.getElementById('comprovante').classList.remove('print-only');
+            window.print();
+        }
+
+        // --- LISTA DO COORDENADOR ---
+        async function atualizarLista() {
+            const tab = document.getElementById('tabelaInscritos');
+            tab.innerHTML = "<tr><td colspan='3' class='p-5 text-center'>Carregando...</td></tr>";
+            try {
+                const r = await fetch(SCRIPT_URL);
+                const d = await r.json();
+                tab.innerHTML = d.map(i => `<tr class="border-b"><td class="p-3">${i.nome}</td><td class="p-3">${i.igreja} / ${i.setor}</td><td class="p-3">${i.telefone || '---'}</td></tr>`).join('');
+            } catch (e) {
+                tab.innerHTML = "<tr><td colspan='3' class='p-5 text-center text-red-500'>Falha ao sincronizar.</td></tr>";
             }
         }
     </script>
