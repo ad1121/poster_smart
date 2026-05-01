@@ -272,7 +272,7 @@
                     <div class="login-wrapper">
                         <p style="color:var(--gray-600);font-size:14px;margin-bottom:16px;">Área exclusiva para coordenadores.</p>
                         <input id="user" class="form-input" type="text"     placeholder="Usuário">
-                        <input id="pass" class="form-input" type="password" placeholder="Senha">
+                        <input id="pass" class="form-input" type="password" placeholder="Senha" inputmode="numeric" pattern="[0-9]*">
                         <button onclick="login()" class="btn-dark">🔐 Entrar</button>
                     </div>
                 </div>
@@ -636,23 +636,21 @@ let _listaCache = [];
 
 async function gerarRelatorio() {
     const btn = document.getElementById('btnRelatorio');
-    btn.textContent = "⏳ Gerando...";
+    btn.textContent = "⏳ Buscando dados...";
     btn.disabled = true;
     try {
-        let dados = _listaCache;
-        if (!dados || dados.length === 0) {
-            const r = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
-            if (!r.ok) throw new Error();
-            dados = await r.json();
-        }
+        const r = await fetch(SCRIPT_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        const dados = await r.json();
         if (!Array.isArray(dados) || dados.length === 0) {
             toast('⚠️ Nenhum inscrito encontrado.', 'error');
             return;
         }
+        _listaCache = dados;
+        btn.textContent = "⏳ Gerando PDF...";
         _gerarRelatorioPDF(dados);
         toast('📄 Relatório gerado com sucesso!', 'success');
-    } catch {
-        toast('⚠️ Erro ao gerar relatório. Sincronize primeiro.', 'error');
+    } catch(e) {
+        toast('⚠️ Erro de conexão ao buscar dados.', 'error');
     } finally {
         btn.textContent = "📄 Relatório PDF";
         btn.disabled = false;
