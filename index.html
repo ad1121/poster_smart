@@ -3,164 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENEM BÍBLICO - UMADEB SETOR 25</title>
+    <title>ENEM BÍBLICO - SETOR 25</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @page { size: A4; margin: 15mm; }
-        .bg-enem-blue { background-color: #005aa1; }
-        .bg-enem-light { background-color: #f4f7f9; }
-        .text-enem-blue { color: #005aa1; }
-        @media print {
-            .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            body { background-color: white !important; }
-        }
+        .bg-enem { background-color: #005aa1; }
+        .text-enem { color: #005aa1; }
+        @media print { .no-print { display: none !important; } .print-only { display: block !important; } body { background: white; } }
         .print-only { display: none; }
-        .comprovante-box { border: 2px dashed #005aa1; padding: 20px; background: white; }
     </style>
 </head>
-<body class="bg-enem-light font-sans min-h-screen">
+<body class="bg-gray-100 font-sans min-h-screen">
 
-    <!-- INTERFACE DO SITE -->
-    <div id="app-interface" class="no-print">
-        <header class="bg-enem-blue p-4 shadow-md">
-            <div class="container mx-auto flex justify-center">
-                <h1 class="text-white text-2xl tracking-wider uppercase">
-                    <span class="font-black">ENEM BÍBLICO</span>
-                </h1>
-            </div>
+    <div id="interface" class="no-print">
+        <header class="bg-enem p-5 shadow-lg text-center">
+            <h1 class="text-white text-3xl font-black italic tracking-tighter uppercase">ENEM BÍBLICO</h1>
         </header>
 
-        <main class="container mx-auto mt-6 p-4 flex flex-col md:flex-row gap-6">
-            <!-- Menu Lateral -->
-            <aside class="w-full md:w-1/4 bg-enem-blue text-white rounded-lg p-6 space-y-4 h-fit">
-                <h2 class="font-bold border-b border-blue-400 pb-2 uppercase text-xs">Site do Enem Bíblico</h2>
-                <ul class="space-y-3 text-sm">
-                    <li>📄 Editais</li>
-                    <li>📅 Cronograma</li>
-                    <li>🌐 Orientações</li>
-                    <li>❓ Dúvidas Frequentes</li>
-                    <li class="pt-4 font-bold text-blue-200">Acesso Restrito</li>
-                    <li class="pl-2 cursor-pointer hover:underline" onclick="showScreen('coordenador')">Painel do Coordenador</li>
-                </ul>
+        <div class="container mx-auto mt-6 p-4 flex flex-col md:flex-row gap-6">
+            <aside class="w-full md:w-64 bg-enem text-white rounded-xl p-6 h-fit shadow-md">
+                <h2 class="font-bold border-b border-blue-400 pb-2 text-xs uppercase mb-4">Navegação</h2>
+                <nav class="space-y-3 text-sm">
+                    <button onclick="show('home')" class="block w-full text-left hover:text-blue-200">🏠 Início</button>
+                    <button onclick="show('coordenador')" class="block w-full text-left hover:text-blue-200">🔐 Painel William</button>
+                </nav>
             </aside>
 
-            <!-- Área de Conteúdo Dinâmico -->
-            <section class="w-full md:w-3/4 bg-white rounded-lg shadow-lg p-8 border border-gray-200 min-h-[400px]">
+            <section class="flex-1 bg-white rounded-xl shadow-xl p-8 border border-gray-200">
                 
-                <!-- TELA 1: HOME -->
                 <div id="screen-home" class="screen">
-                    <div class="flex items-start gap-4 mb-8">
-                        <div class="w-16 h-16 rounded-full border-2 border-enem-blue bg-gray-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" alt="Nanda">
-                        </div>
-                        <div class="relative bg-gray-50 border border-gray-300 p-4 rounded-xl shadow-sm w-full">
-                             <p class="text-gray-700 text-sm">Olá! Sou a assistente do <strong>ENEM BÍBLICO</strong>. O que deseja fazer hoje?</p>
-                        </div>
+                    <div class="flex items-center gap-4 mb-10 bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nanda" class="w-16 h-16 rounded-full border-2 border-blue-600 bg-white">
+                        <p class="text-gray-700">Olá! Sou a <b>Nanda</b>. Bem-vindo à página oficial do <b>ENEM BÍBLICO</b> do Setor 25!</p>
                     </div>
-                    <div class="flex flex-col items-center gap-4 py-6">
-                        <button onclick="showScreen('inscricao')" class="bg-enem-blue hover:bg-blue-800 text-white font-bold py-4 px-12 rounded-full transition-all shadow-lg w-full max-w-sm uppercase">Inscrição</button>
-                        <button onclick="showScreen('conferir')" class="text-enem-blue font-bold border border-enem-blue py-3 px-12 rounded-full hover:bg-blue-50 transition-all w-full max-w-sm">Conferir Inscrição</button>
+                    <div class="flex flex-col items-center gap-5">
+                        <button onclick="show('inscricao')" class="bg-enem text-white font-black py-5 px-12 rounded-full w-full max-w-sm uppercase shadow-xl hover:scale-105 transition-transform">Fazer Inscrição</button>
+                        <button onclick="show('coordenador')" class="text-enem font-bold border-2 border-enem py-3 px-12 rounded-full w-full max-w-sm hover:bg-blue-50 transition">Conferir Inscritos</button>
                     </div>
                 </div>
 
-                <!-- TELA 2: FORMULÁRIO DE INSCRIÇÃO -->
                 <div id="screen-inscricao" class="screen hidden">
-                    <h2 class="text-xl font-bold text-enem-blue mb-6 border-b pb-2 uppercase">Ficha de Inscrição</h2>
-                    <form onsubmit="event.preventDefault(); finalizarInscricao();" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="reg-nome" type="text" placeholder="Nome Completo" required class="border p-2 rounded">
-                            <input id="reg-idade" type="number" placeholder="Idade" required class="border p-2 rounded">
-                            <input id="reg-igreja" type="text" placeholder="Congrega em qual igreja?" required class="border p-2 rounded">
-                            <input id="reg-setor" type="text" placeholder="Setor" required class="border p-2 rounded">
-                            <input id="reg-tel" type="tel" placeholder="Telefone (00) 9 9999-9999" required class="border p-2 rounded">
-                            <input id="reg-exp" type="text" placeholder="Qual a expectativa?" class="border p-2 rounded">
-                        </div>
-                        <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-xs space-y-1">
-                            <p><strong>TERMOS:</strong> Portões 13:20 | Fechamento 13:50 | Caneta preta/azul | Entrega do celular | Prova sem consulta | Duração 2h.</p>
+                    <h2 class="text-2xl font-black text-enem mb-6 border-b-4 border-enem inline-block uppercase">Inscrição</h2>
+                    <form id="formInscricao" onsubmit="salvar(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input id="nome" type="text" placeholder="Nome Completo" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        <input id="idade" type="number" placeholder="Idade" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        <input id="igreja" type="text" placeholder="Qual sua Igreja?" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        <input id="setor" type="text" placeholder="Setor" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        <input id="tel" type="tel" placeholder="Telefone (DDD) 9 9999-9999" required class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        <input id="exp" type="text" placeholder="Sua expectativa" class="border-2 p-3 rounded-lg focus:border-blue-500 outline-none">
+                        
+                        <div class="md:col-span-2 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-xs text-yellow-800 space-y-1 my-2">
+                            <p><b>REGRAS:</b> Portões 13:20 | Fechamento 13:50 | Caneta Preta/Azul | Entrega do Celular | Sem Consulta | Duração 2h.</p>
                             <label class="flex items-center gap-2 mt-2 font-bold cursor-pointer">
-                                <input type="checkbox" required> Aceito os termos para conclusão da inscrição.
+                                <input type="checkbox" required class="w-4 h-4"> Eu aceito todas as regras acima.
                             </label>
                         </div>
-                        <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg">CONCLUIR INSCRIÇÃO</button>
-                    </aside>
+                        
+                        <button id="btn" type="submit" class="md:col-span-2 bg-green-600 text-white font-black py-4 rounded-xl uppercase shadow-lg hover:bg-green-700 transition">Finalizar e Gerar Comprovante</button>
+                    </form>
                 </div>
 
-                <!-- TELA 3: CONFERIR INSCRIÇÃO -->
-                <div id="screen-conferir" class="screen hidden">
-                    <h2 class="text-xl font-bold text-enem-blue mb-6 uppercase">Conferir Inscrição</h2>
-                    <div class="max-w-xs mx-auto space-y-4">
-                        <p class="text-sm text-gray-600">Digite seu telefone para confirmar a inscrição:</p>
-                        <input id="check-tel" type="tel" placeholder="(00) 9 9999-9999" class="w-full border p-2 rounded">
-                        <button onclick="buscarInscricao()" class="w-full bg-enem-blue text-white py-2 rounded">BUSCAR</button>
-                    </div>
-                </div>
-
-                <!-- TELA 4: PAINEL DO COORDENADOR -->
                 <div id="screen-coordenador" class="screen hidden">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">PAINEL DE CONTROLE - WILLIAM</h2>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-black uppercase">Lista de Inscritos</h2>
+                        <button onclick="atualizar()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold text-xs hover:bg-blue-200">🔄 Atualizar</button>
+                    </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm border">
-                            <thead class="bg-gray-100 uppercase text-[10px]">
-                                <tr>
-                                    <th class="p-2 border">Nome</th>
-                                    <th class="p-2 border">Igreja</th>
-                                    <th class="p-2 border">Setor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lista-inscritos">
-                                <!-- Dados viriam do JSON/Banco -->
-                                <tr><td colspan="3" class="p-4 text-center text-gray-400 italic">Nenhum cadastro realizado no momento.</td></tr>
-                            </tbody>
+                        <table class="w-full border-collapse">
+                            <thead><tr class="bg-gray-100 text-left text-xs uppercase"><th class="p-3 border">Nome</th><th class="p-3 border">Igreja/Setor</th></tr></thead>
+                            <tbody id="tabela" class="text-sm"><tr><td colspan="2" class="p-5 text-center text-gray-400">Clique em atualizar para carregar...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <button onclick="showScreen('home')" class="mt-8 text-gray-400 text-xs hover:underline flex items-center gap-1"> ← Voltar ao início</button>
             </section>
-        </main>
+        </div>
     </div>
 
-    <!-- TELA 5: COMPROVANTE DE IMPRESSÃO -->
-    <div id="printable-area" class="print-only p-8">
-        <div class="comprovante-box mx-auto max-w-2xl">
-            <div class="text-center border-b-2 border-enem-blue pb-4 mb-4">
-                <h1 class="text-2xl font-black text-enem-blue uppercase">COMPROVANTE DE INSCRIÇÃO</h1>
-                <h2 class="text-lg font-bold">ENEM BÍBLICO UMADEB SETOR 25</h2>
+    <div id="comprovante" class="print-only p-10">
+        <div class="border-4 border-double border-blue-900 p-8 bg-white max-w-2xl mx-auto">
+            <div class="text-center border-b-2 border-blue-900 pb-4 mb-6">
+                <h1 class="text-3xl font-black text-blue-900 uppercase italic">ENEM BÍBLICO</h1>
+                <p class="font-bold">CARTÃO DE CONFIRMAÇÃO DE INSCRIÇÃO</p>
             </div>
-            <div class="grid grid-cols-2 gap-4 text-sm mb-6">
-                <div><p class="text-[10px] text-gray-500 uppercase font-bold">Participante</p><p id="p-nome" class="font-bold">-</p></div>
-                <div><p class="text-[10px] text-gray-500 uppercase font-bold">Igreja / Setor</p><p id="p-igreja">-</p></div>
+            <div class="space-y-4 text-lg">
+                <p><b>PARTICIPANTE:</b> <span id="c-nome" class="uppercase">-</span></p>
+                <p><b>IGREJA/SETOR:</b> <span id="c-igreja" class="uppercase">-</span></p>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <p><b>ETAPA 1:</b> 31/05 | <b>ETAPA 2:</b> 12/07</p>
+                    <p><b>LOCAL:</b> Adeb sede São Sebastião</p>
+                    <p class="text-sm">Quadra 01 Conjunto 05 lotes 5/6 São Bartolomeu</p>
+                </div>
             </div>
-            <div class="bg-gray-50 p-4 border rounded text-sm mb-4">
-                <p><strong>ETAPA 1:</strong> 31/05 | <strong>ETAPA 2:</strong> 12/07</p>
-                <p><strong>LOCAL:</strong> Adeb sede São Sebastião (Quadra 01 Conjunto 05 Lotes 5/6)</p>
-            </div>
-            <div class="text-[10px] grid grid-cols-2 pt-4 border-t uppercase font-bold text-gray-400 italic">
-                <span>Coord: William e Nathália</span>
-                <span class="text-right">Dc Marcos e Andressa</span>
+            <div class="mt-10 grid grid-cols-2 text-[10px] uppercase font-bold text-gray-500">
+                <div>Coord: William e Nathália</div>
+                <div class="text-right">Dc Marcos e Andressa</div>
             </div>
         </div>
-        <button onclick="window.print()" class="no-print mt-4 mx-auto block bg-blue-500 text-white px-4 py-2 rounded">IMPRIMIR AGORA</button>
+        <button onclick="window.location.reload()" class="no-print mt-10 mx-auto block bg-black text-white px-8 py-2 rounded-full">Voltar ao Início</button>
     </div>
 
     <script>
-        function showScreen(id) {
+        const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbwLDQiY2YVT6z5uYZcAoGWfWDdOTImn26EHSJkWxWQvqRxVlWVeJeoj3OL1rg5u9Hep/exec"; // <--- COLE SUA URL AQUI
+
+        function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('screen-' + id).classList.remove('hidden');
         }
 
-        function finalizarInscricao() {
-            document.getElementById('p-nome').innerText = document.getElementById('reg-nome').value;
-            document.getElementById('p-igreja').innerText = document.getElementById('reg-igreja').value + " / " + document.getElementById('reg-setor').value;
-            
-            document.getElementById('app-interface').classList.add('hidden');
-            document.getElementById('printable-area').classList.remove('print-only');
-            window.print();
+        async function salvar(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn');
+            btn.innerText = "PROCESSANDO INSCRIÇÃO...";
+            btn.disabled = true;
+
+            const dados = {
+                nome: document.getElementById('nome').value,
+                idade: document.getElementById('idade').value,
+                igreja: document.getElementById('igreja').value,
+                setor: document.getElementById('setor').value,
+                telefone: document.getElementById('tel').value,
+                expectativa: document.getElementById('exp').value
+            };
+
+            try {
+                await fetch(URL_PLANILHA, { method: 'POST', body: JSON.stringify(dados) });
+                document.getElementById('c-nome').innerText = dados.nome;
+                document.getElementById('c-igreja').innerText = dados.igreja + " / " + dados.setor;
+                
+                document.getElementById('interface').classList.add('hidden');
+                document.getElementById('comprovante').classList.remove('print-only');
+                window.print();
+            } catch (err) {
+                alert("Erro ao salvar! Verifique sua conexão ou a URL do script.");
+                btn.disabled = false;
+                btn.innerText = "TENTAR NOVAMENTE";
+            }
         }
 
-        function buscarInscricao() {
-            alert("Buscando dados para o telefone: " + document.getElementById('check-tel').value);
+        async function atualizar() {
+            const tab = document.getElementById('tabela');
+            tab.innerHTML = "<tr><td colspan='2' class='p-5 text-center'>Carregando dados da planilha...</td></tr>";
+            try {
+                const r = await fetch(URL_PLANILHA);
+                const d = await r.json();
+                tab.innerHTML = d.map(i => `<tr class="border-b"><td class="p-3">${i.nome}</td><td class="p-3">${i.igreja} / ${i.setor}</td></tr>`).join('');
+            } catch (e) {
+                tab.innerHTML = "<tr><td colspan='2' class='p-5 text-center text-red-500'>Erro ao carregar lista.</td></tr>";
+            }
         }
     </script>
 </body>
